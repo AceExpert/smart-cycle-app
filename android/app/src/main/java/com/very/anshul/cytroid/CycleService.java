@@ -9,11 +9,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ServiceInfo;
+import android.media.AudioAttributes;
 import android.media.AudioDeviceInfo;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.AudioTrack;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -38,6 +40,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
@@ -55,6 +58,8 @@ public class CycleService extends Service {
     static String token = "49n5pEsOUDF25rBhUFmN";
     String address = "88:13:BF:0B:CB:3E";
     String speakerAddr = "88:13:bf:0b:94:6e";
+    String serverIP = "";
+    int localPort = 8248;
 
     double lat = 0;
     double longt = 0;
@@ -71,6 +76,11 @@ public class CycleService extends Service {
     AudioDeviceInfo bluetoothAudio = null;
     AudioRecord audioRecord = null;
     AudioTrack audioTrack = null;
+    int audioSessionId = 0;
+    boolean muted = false;
+    boolean joined = false;
+
+    VoIPWebSocket vows = null;
 
     ArrayList<Integer> rssiRecord = new ArrayList<Integer>();
 
@@ -88,6 +98,73 @@ public class CycleService extends Service {
     boolean auth = false;
 
     LinkedList<String> sendQueue = new LinkedList<>();
+
+    public class VoStreamTask implements Runnable {
+
+        DatagramSocket udpSocket = null;
+
+        public VoStreamTask() {
+        }
+
+        @Override
+        public void run() {
+            while(true) {
+                if(!joined) continue;
+                audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
+                bluetoothAudio = null;
+                for (AudioDeviceInfo audioDevice : audioManager.getAvailableCommunicationDevices()) {
+                    if (audioDevice.getType() == AudioDeviceInfo.TYPE_BLUETOOTH_SCO) {
+                        bluetoothAudio = audioDevice;
+                        break;
+                    }
+                }
+                if (bluetoothAudio != null)
+                    audioManager.setCommunicationDevice(bluetoothAudio);
+
+                try {
+                    udpSocket = new DatagramSocket(localPort);
+                } catch (SocketException e) {
+                    continue;
+                }
+                try {
+                    audioRecord = new AudioRecord(
+                            MediaRecorder.AudioSource.VOICE_COMMUNICATION,
+                            16000,
+                            AudioFormat.CHANNEL_IN_MONO,
+                            AudioFormat.ENCODING_PCM_16BIT,
+                            AudioRecord.getMinBufferSize(16000, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
+                    );
+                    audioSessionId = audioManager.generateAudioSessionId();
+                    audioTrack = new AudioTrack(
+                        new AudioAttributes.Builder()
+                                .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
+                                .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                                .build(),
+                        new AudioFormat.Builder()
+                                .setSampleRate(16000)
+                                .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                                .setChannelIndexMask(1)
+                                .build(),
+                        AudioTrack.getMinBufferSize(1600, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT),
+                        AudioTrack.MODE_STREAM,
+                        audioSessionId
+                    );
+                    byte[] audioBuf;
+                    while (joined) {
+                        if(muted) continue;
+                        audioBuf = new byte[512];
+                        int byteRead = audioRecord.read(audioBuf, 0, 512);
+                        DatagramPacket packet = new DatagramPacket(audioBuf, byteRead, InetAddress.getByName(serverIP), 3500);
+                        udpSocket.send(packet);
+                    }
+                } catch (SecurityException e) {
+
+                } catch (IOException e) {
+
+                }
+            }
+        }
+    }
 
     public class GPSTask implements Runnable {
 
@@ -259,6 +336,27 @@ public class CycleService extends Service {
         audioManager = getSystemService(AudioManager.class);
         notificationManager = getSystemService(NotificationManager.class);
         gpsTask = new GPSTask();
+        vows = new VoIPWebSocket("ws://" + serverIP + ":3500/bolt", localPort, "89", new VoIPWebSocket.Callback() {
+            @Override
+            public void onFriendOnline(String[] userID) {
+
+            }
+
+            @Override
+            public void onFriendOffline(String[] userID) {
+
+            }
+
+            @Override
+            public void onFriendJoin(String userID) {
+
+            }
+
+            @Override
+            public void onFriendLeave(String userID) {
+
+            }
+        });
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
@@ -298,10 +396,12 @@ public class CycleService extends Service {
     public void onCycleUnlock() {
         startGPS = false;
         setCycleAudioRouting();
+        vows.sendMessage("{\"type\":1, \"action\":1}");
     };
 
     public void onCycleLock() {
         startGPS = true;
+        vows.sendMessage("{\"type\":1, \"action\":0}");
     };
 
     public void setCycleAudioRouting() {
@@ -322,6 +422,16 @@ public class CycleService extends Service {
 
     BluetoothGattCharacteristic getMainCharacteristic() {
         return gattClient.getServices().get(2).getCharacteristics().get(0);
+    }
+
+    public void joinVOIP() {
+        vows.sendMessage("{\"type\":2, \"action\":1}");
+        joined = true;
+    }
+
+    public void leaveVOIP() {
+        joined = false;
+        vows.sendMessage("{\"type\":2, \"action\":0}");
     }
 
     public void connectCycle() {
@@ -371,9 +481,8 @@ public class CycleService extends Service {
                     } else if (cmd.equals(".prev")) {
                         sendMediaControl("TRACK_PREV");
                     } else if (cmd.equals(".join")) {
-
+                        joinVOIP();
                     } else if (cmd.equals(".leave")) {
-
                     }
                 }
 
