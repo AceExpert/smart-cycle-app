@@ -56,6 +56,7 @@ import java.util.stream.Stream;
 public class CycleService extends Service {
 
     static String token = "49n5pEsOUDF25rBhUFmN";
+    String gpsToken = "auth 1234";
     String address = "88:13:BF:0B:CB:3E";
     String speakerAddr = "88:13:bf:0b:94:6e";
     String serverIP = "";
@@ -79,8 +80,11 @@ public class CycleService extends Service {
     int audioSessionId = 0;
     boolean muted = false;
     boolean joined = false;
+    DatagramSocket udpSocket = null;
 
     VoIPWebSocket vows = null;
+    VoStreamTask streamTask = null;
+    VoStreamPlayTask streamPlayTask = null;
 
     ArrayList<Integer> rssiRecord = new ArrayList<Integer>();
 
@@ -101,8 +105,6 @@ public class CycleService extends Service {
 
     public class VoStreamTask implements Runnable {
 
-        DatagramSocket udpSocket = null;
-
         public VoStreamTask() {
         }
 
@@ -122,7 +124,8 @@ public class CycleService extends Service {
                     audioManager.setCommunicationDevice(bluetoothAudio);
 
                 try {
-                    udpSocket = new DatagramSocket(localPort);
+                    if(udpSocket == null)
+                        udpSocket = new DatagramSocket(localPort);
                 } catch (SocketException e) {
                     continue;
                 }
@@ -156,6 +159,64 @@ public class CycleService extends Service {
                         int byteRead = audioRecord.read(audioBuf, 0, 512);
                         DatagramPacket packet = new DatagramPacket(audioBuf, byteRead, InetAddress.getByName(serverIP), 3500);
                         udpSocket.send(packet);
+                    }
+                } catch (SecurityException e) {
+
+                } catch (IOException e) {
+
+                }
+            }
+        }
+    }
+
+    public class VoStreamPlayTask implements Runnable {
+
+        public VoStreamPlayTask() {
+        }
+
+        @Override
+        public void run() {
+            while(true) {
+                if(!joined) continue;
+                audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
+                bluetoothAudio = null;
+                for (AudioDeviceInfo audioDevice : audioManager.getAvailableCommunicationDevices()) {
+                    if (audioDevice.getType() == AudioDeviceInfo.TYPE_BLUETOOTH_SCO) {
+                        bluetoothAudio = audioDevice;
+                        break;
+                    }
+                }
+                if (bluetoothAudio != null)
+                    audioManager.setCommunicationDevice(bluetoothAudio);
+
+                try {
+                    if(udpSocket == null)
+                        udpSocket = new DatagramSocket(localPort);
+                } catch (SocketException e) {
+                    continue;
+                }
+                try {
+                    audioSessionId = audioManager.generateAudioSessionId();
+                    audioTrack = new AudioTrack(
+                            new AudioAttributes.Builder()
+                                    .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
+                                    .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                                    .build(),
+                            new AudioFormat.Builder()
+                                    .setSampleRate(16000)
+                                    .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                                    .setChannelIndexMask(1)
+                                    .build(),
+                            AudioTrack.getMinBufferSize(1600, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT),
+                            AudioTrack.MODE_STREAM,
+                            audioSessionId
+                    );
+                    byte[] audioBuf;
+                    while (joined) {
+                        audioBuf = new byte[512];
+                        DatagramPacket packet = new DatagramPacket(audioBuf, 512);
+                        udpSocket.receive(packet);
+                        audioTrack.write(audioBuf, 0, packet.getLength());
                     }
                 } catch (SecurityException e) {
 
@@ -226,7 +287,7 @@ public class CycleService extends Service {
                             InputStream inputStream = gpsSocket.getInputStream();
                             Log.i("socket", "started");
                             String cmd = "";
-                            gpsSocket.getOutputStream().write("auth 1234".getBytes());
+                            gpsSocket.getOutputStream().write(gpsToken.getBytes());
                             gpsSocket.getOutputStream().flush();
                             while (gpsSocket != null && gpsSocket.isConnected() && locked && startGPS) {
                                 byte[] b = new byte[1];
@@ -336,14 +397,16 @@ public class CycleService extends Service {
         audioManager = getSystemService(AudioManager.class);
         notificationManager = getSystemService(NotificationManager.class);
         gpsTask = new GPSTask();
+        streamTask = new VoStreamTask();
+        streamPlayTask = new VoStreamPlayTask();
         vows = new VoIPWebSocket("ws://" + serverIP + ":3500/bolt", localPort, "89", new VoIPWebSocket.Callback() {
             @Override
-            public void onFriendOnline(String[] userID) {
+            public void onFriendOnline(String[] userIds) {
 
             }
 
             @Override
-            public void onFriendOffline(String[] userID) {
+            public void onFriendOffline(String[] userIds) {
 
             }
 
@@ -386,6 +449,8 @@ public class CycleService extends Service {
         //startService(new Intent(this, CallService.class));
         if(adapter.isEnabled()) connectCycle();
         (new Thread(gpsTask)).start();
+        (new Thread(streamTask)).start();
+        (new Thread(streamPlayTask)).start();
         return START_STICKY;
     }
 
@@ -481,7 +546,11 @@ public class CycleService extends Service {
                     } else if (cmd.equals(".prev")) {
                         sendMediaControl("TRACK_PREV");
                     } else if (cmd.equals(".join")) {
-                        joinVOIP();
+                        if(joined) {
+                            leaveVOIP();
+                        } else {
+                            joinVOIP();
+                        }
                     } else if (cmd.equals(".leave")) {
                     }
                 }
