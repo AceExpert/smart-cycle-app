@@ -28,7 +28,7 @@ export default class ActionCard extends Component {
         height: 150,
         width: 150,
         backgroundColor: "white",
-        borderRadius: 20,
+        borderRadius: 25,
         elevation: 30,
         shadowColor: "rgba(00, 00, 00, 0.4)",
         borderWidth: 0.0,

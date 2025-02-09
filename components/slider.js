@@ -18,10 +18,10 @@ export default class Slider extends Component {
     }
 
     render = () => 
-        <View style={[styles.row, {width: this.props?.style?.width ?? "100%", padding: 9, height: 16}]}>
+        <View style={[styles.row, {width: this.props?.style?.width ?? "100%", padding: 6, height: 10}]}>
             <View 
                 ref={this.trackRef}
-                style={[styles.row, {width: this.props?.style?.width ?? "100%", height: 2, backgroundColor: "rgba(100, 100, 100, 0.4)", borderRadius: 10}]}>
+                style={[styles.row, {width: this.props?.style?.width ?? "100%", height: 1, backgroundColor: "rgba(100, 100, 100, 0.4)", borderRadius: 10}]}>
                 <View style={[styles.thumb,
                     {position: "absolute"}, {left: this.props.pos ? this.props.pos + "%" : 0}
                 ]}></View>
@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
         height: 10, 
         backgroundColor: "white", 
         borderRadius: 10,
-        elevation: 3,
-        borderWidth: 1,
+        elevation: 1,
+        borderWidth: 1.0,
         borderColor: "rgba(100, 100, 100, 0.4)"
     },
 })

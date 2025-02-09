@@ -78,7 +78,7 @@ public class CycleService extends Service {
     AudioRecord audioRecord = null;
     AudioTrack audioTrack = null;
     int audioSessionId = 0;
-    boolean muted = false;
+    boolean muted = true;
     boolean joined = false;
     DatagramSocket udpSocket = null;
 
