@@ -180,7 +180,7 @@ export default class Index extends Component {
             </View>
           </View>
           <View style={[{gap: 20, width: "100%", alignItems: "flex-end", paddingTop: 10}, styles.column]}>
-            <ActionCard style={[styles.actionCard, {width: "100%", height: 150}, styles.cassette, {borderColor: "#ff61ea"}]}>
+            <ActionCard style={[styles.actionCard, {width: "100%", minHeight: 150}, styles.cassette, {borderColor: "#c065fc"}]}>
               <Image style={{position: "absolute", width: 150, height: 150, borderRadius: 20, alignSelf: "flex-end"}} source={{uri: this.state.cover}}/>
               <View style={[styles.column, {width: "100%", gap: 3}]}>  
                 <View style={[styles.centerRow, {justifyContent: 'space-between', width: "100%", paddingTop: 5, paddingLeft: 5, paddingRight: 20}]}>
@@ -212,7 +212,7 @@ export default class Index extends Component {
                 </View>
               </View>
             </ActionCard>
-            <View style={[styles.row, {gap: 20, height: "auto", flexWrap: "wrap", justifyContent: "flex-end", paddingLeft: 30}]}>
+            <View style={[styles.row, {gap: 20, height: "auto", flexWrap: "wrap", justifyContent: "flex-end", paddingLeft: 0}]}>
               <LauncherIcon style={[styles.actionCard, styles.actionIcon]} icon={"search"} name={"Find cycle"} iconStyle={{color: "purple"}}/>
               <LauncherIcon style={[styles.actionCard, styles.actionIcon]} icon={"location-on"} name={"Location"} iconStyle={{color: "maroon"}}/>
               <LauncherIcon style={[styles.actionCard, styles.actionIcon]} icon={"phonelink-ring"} name={"Ring Cycle"} iconStyle={{color: "coral"}}/>

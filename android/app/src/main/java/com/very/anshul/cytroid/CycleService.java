@@ -59,7 +59,7 @@ public class CycleService extends Service {
     String gpsToken = "auth 1234";
     String address = "88:13:BF:0B:CB:3E";
     String speakerAddr = "88:13:bf:0b:94:6e";
-    String serverIP = "192.168.117.38";
+    String serverIP = "10.145.65.124";
     int localPort = 8248;
 
     double lat = 0;
@@ -80,6 +80,7 @@ public class CycleService extends Service {
     int audioSessionId = 0;
     boolean muted = true;
     boolean joined = false;
+    boolean recording = false;
     DatagramSocket udpSocket = null;
 
     VoIPWebSocket vows = null;
@@ -131,6 +132,7 @@ public class CycleService extends Service {
                 } catch (SocketException e) {
                     continue;
                 }
+
                 try {
                     audioRecord = new AudioRecord(
                             MediaRecorder.AudioSource.VOICE_COMMUNICATION,
@@ -139,25 +141,32 @@ public class CycleService extends Service {
                             AudioFormat.ENCODING_PCM_16BIT,
                             AudioRecord.getMinBufferSize(16000, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
                     );
-                    if(!muted) audioRecord.startRecording();
+                    if(!muted) {
+                        audioRecord.startRecording();
+                        recording = true;
+                    }
                     byte[] audioBuf;
                     while (joined) {
                         if(muted) {
-                            if(audioRecord.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING) {
+                            if(recording) {
                                 audioRecord.stop();
+                                recording = false;
                             }
                             continue;
                         }
-                        if(audioRecord.getRecordingState() == AudioRecord.RECORDSTATE_STOPPED) {
+                        if(!recording) {
                             audioRecord.startRecording();
+                            recording = true;
                         }
                         audioBuf = new byte[512];
                         int byteRead = audioRecord.read(audioBuf, 0, 512);
                         DatagramPacket packet = new DatagramPacket(audioBuf, byteRead, InetAddress.getByName(serverIP), 3500);
                         udpSocket.send(packet);
                     }
-                    if(audioRecord.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING)
+                    if(recording) {
                         audioRecord.stop();
+                        recording = false;
+                    }
                     audioRecord.release();
                     audioRecord = null;
                     muted = true;
@@ -436,6 +445,7 @@ public class CycleService extends Service {
         (new Thread(streamTask)).start();
         (new Thread(streamPlayTask)).start();
         vows.connect();
+        Log.i("connectreq", "ws");
         return START_STICKY;
     }
 
@@ -451,7 +461,7 @@ public class CycleService extends Service {
 
     public void onCycleLock() {
         startGPS = true;
-        vows.sendMessage("{\"type\":1, \"action\":0}");
+        leaveVOIP();
     };
 
     public void setCycleAudioRouting() {

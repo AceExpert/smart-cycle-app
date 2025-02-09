@@ -1,6 +1,9 @@
 package com.very.anshul.cytroid;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -104,6 +107,7 @@ public class VoIPWebSocket extends WebSocketListener {
     @Override
     public void onOpen(@NonNull WebSocket webSocket, @NonNull Response response) {
         super.onOpen(webSocket, response);
+        Log.i("ws", "opened");
         ws = webSocket;
         ws.send("{\"type\":0, \"auth\":\"" + wsToken + "\", \"id\":\""+userID+"\"}");
         try {
@@ -138,6 +142,13 @@ public class VoIPWebSocket extends WebSocketListener {
     public void onClosed(@NonNull WebSocket webSocket, int code, @NonNull String reason) {
         super.onClosed(webSocket, code, reason);
         ws = null;
+        connect();
+    }
+
+    @Override
+    public void onFailure(@NonNull WebSocket webSocket, @NonNull Throwable t, @Nullable Response response) {
+        super.onFailure(webSocket, t, response);
+        connect();
     }
 
     public String[] toStringArray(JSONArray jsonArray) {
