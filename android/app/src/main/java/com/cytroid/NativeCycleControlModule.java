@@ -30,6 +30,8 @@ public class NativeCycleControlModule extends NativeCycleControlSpec {
 
     ReactApplicationContext ctx;
 
+    String[] filters = new String[]{"join_voip", "mute_voip", "leave_voip", "unmute_voip", "media_rsp", "map_update"};
+
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -69,6 +71,14 @@ public class NativeCycleControlModule extends NativeCycleControlSpec {
                 map.putString("logt", location[2]);
                 map.putString("logt_dir", location[3]);
                 ctx.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("cycleLocation", map);
+            } else if(Objects.equals(intent.getAction(), "join_voip")) {
+                ctx.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("joinVOIP", Arguments.createMap());
+            } else if(Objects.equals(intent.getAction(), "leave_voip")) {
+                ctx.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("leaveVOIP", Arguments.createMap());
+            } else if(Objects.equals(intent.getAction(), "mute_voip")) {
+                ctx.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("muteVOIP", Arguments.createMap());
+            } else if(Objects.equals(intent.getAction(), "unmute_voip")) {
+                ctx.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("unmuteVOIP", Arguments.createMap());
             }
         }
     };
@@ -114,6 +124,11 @@ public class NativeCycleControlModule extends NativeCycleControlSpec {
         notificationManager.createNotificationChannel(channel);
     }
 
+    public void sendBroadcast(String action) {
+        Intent intent = new Intent(action);
+        ctx.sendBroadcast(intent);
+    }
+
     @Override
     @NonNull
     public String getName() {
@@ -123,9 +138,10 @@ public class NativeCycleControlModule extends NativeCycleControlSpec {
     @Override
     public void init(Callback callback) {
         IntentFilter filter = new IntentFilter();
-        filter.addAction("media_rsp");
-        filter.addAction("map_update");
-        ctx.getCurrentActivity().registerReceiver(broadcastReceiver, filter);
+        for(String filt: filters) {
+            filter.addAction(filt);
+        }
+        ctx.getCurrentActivity().registerReceiver(broadcastReceiver, filter, Context.RECEIVER_EXPORTED);
         callback.invoke();
         ctx.sendBroadcast(new Intent("media_info"));
         ctx.sendBroadcast(new Intent("media_active"));
@@ -149,12 +165,12 @@ public class NativeCycleControlModule extends NativeCycleControlSpec {
 
     @Override
     public void mediaToggle() {
-        ctx.sendBroadcast(new Intent("PLAY_PAUSE"));
+        this.sendBroadcast("PLAY_PAUSE");
     }
 
     @Override
     public void mediaNext() {
-        ctx.sendBroadcast(new Intent("TRACK_NEXT"));
+        sendBroadcast("TRACK_NEXT");
     }
 
     @Override
@@ -162,7 +178,7 @@ public class NativeCycleControlModule extends NativeCycleControlSpec {
         Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         ctx.startActivity(intent);
-        ctx.sendBroadcast(new Intent("TRACK_PREV"));
+        this.sendBroadcast("TRACK_PREV");
     }
 
     @Override
@@ -251,22 +267,22 @@ public class NativeCycleControlModule extends NativeCycleControlSpec {
 
     @Override
     public void connectVoIP() {
-
+        sendBroadcast("CONNECT_VOIP");
     }
 
     @Override
     public void disconnectVoIP() {
-
+        sendBroadcast("DISCONNECT_VOIP");
     }
 
     @Override
     public void VoIPMute() {
-
+        sendBroadcast("MUTE_VOIP");
     }
 
     @Override
     public void VoIPUnmute() {
-
+        sendBroadcast("UNMUTE_VOIP");
     }
 
 }

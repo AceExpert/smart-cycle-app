@@ -59,7 +59,7 @@ public class CycleService extends Service {
     String gpsToken = "auth 1234";
     String address = "88:13:BF:0B:CB:3E";
     String speakerAddr = "88:13:bf:0b:94:6e";
-    String serverIP = "";
+    String serverIP = "192.168.117.38";
     int localPort = 8248;
 
     double lat = 0;
@@ -103,6 +103,8 @@ public class CycleService extends Service {
 
     LinkedList<String> sendQueue = new LinkedList<>();
 
+    String[] cycleIntents = new String[] {"media_rsp", "map_update", "haptic_navigation", "CONNECT_VOIP", "DISCONNECT_VOIP", "MUTE_VOIP", "UNMUTE_VOIP"};
+
     public class VoStreamTask implements Runnable {
 
         public VoStreamTask() {
@@ -137,29 +139,29 @@ public class CycleService extends Service {
                             AudioFormat.ENCODING_PCM_16BIT,
                             AudioRecord.getMinBufferSize(16000, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
                     );
-                    audioSessionId = audioManager.generateAudioSessionId();
-                    audioTrack = new AudioTrack(
-                        new AudioAttributes.Builder()
-                                .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
-                                .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-                                .build(),
-                        new AudioFormat.Builder()
-                                .setSampleRate(16000)
-                                .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
-                                .setChannelIndexMask(1)
-                                .build(),
-                        AudioTrack.getMinBufferSize(1600, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT),
-                        AudioTrack.MODE_STREAM,
-                        audioSessionId
-                    );
+                    if(!muted) audioRecord.startRecording();
                     byte[] audioBuf;
                     while (joined) {
-                        if(muted) continue;
+                        if(muted) {
+                            if(audioRecord.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING) {
+                                audioRecord.stop();
+                            }
+                            continue;
+                        }
+                        if(audioRecord.getRecordingState() == AudioRecord.RECORDSTATE_STOPPED) {
+                            audioRecord.startRecording();
+                        }
                         audioBuf = new byte[512];
                         int byteRead = audioRecord.read(audioBuf, 0, 512);
                         DatagramPacket packet = new DatagramPacket(audioBuf, byteRead, InetAddress.getByName(serverIP), 3500);
                         udpSocket.send(packet);
                     }
+                    if(audioRecord.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING)
+                        audioRecord.stop();
+                    audioRecord.release();
+                    audioRecord = null;
+                    muted = true;
+                    sendMediaControl("mute_voip");
                 } catch (SecurityException e) {
 
                 } catch (IOException e) {
@@ -207,17 +209,22 @@ public class CycleService extends Service {
                                     .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
                                     .setChannelIndexMask(1)
                                     .build(),
-                            AudioTrack.getMinBufferSize(1600, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT),
+                            AudioTrack.getMinBufferSize(16000, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT),
                             AudioTrack.MODE_STREAM,
                             audioSessionId
                     );
+                    audioTrack.play();
                     byte[] audioBuf;
                     while (joined) {
                         audioBuf = new byte[512];
                         DatagramPacket packet = new DatagramPacket(audioBuf, 512);
                         udpSocket.receive(packet);
-                        audioTrack.write(audioBuf, 0, packet.getLength());
+                        if(packet.getAddress().equals(InetAddress.getByName(serverIP)))
+                            audioTrack.write(audioBuf, 0, packet.getLength());
                     }
+                    audioTrack.stop();
+                    audioTrack.release();
+                    audioTrack = null;
                 } catch (SecurityException e) {
 
                 } catch (IOException e) {
@@ -315,41 +322,6 @@ public class CycleService extends Service {
         }
     }
 
-    public class StreamTest implements Runnable {
-
-        DatagramSocket udpSocket = null;
-
-        public StreamTest() {
-        }
-
-        @Override
-        public void run() {
-            try {
-                udpSocket = new DatagramSocket(8888);
-                audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
-                audioRecord = new AudioRecord(
-                        MediaRecorder.AudioSource.VOICE_COMMUNICATION,
-                        44100,
-                        AudioFormat.CHANNEL_IN_MONO,
-                        AudioFormat.ENCODING_PCM_16BIT,
-                        AudioRecord.getMinBufferSize(44100, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
-                );
-                audioRecord.startRecording();
-                byte[] audioBuf;
-                while (true) {
-                    audioBuf = new byte[1024];
-                    int byteRead = audioRecord.read(audioBuf, 0, 1024);
-                    DatagramPacket packet = new DatagramPacket(audioBuf, byteRead, InetAddress.getByName("10.145.2.222"), 3001);
-                    udpSocket.send(packet);
-                }
-            } catch (IOException e) {
-                Log.e("IOError", String.valueOf(e));
-            } catch (SecurityException e) {
-
-            }
-        }
-    }
-
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -373,6 +345,18 @@ public class CycleService extends Service {
                 }
             } else if (Objects.equals(intent.getAction(), "call_state")) {
                 callState = intent.getBooleanExtra("call", false);
+            } else if (Objects.equals(intent.getAction(), "CONNECT_VOIP")) {
+                joinVOIP();
+                sendMediaControl("join_voip");
+            } else if (Objects.equals(intent.getAction(), "DISCONNECT_VOIP")) {
+                leaveVOIP();
+                sendMediaControl("leave_voip");
+            } else if (Objects.equals(intent.getAction(), "MUTE_VOIP")) {
+                muted = true;
+                sendMediaControl("mute_voip");
+            } else if (Objects.equals(intent.getAction(), "UNMUTE_VOIP")) {
+                muted = false;
+                sendMediaControl("unmute_voip");
             };
         }
     };
@@ -423,9 +407,9 @@ public class CycleService extends Service {
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
-        intentFilter.addAction("media_rsp");
-        intentFilter.addAction("haptic_navigation");
-        intentFilter.addAction("map_update");
+        for(String filter: cycleIntents) {
+            intentFilter.addAction(filter);
+        }
 
         registerReceiver(broadcastReceiver, intentFilter, Context.RECEIVER_EXPORTED);
     }
@@ -451,6 +435,7 @@ public class CycleService extends Service {
         (new Thread(gpsTask)).start();
         (new Thread(streamTask)).start();
         (new Thread(streamPlayTask)).start();
+        vows.connect();
         return START_STICKY;
     }
 
@@ -594,6 +579,41 @@ public class CycleService extends Service {
                 }
             });
         } catch (SecurityException e) {
+        }
+    }
+
+    public class StreamTest implements Runnable {
+
+        DatagramSocket udpSocket = null;
+
+        public StreamTest() {
+        }
+
+        @Override
+        public void run() {
+            try {
+                udpSocket = new DatagramSocket(8888);
+                audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
+                audioRecord = new AudioRecord(
+                        MediaRecorder.AudioSource.VOICE_COMMUNICATION,
+                        44100,
+                        AudioFormat.CHANNEL_IN_MONO,
+                        AudioFormat.ENCODING_PCM_16BIT,
+                        AudioRecord.getMinBufferSize(44100, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
+                );
+                audioRecord.startRecording();
+                byte[] audioBuf;
+                while (true) {
+                    audioBuf = new byte[1024];
+                    int byteRead = audioRecord.read(audioBuf, 0, 1024);
+                    DatagramPacket packet = new DatagramPacket(audioBuf, byteRead, InetAddress.getByName("10.145.2.222"), 3001);
+                    udpSocket.send(packet);
+                }
+            } catch (IOException e) {
+                Log.e("IOError", String.valueOf(e));
+            } catch (SecurityException e) {
+
+            }
         }
     }
 
