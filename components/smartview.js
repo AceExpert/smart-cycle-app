@@ -17,12 +17,14 @@ export default class SmartView extends Component {
   
     render = () => 
         <View 
-            style={[this.props?.style, {padding: 1, backgroundColor: this.state.touch ? "rgba(107, 107, 107, 0.2)" : "rgba(0, 0, 0, 0)", borderRadius: "50%"}]}
+            style={[this.props?.style, {padding: 1, backgroundColor: this.props.touchFeedback === false? "rgba(0, 0, 0, 0)": this.state.touch? "rgba(107, 107, 107, 0.2)" : "rgba(0, 0, 0, 0)", borderRadius: "50%"}]}
             ref={this.view}
-            onStartShouldSetResponder={evt => true}
-            onResponderGrant={evt => {
-                this.props?.onTouchStart?.(evt);
+            onStartShouldSetResponder={evt => this.props.disabled === true? false : (() => {
                 this.setState({touch: true})
+                this.props?.onTouchStart?.(evt);
+                return true
+            })()}
+            onResponderGrant={evt => {
                 if(this.props.tooltip) {
                     this.setState({
                         display: "flex",

@@ -123,9 +123,9 @@ public class CycleService extends Service {
                         break;
                     }
                 }
-                if (bluetoothAudio != null)
-                    audioManager.setCommunicationDevice(bluetoothAudio);
-
+                if (bluetoothAudio != null) {
+                    //audioManager.setCommunicationDevice(bluetoothAudio);
+                }
                 try {
                     if(udpSocket == null)
                         udpSocket = new DatagramSocket(localPort);
@@ -197,9 +197,9 @@ public class CycleService extends Service {
                         break;
                     }
                 }
-                if (bluetoothAudio != null)
-                    audioManager.setCommunicationDevice(bluetoothAudio);
-
+                if (bluetoothAudio != null) {
+                    //audioManager.setCommunicationDevice(bluetoothAudio);
+                }
                 try {
                     if(udpSocket == null)
                         udpSocket = new DatagramSocket(localPort);
@@ -394,6 +394,16 @@ public class CycleService extends Service {
         streamPlayTask = new VoStreamPlayTask();
         vows = new VoIPWebSocket("ws://" + serverIP + ":3500/bolt", localPort, "89", new VoIPWebSocket.Callback() {
             @Override
+            public void onOpen() {
+                sendMediaControl("voip_serv_conn");
+            }
+
+            @Override
+            public void onDisconnect() {
+                sendMediaControl("voip_serv_disconn");
+            }
+
+            @Override
             public void onFriendOnline(String[] userIds) {
 
             }
@@ -445,7 +455,6 @@ public class CycleService extends Service {
         (new Thread(streamTask)).start();
         (new Thread(streamPlayTask)).start();
         vows.connect();
-        Log.i("connectreq", "ws");
         return START_STICKY;
     }
 

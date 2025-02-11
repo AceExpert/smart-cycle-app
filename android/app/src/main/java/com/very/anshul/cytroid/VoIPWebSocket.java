@@ -41,6 +41,8 @@ public class VoIPWebSocket extends WebSocketListener {
     Callback callbacks = null;
 
     public interface Callback {
+        void onOpen();
+        void onDisconnect();
         void onFriendOnline(String[] userID);
         void onFriendOffline(String[] userID);
         void onFriendJoin(String userID);
@@ -90,6 +92,7 @@ public class VoIPWebSocket extends WebSocketListener {
 
         httpClient = new OkHttpClient.Builder()
                 .socketFactory(new WSSocketFactory(localPort))
+                .connectTimeout(30000, TimeUnit.MILLISECONDS)
                 .readTimeout(0, TimeUnit.MILLISECONDS).build();
     }
 
@@ -110,6 +113,7 @@ public class VoIPWebSocket extends WebSocketListener {
         Log.i("ws", "opened");
         ws = webSocket;
         ws.send("{\"type\":0, \"auth\":\"" + wsToken + "\", \"id\":\""+userID+"\"}");
+        callbacks.onOpen();
         try {
             String msg = sendQueue.pop();
             sendMessage(msg);
@@ -142,12 +146,14 @@ public class VoIPWebSocket extends WebSocketListener {
     public void onClosed(@NonNull WebSocket webSocket, int code, @NonNull String reason) {
         super.onClosed(webSocket, code, reason);
         ws = null;
+        callbacks.onDisconnect();
         connect();
     }
 
     @Override
     public void onFailure(@NonNull WebSocket webSocket, @NonNull Throwable t, @Nullable Response response) {
         super.onFailure(webSocket, t, response);
+        callbacks.onDisconnect();
         connect();
     }
 

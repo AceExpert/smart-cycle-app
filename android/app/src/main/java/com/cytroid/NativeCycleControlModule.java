@@ -30,7 +30,7 @@ public class NativeCycleControlModule extends NativeCycleControlSpec {
 
     ReactApplicationContext ctx;
 
-    String[] filters = new String[]{"join_voip", "mute_voip", "leave_voip", "unmute_voip", "media_rsp", "map_update"};
+    String[] filters = new String[]{"join_voip", "mute_voip", "leave_voip", "unmute_voip", "media_rsp", "map_update", "voip_serv_conn", "voip_serv_disconn"};
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -79,6 +79,10 @@ public class NativeCycleControlModule extends NativeCycleControlSpec {
                 ctx.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("muteVOIP", Arguments.createMap());
             } else if(Objects.equals(intent.getAction(), "unmute_voip")) {
                 ctx.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("unmuteVOIP", Arguments.createMap());
+            } else if(Objects.equals(intent.getAction(), "voip_serv_conn")) {
+                ctx.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("VOIPOpen", Arguments.createMap());
+            } else if(Objects.equals(intent.getAction(), "voip_serv_disconn")) {
+                ctx.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("VOIPDisconnect", Arguments.createMap());
             }
         }
     };

@@ -13,7 +13,7 @@ export default class ActionCard extends Component {
     }
   
     render = () => 
-      <View style={[styles.column, styles.actionCard, this.props.style]}>
+      <View style={[styles.column, styles.actionCard, ...(this.props?.style?.constructor === Array? this.props.style : [this.props.style])]}>
         {this.props.children}
       </View>
   

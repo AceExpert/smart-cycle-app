@@ -1,6 +1,7 @@
 import { Component } from "react";
 
-import { Text, View, StyleSheet, NativeModules, ScrollView, Switch, DeviceEventEmitter, Image, Dimensions } from "react-native";
+import { Text, View, StyleSheet, NativeModules, ScrollView, Switch, DeviceEventEmitter, Image, Dimensions, ActivityIndicator } from "react-native";
+import { Link } from "expo-router";
 
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
@@ -29,7 +30,8 @@ export default class Index extends Component {
       seekProg: null,
       navigation: this.naviDefault,
       voipConnected: false,
-      muted: true
+      muted: true,
+      voipServerConnected: false,
     };
   }
 
@@ -85,6 +87,12 @@ export default class Index extends Component {
     DeviceEventEmitter.addListener("cycleLocation", evt => {
       
     })
+    DeviceEventEmitter.addListener("VOIPOpen", evt => {
+      this.setState({voipServerConnected: true, voipConnected: false, muted: true})
+    })
+    DeviceEventEmitter.addListener("VOIPDisconnect", evt => {
+      this.setState({voipServerConnected: false, voipConnected: false, muted: true})
+    })
     DeviceEventEmitter.addListener("joinVOIP", evt => {
       this.setState({voipConnected: true})
     })
@@ -129,17 +137,25 @@ export default class Index extends Component {
             <MaterialIcons name={"bluetooth-audio"} size={52} style={[styles.mainIcon, {color: "white"}]}/>
             <Text style={[{fontSize: 13, color: "white"}]}>Connected</Text>
           </ActionCard>
-          <ActionCard style={[styles.actionCard, {borderWidth: 0.0, borderLeftWidth: 3, borderColor: 'orange'}]}>
+          <ActionCard style={[styles.actionCard, {borderWidth: 0.0, borderLeftWidth: 3, borderColor: this.state.voipServerConnected ? 'orange' : 'grey'}]}>
+            {this.state.voipServerConnected ? 
+              <MaterialIcons name={"wifi-tethering"} size={15} style={[{color: "orange", position: "absolute", right: 8, top: 5}]}/> 
+                : 
+              <ActivityIndicator size={"small"} color={"purple"} style={[{position: "absolute", right: 8, top: 5}]}/>
+            }
             <Text style={[styles.actionCardHead]}>VoIP</Text>
             <View style={[styles.centerRow, {gap: 10, alignSelf: "flex-start", paddingLeft: 10}]}>
-              <SmartView onTouchEnd={() => this.state.muted ? NativeCycleControl.VoIPUnmute() : NativeCycleControl.VoIPMute()}>
-                <MaterialIcons name={this.state.muted ? "mic-off" : "mic"} size={35} style={[styles.mainIcon, {color: this.state.muted ? "darkred" : "purple"}]}/>
+              <SmartView onTouchEnd={() => this.state.muted ? NativeCycleControl.VoIPUnmute() : NativeCycleControl.VoIPMute()} disabled={!this.state.voipServerConnected}>
+                <MaterialIcons name={this.state.muted ? "mic-off" : "mic"} size={35} style={[styles.mainIcon, {color: this.state.voipServerConnected? (this.state.muted ? "darkred" : "purple") : 'grey'}]}/>
               </SmartView>
-              <SmartView onTouchEnd={() => this.state.voipConnected? NativeCycleControl.disconnectVoIP() : NativeCycleControl.connectVoIP()}>
-                <MaterialIcons name={this.state.voipConnected ? "wifi-calling-3" : "call-end"} size={35} style={[styles.mainIcon, {color: this.state.voipConnected ? "yellowgreen" : "grey"}]}/>
-              </SmartView>
+              <View style={[{display: "flex", flexDirection: "column", alignItems: "center"}]}>
+                <SmartView onTouchEnd={() => this.state.voipConnected? NativeCycleControl.disconnectVoIP() : NativeCycleControl.connectVoIP()} disabled={!this.state.voipServerConnected}>
+                  <MaterialIcons name={this.state.voipConnected ? "wifi-calling-3" : "call-end"} size={35} style={[styles.mainIcon, {color: this.state.voipConnected ? "yellowgreen" : "grey"}]}/>
+                </SmartView>
+                <Text style={[{fontSize: 10, color: "grey", position: "absolute", bottom: -10}]}>{this.state.voipServerConnected? (this.state.voipConnected? 'Leave' : 'Join') : ''}</Text>
+              </View>
             </View>
-            <Text style={[{fontSize: 13, color: "rgb(180, 180, 180)"}]}>{this.state.voipConnected? 'Connected' : 'Disconnected'}</Text>
+            <Text style={[{fontSize: 13, color: "rgb(180, 180, 180)"}]}>{this.state.voipServerConnected? (this.state.voipConnected? 'Connected' : 'Idle') : 'Connecting'}</Text>
           </ActionCard>
           <ActionCard style={[styles.actionCard, {width: 240, borderWidth: 0., marginTop: 8, height: "auto", gap: 0, borderTopRightRadius: 0, borderTopLeftRadius: 0, borderTopWidth: 3, borderColor: "dodgerblue"}]}>
               <Text style={[styles.actionCardHead, {alignSelf: "flex-start", paddingLeft: 9, paddingTop: 5}]}>Sound</Text>
@@ -216,6 +232,9 @@ export default class Index extends Component {
               <LauncherIcon style={[styles.actionCard, styles.actionIcon]} icon={"search"} name={"Find cycle"} iconStyle={{color: "purple"}}/>
               <LauncherIcon style={[styles.actionCard, styles.actionIcon]} icon={"location-on"} name={"Location"} iconStyle={{color: "maroon"}}/>
               <LauncherIcon style={[styles.actionCard, styles.actionIcon]} icon={"phonelink-ring"} name={"Ring Cycle"} iconStyle={{color: "coral"}}/>
+              <Link href={'/call'} relativeToDirectory>
+                <LauncherIcon style={[styles.actionCard, styles.actionIcon]} icon={"groups-2"} name={"Group Call"} iconStyle={{color: "navy"}}/>
+              </Link>
               <LauncherIcon style={[styles.actionCard, styles.actionIcon]} icon={"settings"} name={"Settings"} iconStyle={{color: "rgb(120, 120, 120)"}}/>
             </View>
 

@@ -5,6 +5,7 @@ import { Text, View, StyleSheet } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 import ActionCard from "./actioncard";
+import SmartView from "./smartview";
 
 export default class LauncherIcon extends Component {
 
@@ -12,15 +13,25 @@ export default class LauncherIcon extends Component {
       super(props);
       this.props = props;
       this.state = {
-  
+        touch: false
       }
     }
   
-    render = () => 
-        <View style={[styles.column, {alignItems: "center", gap: 3}]}>
-            <ActionCard style={this.props.style}>
-                <MaterialIcons name={this.props.icon} size={35} style={[styles.mainIcon, styles.lightBorder, this.props.iconStyle]}/>
-            </ActionCard>
+    render = () =>
+        <View style={[styles.column, {alignItems: "center", gap: 3}]}> 
+            <SmartView 
+                touchFeedback={false} 
+                onTouchStart={() => {
+                    this.setState({touch: true})
+                }}
+                onTouchEnd={() => {
+                    this.setState({touch: false})
+                }}
+            >
+                <ActionCard style={[this.props.style, {backgroundColor: this.state.touch? 'rgb(200, 200, 200)': 'white'}]}>
+                    <MaterialIcons name={this.props.icon} size={35} style={[styles.mainIcon, styles.lightBorder, this.props.iconStyle]}/>
+                </ActionCard>
+            </SmartView>
             <Text style={[styles.iconText]}>{this.props.name}</Text>
         </View>
   
