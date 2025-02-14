@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { Stack } from "expo-router";
 
 import { ScrollView, Text, View, StyleSheet, Dimensions } from "react-native";
 
@@ -20,6 +21,7 @@ export default class CallView extends Component {
 
     render = () => 
         <View style={[{width: "100%", height: "100%", display: "flex", flexDirection: "column"}]}>
+            <Stack.Screen options={{headerShown: false}} />
             <View style={[{width: "100%", height: "100%", display: "flex", flexDirection: "column", gap: 25, alignItems: "center", justifyContent: "center"}]}>
                 <View style={[{width: "100%", display: "flex", flexDirection: "column-reverse", gap: 10}]}>
                     <View style={[{width: "100%", paddingRight: 25, paddingBottom: 30}]}>
@@ -77,29 +79,39 @@ export default class CallView extends Component {
                         <ActionIconType1 mainPad={7} iconName={'ellipsis-vertical'} IconClass={Ionicons} iconSize={23}/>
                     </View>
                 </View>
-                <View style={[{width: "100%", display: "flex", flexDirection: "column", gap: 20}]}>
-                    <ActionIconType1 latch={'left'} mainPad={10} height={30} width={220} radius={0} style={{alignSelf: "flex-start", borderTopRightRadius: 17}}/>
-                    <ActionIconType1 latch={'right'} mainPad={10} height={30} width={130} radius={0} style={{alignSelf: "flex-end", borderTopLeftRadius: 17}}/>
-                    <ActionIconType1 latch={'left'} mainPad={10} height={30} width={150} radius={0} style={{alignSelf: "flex-start", borderBottomRightRadius: 17}}/>
-                    <ActionIconType1 latch={'right'} mainPad={10} height={30} width={200} radius={0} style={{alignSelf: "flex-end", borderBottomLeftRadius: 17}}/>
+                <View style={[{width: "100%", display: "flex", flexDirection: "column", gap: 20, justifyContent: "center"}]}>
+                    <ActionIconType1 latch={'left'} mainPad={10} height={30} width={220} radius={0} style={{alignSelf: "flex-start", borderTopRightRadius: 17, backgroundColor: "rgb(255, 0, 55)"}}/>
+                    <ActionIconType1 latch={'right'} mainPad={10} height={30} width={130} radius={0} style={{alignSelf: "flex-end", borderTopLeftRadius: 17, backgroundColor: "lightgreen"}}/>
+                    <ActionIconType1 latch={'left'} mainPad={10} height={30} width={150} radius={0} style={{alignSelf: "flex-start", borderBottomRightRadius: 17, backgroundColor: "gold"}}/>
+                    <ActionIconType1 latch={'right'} mainPad={10} height={30} width={200} radius={0} style={{alignSelf: "flex-end", borderBottomLeftRadius: 17, backgroundColor: "dodgerblue"}}/>
+                    <View style={[{width: "100%", height: 65, alignSelf: "center", position: "absolute", display: "flex", flexDirection: "column", alignItems: "center", gap: 2}]}>
+                        <View style={[{width: 65, height: "50%", display: "flex", flexDirection: "row", gap: 2}]}>
+                            <View style={[{width: "50%", height: "100%", backgroundColor: "rgb(34, 0, 54)" || "skyblue", borderTopLeftRadius: "10%", elevation: 5, shadowColor: "rgba(0, 0, 0, 0.6)", borderRightWidth: 0, borderColor: "dodgerblue"}]}></View>
+                            <View style={[{width: "50%", height: "100%", backgroundColor: "rgb(34, 0, 54)", borderTopRightRadius: "10%", elevation: 5, shadowColor: "rgba(0, 0, 0, 0.6)", borderBottomWidth: 0, borderColor: "gold"}]}></View>
+                        </View>
+                        <View style={[{width: 65, height: "50%", display: "flex", flexDirection: "row", gap: 2}]}>
+                            <View style={[{width: "50%", height: "100%", backgroundColor: "rgb(66, 0, 104)" || "rgb(132, 189, 255)", borderBottomLeftRadius: "10%", elevation: 5, shadowColor: "rgba(0, 0, 0, 0.6)", borderTopWidth: 0, borderColor: "lightgreen"}]}></View>
+                            <View style={[{width: "50%", height: "100%", backgroundColor: "rgb(66, 0, 104)" || "skyblue", borderBottomRightRadius: "10%", elevation: 2, shadowColor: "rgba(0, 0, 0, .6)", borderLeftWidth: 0, borderColor: "rgb(255, 0, 55)"}]}></View>
+                        </View>
+                    </View>
                 </View>
                 <View style={{width: "100%", display: "flex", flexDirection: "column", paddingTop: 0}}>
                     <View style={{width: "100%", padding: 20, display: "flex", flexDirection: "column", gap: 10, alignItems: "center"}}>
                         <View style={{width: "100%", display: "flex", flexDirection: "row", alignItems: "center", gap: 0, justifyContent: "center"}}>
-                            <View style={{display: "flex", flexDirection: "column", gap: 10, alignItems: "center", position: "relative", left: 10}}>
-                                <View style={[styles.controlButton, {width: 140, height: 140, elevation: 10, shadowColor: 'rgba(216, 1, 144, 0.55)', borderWidth: 1, borderColor: 'rgba(100, 100, 100, 0.2)'}]}>
-                                    <MaterialIcons style={[{}]} name={"mic-off"} size={50}/>
+                            <View style={{display: "flex", flexDirection: "column", gap: 10, alignItems: "center", position: "relative", left: 10, left: -20}}>
+                                <View style={[styles.controlButton, {width: 180 || 140, height: 180 || 140, elevation: 0 ?? 10, shadowColor: 'rgba(216, 1, 144, 0.55)', borderWidth: 0, borderColor: 'rgba(100, 100, 100, 0.2)', backgroundColor: "rgb(34, 0, 54)"}]}>
+                                    <MaterialIcons style={[{color: "white"}]} name={"mic-off"} size={50}/>
                                 </View>
                                 <Text style={[{fontSize: 15, color: "rgba(0, 0, 0, .5)"}]}>Unmute</Text>
                             </View>
                             <View style={{display: "flex", flexDirection: "column", gap: 10, alignItems: "center", zIndex: 5}}>
-                                <View style={[styles.controlButton, {width: 180, height: 180, elevation: 15, shadowColor: 'rgba(132, 0, 194, 0.4)', borderWidth: 1, borderColor: 'rgba(100, 100, 100, 0.2)'}]}>
+                                <View style={[styles.controlButton, {width: 150, height: 150, elevation: 0 ?? 15, shadowColor: 'rgba(132, 0, 194, 0.4)', borderWidth: 0.0, borderColor: 'rgba(100, 100, 100, 0.2)', boxShadow: "0px 0px 20px -10px rgba(0, 0, 0, 0.1)"}]}>
                                     <MaterialIcons style={[{}]} name={"call"} size={80}/>
                                 </View>
                                 <Text style={[{fontSize: 15, color: "rgba(0, 0, 0, .5)"}]}>Join</Text>
                             </View>
-                            <View style={{display: "flex", flexDirection: "column", gap: 10, alignItems: "center", position: "relative", right: 7}}>
-                                <View style={[styles.controlButton, {width: 110, height: 110, elevation: 7, shadowColor: 'rgba(255, 0, 255, 0.62)', borderWidth: 1, borderColor: 'rgba(100, 100, 100, 0.2)'}]}>
+                            <View style={{display: "flex", flexDirection: "column", gap: 10, alignItems: "center", position: "relative", right: 7, right: -20}}>
+                                <View style={[styles.controlButton, {width: 180 || 110, height: 180 || 110, elevation: 0 ?? 7, shadowColor: 'rgba(255, 0, 255, 0.62)', borderWidth: 0, borderColor: 'rgba(100, 100, 100, 0.2)', borderColor: "white", borderWidth: 15, backgroundColor: "transparent", boxShadow: "0px 0px 2px 0px rgba(0, 0, 0, 0.1)"}]}>
                                     <MaterialIcons style={[{}]} name={"pause"} size={35}/>
                                 </View>
                                 <Text style={[{fontSize: 15, color: "rgba(0, 0, 0, .5)"}]}>Hold</Text>
@@ -137,6 +149,6 @@ const styles = StyleSheet.create({
         borderColor: 'rgba(100, 100, 100, 0.2)',
         elevation: 0,
         shadowColor: "rgba(0, 0, 0, .3)",
-        borderRadius: 5,
+        borderRadius: "10%",
     }
 })

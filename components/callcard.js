@@ -1,6 +1,6 @@
 import { Component } from "react";
 
-import { Text, View, StyleSheet, ImageBackground, FlatList } from "react-native";
+import { Text, View, StyleSheet, ImageBackground } from "react-native";
 
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -58,7 +58,7 @@ export function ActionIconType1(
         iconName, IconClass, text, iconSize, iconColor, 
         height, width, style, ...others
     }) {
-    let bRadius = radius ?? 17
+    let bRadius = radius ?? 13
     let fLatch = latch || 'center'
     return (
         <View style={[

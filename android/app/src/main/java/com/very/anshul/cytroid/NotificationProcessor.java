@@ -139,7 +139,7 @@ public class NotificationProcessor extends NotificationListenerService {
         filter.addAction("PLAY_PAUSE");
         filter.addAction("TRACK_NEXT");
         filter.addAction("TRACK_PREV");
-        registerReceiver(broadcastReceiver, filter);
+        registerReceiver(broadcastReceiver, filter, RECEIVER_EXPORTED);
         requestRebind(new ComponentName(this, CycleService.class));
     }
 

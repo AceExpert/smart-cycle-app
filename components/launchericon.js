@@ -21,6 +21,7 @@ export default class LauncherIcon extends Component {
         <View style={[styles.column, {alignItems: "center", gap: 3}]}> 
             <SmartView 
                 touchFeedback={false} 
+                link={this.props.link}
                 onTouchStart={() => {
                     this.setState({touch: true})
                 }}

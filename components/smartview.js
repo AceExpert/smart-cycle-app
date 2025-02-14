@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { router } from "expo-router";
 
 import { Text, View, StyleSheet, ImageBackground } from "react-native";
 
@@ -35,6 +36,9 @@ export default class SmartView extends Component {
             onResponderRelease={
                 evt => {
                     this.props?.onTouchEnd?.(evt);
+                    if(this.props?.link) {
+                        router.push(this.props.link, this.props?.linkOptions)
+                    }
                     this.setState({touch: false})
                     if(this.state.timer) {
                         clearTimeout(this.state.timer);
@@ -54,24 +58,18 @@ export default class SmartView extends Component {
   
 }
 
-export class ChatView extends Component {
+export function ChatView({children, style, ...others}) {
 
-    constructor(props) {
-        super(props)
-        this.props = props
-    }
-
-    render = () => 
-        <View style={[this.props.style]}>
-            {this.props.children.map((elem, ind, {length}) => {
+    return ( 
+        <View style={[...(style.constructor === Array? style: [style])]}>
+            {children.map((elem, ind, {length}) => {
                 {
                     elem.props.style.push({...(ind < length - 1 ? {borderBottomLeftRadius: 0} : {}), ...(ind > 0 ? {borderTopLeftRadius: 0} : {})})
                     return elem
                 }
             })}
         </View>
-    
-
+    )
 }
   
 const styles = StyleSheet.create({

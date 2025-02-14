@@ -1,7 +1,12 @@
 import { Component } from "react";
+import { router, Stack } from "expo-router";
 
-import { Text, View, StyleSheet, NativeModules, ScrollView, Switch, DeviceEventEmitter, Image, Dimensions, ActivityIndicator } from "react-native";
-import { Link } from "expo-router";
+import { 
+  Text, View, StyleSheet, 
+  ScrollView, Switch, /*DeviceEventEmitter,*/ 
+  Image, Dimensions, ActivityIndicator, 
+  ImageBackground 
+} from "react-native";
 
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
@@ -10,6 +15,8 @@ import LauncherIcon from "../components/launchericon";
 import Slider from "../components/slider";
 import SmartView, {ChatView} from "../components/smartview";
 import NavigationTemplate from "../components/navitemplate";
+import Notification from "../components/notification";
+import { ActionIconType1 } from "../components/callcard";
 
 import NativeCycleControl from "../specs/NativeCycleControl"
 
@@ -36,6 +43,8 @@ export default class Index extends Component {
   }
 
   componentDidMount() {
+    this.setState({voipServerConnected: true})
+    /*
     DeviceEventEmitter.addListener("mediaActive", evt => {
       console.log(evt)
       if(evt.active === 'false') {
@@ -104,7 +113,7 @@ export default class Index extends Component {
     })
     DeviceEventEmitter.addListener("unmuteVOIP", evt => {
       this.setState({muted: false})
-    })
+    })*/
     NativeCycleControl.init(() => {})
   }
 
@@ -118,11 +127,14 @@ export default class Index extends Component {
   }
 
   componentWillUnmount() {
-    DeviceEventEmitter.removeAllListeners();
+    //DeviceEventEmitter.removeAllListeners();
   }
 
   render = () => 
     <ScrollView style={[{width: "100%", height: "100%"}, styles.column]}>
+      <Stack.Screen options={{headerTitle: "Cytroid"}}/>
+      <View style={[{position: "absolute", width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", paddingTop: 30, justifyContent: "flex-start"}]}>
+      </View>
       <View style={[styles.row, {width: "100%", padding: 20, paddingTop: 10, justifyContent: "space-between", height: "100%"}]}>
         <ChatView style={[{paddingTop: 20, gap: 20, width: 240}, styles.column]}>
           <ActionCard style={[styles.actionCard, {backgroundColor: "#ff2982"}]}>
@@ -232,9 +244,7 @@ export default class Index extends Component {
               <LauncherIcon style={[styles.actionCard, styles.actionIcon]} icon={"search"} name={"Find cycle"} iconStyle={{color: "purple"}}/>
               <LauncherIcon style={[styles.actionCard, styles.actionIcon]} icon={"location-on"} name={"Location"} iconStyle={{color: "maroon"}}/>
               <LauncherIcon style={[styles.actionCard, styles.actionIcon]} icon={"phonelink-ring"} name={"Ring Cycle"} iconStyle={{color: "coral"}}/>
-              <Link href={'/call'} relativeToDirectory>
-                <LauncherIcon style={[styles.actionCard, styles.actionIcon]} icon={"groups-2"} name={"Group Call"} iconStyle={{color: "navy"}}/>
-              </Link>
+              <LauncherIcon style={[styles.actionCard, styles.actionIcon]} icon={"groups-2"} name={"Group Call"} iconStyle={{color: "navy"}} link={'/call'}/>
               <LauncherIcon style={[styles.actionCard, styles.actionIcon]} icon={"settings"} name={"Settings"} iconStyle={{color: "rgb(120, 120, 120)"}}/>
             </View>
 
@@ -255,6 +265,23 @@ export default class Index extends Component {
             </ActionCard>
 
           </View>
+        </View>
+      </View>
+
+      <View style={[{width: 400, display: "flex", flexDirection: "column", gap: 20, justifyContent: "center"}]}>
+        <ActionIconType1 latch={'left'} mainPad={10} height={30} width={220} radius={0} style={{alignSelf: "flex-start", borderTopRightRadius: 17, backgroundColor: "rgb(255, 0, 55)"}}/>
+        <ActionIconType1 latch={'right'} mainPad={10} height={30} width={130} radius={0} style={{alignSelf: "flex-end", borderTopLeftRadius: 17, backgroundColor: "lightgreen"}}/>
+        <ActionIconType1 latch={'left'} mainPad={10} height={30} width={150} radius={0} style={{alignSelf: "flex-start", borderBottomRightRadius: 17, backgroundColor: "gold"}}/>
+        <ActionIconType1 latch={'right'} mainPad={10} height={30} width={200} radius={0} style={{alignSelf: "flex-end", borderBottomLeftRadius: 17, backgroundColor: "dodgerblue"}}/>
+        <View style={[{width: "100%", height: 65, alignSelf: "center", position: "absolute", display: "flex", flexDirection: "column", alignItems: "center", gap: 2}]}>
+            <View style={[{width: 65, height: "50%", display: "flex", flexDirection: "row", gap: 2}]}>
+                <View style={[{width: "50%", height: "100%", backgroundColor: "rgb(34, 0, 54)" || "skyblue", borderTopLeftRadius: "10%", elevation: 5, shadowColor: "rgba(0, 0, 0, 0.6)", borderRightWidth: 0, borderColor: "dodgerblue"}]}></View>
+                <View style={[{width: "50%", height: "100%", backgroundColor: "rgb(34, 0, 54)", borderTopRightRadius: "10%", elevation: 5, shadowColor: "rgba(0, 0, 0, 0.6)", borderBottomWidth: 0, borderColor: "gold"}]}></View>
+            </View>
+            <View style={[{width: 65, height: "50%", display: "flex", flexDirection: "row", gap: 2}]}>
+                <View style={[{width: "50%", height: "100%", backgroundColor: "rgb(66, 0, 104)" || "rgb(132, 189, 255)", borderBottomLeftRadius: "10%", elevation: 5, shadowColor: "rgba(0, 0, 0, 0.6)", borderTopWidth: 0, borderColor: "lightgreen"}]}></View>
+                <View style={[{width: "50%", height: "100%", backgroundColor: "rgb(66, 0, 104)" || "skyblue", borderBottomRightRadius: "10%", elevation: 2, shadowColor: "rgba(0, 0, 0, .6)", borderLeftWidth: 0, borderColor: "rgb(255, 0, 55)"}]}></View>
+            </View>
         </View>
       </View>
 
