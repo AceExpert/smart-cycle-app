@@ -12,7 +12,8 @@ export default class SmartView extends Component {
       this.state = {
         display: "none",
         timer: null,
-        touch: false
+        touch: false,
+        ltimer: null,
       }
     }
   
@@ -22,7 +23,7 @@ export default class SmartView extends Component {
             ref={this.view}
             onStartShouldSetResponder={evt => this.props.disabled === true? false : (() => {
                 this.setState({touch: true}, () => {
-                    setTimeout(() => {
+                    this.state.ltimer = setTimeout(() => {
                         if(this.state.touch) {
                             this.props.onLongPress?.(evt)
                         }
@@ -45,7 +46,12 @@ export default class SmartView extends Component {
                     if(this.props?.link) {
                         router.push(this.props.link, this.props?.linkOptions)
                     }
+                    this.state.touch = false;
                     this.setState({touch: false})
+                    if(this.state.ltimer) { 
+                        clearTimeout(this.state.ltimer); 
+                    }
+                    this.state.ltimer = null;
                     if(this.state.timer) {
                         clearTimeout(this.state.timer);
                         this.setState({timer: null, display: "none", touch: false});

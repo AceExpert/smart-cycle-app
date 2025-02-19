@@ -18,7 +18,7 @@ export default class LauncherIcon extends Component {
     }
   
     render = () =>
-        <View style={[styles.column, {alignItems: "center", gap: 3}]}> 
+        <View style={[styles.column, {alignItems: "center", gap: 3, justifyContent: "center"}, this.props.rStyle]}> 
             <SmartView 
                 touchFeedback={false} 
                 link={this.props.link}
@@ -29,7 +29,7 @@ export default class LauncherIcon extends Component {
                     this.setState({touch: false})
                 }}
             >
-                <ActionCard style={[this.props.style, {backgroundColor: this.state.touch? 'rgb(200, 200, 200)': 'white'}]}>
+                <ActionCard style={[this.props.style, {backgroundColor: this.state.touch? 'rgb(200, 200, 200)': this.props.style?.backgroundColor ?? 'white', display: "flex", alignItems: "center", justifyContent: "center"}]}>
                     <MaterialIcons name={this.props.icon} size={35} style={[styles.mainIcon, styles.lightBorder, this.props.iconStyle]}/>
                 </ActionCard>
             </SmartView>

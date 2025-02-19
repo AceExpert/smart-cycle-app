@@ -56,7 +56,7 @@ export function ActionIconType1(
     {
         radius, latch, children, leftPad, mainPad, 
         iconName, IconClass, text, iconSize, iconColor, 
-        height, width, style, ...others
+        height, width, style, iconStyle, ...others
     }) {
     let bRadius = radius ?? 13
     let fLatch = latch || 'center'
@@ -82,12 +82,15 @@ export function ActionIconType1(
                         borderBottomLeftRadius: bRadius, 
                         borderTopLeftRadius: bRadius
                     }),
-                ...(style ?? {})
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                ...(style ?? {}),
             }
         ]}>
             <View style={[{padding: mainPad ?? 7, display: "flex", alignItems: "center", width: width || 'auto', height: height || 'auto'}]}>
                 {iconName? 
-                  <IconClass name={iconName} size={iconSize ?? 23} style={[{color: iconColor ?? 'black'}]}/>
+                  <IconClass name={iconName} size={iconSize ?? 23} style={[{color: iconColor ?? 'black'}, ...(iconStyle?.constructor === Array? iconStyle : [iconStyle])]}/>
                   : text?
                   <Text style={[{fontSize: 18, fontWeight: 500}]}>{text}</Text> : null
                 }
