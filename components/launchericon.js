@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { Component, useState } from "react";
 
 import { Text, View, StyleSheet } from "react-native";
 
@@ -7,35 +7,29 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import ActionCard from "./actioncard";
 import SmartView from "./smartview";
 
-export default class LauncherIcon extends Component {
+export default function LauncherIcon({IconClass = MaterialIcons, ...props}) {
 
-    constructor(props) {
-      super(props);
-      this.props = props;
-      this.state = {
-        touch: false
-      }
-    }
+    let [touch, setTouch] = useState(false);
   
-    render = () =>
-        <View style={[styles.column, {alignItems: "center", gap: 3, justifyContent: "center"}, this.props.rStyle]}> 
+    return (
+        <View style={[styles.column, {alignItems: "center", gap: 3, justifyContent: "center"}, props.rStyle]}> 
             <SmartView 
                 touchFeedback={false} 
-                link={this.props.link}
+                link={props.link}
                 onTouchStart={() => {
-                    this.setState({touch: true})
+                    setTouch(true)
                 }}
                 onTouchEnd={() => {
-                    this.setState({touch: false})
+                    setTouch(false)
                 }}
             >
-                <ActionCard style={[this.props.style, {backgroundColor: this.state.touch? 'rgb(200, 200, 200)': this.props.style?.backgroundColor ?? 'white', display: "flex", alignItems: "center", justifyContent: "center"}]}>
-                    <MaterialIcons name={this.props.icon} size={35} style={[styles.mainIcon, styles.lightBorder, this.props.iconStyle]}/>
+                <ActionCard style={[props.style, {backgroundColor: touch? 'rgb(200, 200, 200)': props.style?.backgroundColor ?? 'white', display: "flex", alignItems: "center", justifyContent: "center"}]}>
+                    <IconClass name={props.icon} size={35} style={[styles.mainIcon, styles.lightBorder, props.iconStyle]}/>
                 </ActionCard>
             </SmartView>
-            <Text style={[styles.iconText]}>{this.props.name}</Text>
+            <Text style={[styles.iconText]}>{props.name}</Text>
         </View>
-  
+    )
 }
   
 const styles = StyleSheet.create({

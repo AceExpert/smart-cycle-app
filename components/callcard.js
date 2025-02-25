@@ -19,7 +19,7 @@ export default class CallCard extends Component {
     }
 
     render = () =>
-        <View style={[{width: "100%", display: "flex", flexDirection: "column", elevation: 0, backgroundColor: "rgba(255, 255, 255, 0)", borderLeftColor: this.props.sideColor ?? "green", borderLeftWidth: 5}]}>
+        <View style={[{width: "100%", display: "flex", flexDirection: "column", elevation: 0, backgroundColor: "rgba(255, 255, 255, 0)", borderLeftColor: this.props.sideColor ?? "green", borderLeftWidth: this.props.sideWidth ?? 5}]}>
             <View style={[styles.card, this.props.style ?? {}]}>
                 <View style={[styles.avatar]}>
                     <ImageBackground 
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
         gap: 5,
         height: 60,
         borderBottomColor: 'rgba(200, 200, 200, 0.5)',
-        borderBottomWidth: 1,
+        borderBottomWidth: 0.5, //1
         borderTopWidth: 0,
         borderRightWidth: 0,
         borderTopColor: 'rgba(220, 220, 220, 0.4)',

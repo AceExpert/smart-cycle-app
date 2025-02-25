@@ -61,7 +61,6 @@ export default class CallView extends Component {
                         
                         <View style={[styles.memberCard, {borderTopRightRadius: 0, borderBottomRightRadius: 30}]}>
                             <ScrollView style={{display: "flex", width: "100%", flexDirection: "column", gap: 0, maxHeight: 300}}>
-                                <CallCard online = {true} joined = {true} muted={false}/>
                                 <CallCard 
                                     name = {"Anshul"} 
                                     avatar = {'https://cdn-icons-png.flaticon.com/512/6997/6997662.png'} 
@@ -75,14 +74,6 @@ export default class CallView extends Component {
                                     online = {true}
                                     muted = {false}
                                     joined = {true}
-                                />
-                                <CallCard 
-                                    name = {"Gabriella"} 
-                                    avatar = {'https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-female-9.png'} 
-                                    sideColor = {'orange'}
-                                    online = {false}
-                                    muted = {false}
-                                    joined = {false}
                                     style = {{borderBottomWidth: 0}}
                                 />
                             </ScrollView>
@@ -100,7 +91,7 @@ export default class CallView extends Component {
                     </View>
                     <View style={[{width: "100%", display: "flex", flexDirection: "row", justifyContent: "flex-start", marginBottom: 10, alignItems: "center"}]}>
                         <View style={[{display: "flex", flexDirection: "row", alignItems: "flex-end", gap: 3, justifyContent: "flex-end"}]}>
-                            <ActionIconType1 latch={'left'} mainPad={9} text={'Cupertino Dreams'} style={{borderTopRightRadius: 30, borderBottomRightRadius: 0}}/>
+                            <ActionIconType1 latch={'left'} mainPad={9} text={'Our dreams'} style={{borderTopRightRadius: 30, borderBottomRightRadius: 0}}/>
                             <ActionIconType1 mainPad={7} iconName={'exit'} IconClass={Ionicons} iconSize={23} iconColor={"darkred"} radius={30} style={{borderBottomLeftRadius: 0, borderTopRightRadius: 0, borderBottomRightRadius: 17}} iconStyle={[{position: "relative", right: -3}]}/>
                             <View style={{position: "absolute", top: -43, display: "flex", flexDirection: "row", gap: 3, alignItems: "flex-end", right: -64}}>
                         
@@ -150,7 +141,7 @@ export default class CallView extends Component {
                     </Animated.View>
                 </View>
                 <View style={{width: "100%", display: "flex", flexDirection: "column", paddingTop: 0}}>
-                    <View style={{width: "100%", padding: 20, display: "flex", flexDirection: "column", gap: 7, alignItems: "flex-start", transform: [{rotateZ: "-15deg"}] || [{rotateX: "30deg"}, {rotateZ: "-30deg"}]}}>
+                    <View style={{width: "100%", padding: 20, display: "flex", flexDirection: "column", gap: 7, alignItems: "flex-start", transform: [{rotateZ: "-0deg"}] || [{rotateX: "30deg"}, {rotateZ: "-30deg"}]}}>
                         <View style={{display: "flex", flexDirection: "row", alignItems: "flex-end", gap: 7, alignSelf: "flex-end"}}>
                             <View style={{display: "flex", flexDirection: "column", gap: 10, alignItems: "center", zIndex: 5}}>
                                 <Animated.View style={[styles.controlButton, {transform: [{rotateY: this.state.butterflyAnim1.interpolate({inputRange: [-25, 25], outputRange: ["-35deg", "35deg"]})}, {translateX:  this.state.butterflyAnim1.interpolate({inputRange: [-25, 0, 25], outputRange: [15, 0, 15]})}], width: 180, height: 180, elevation: 0 ?? 15, shadowColor: 'rgba(132, 0, 194, 0.4)', borderWidth: 0.0, borderColor: 'rgba(100, 100, 100, 0.2)', boxShadow: "0px 0px 20px -10px rgba(0, 0, 0, 0.1)", borderRadius: "40%", borderBottomRightRadius: "0%", borderTopLeftRadius: "0%", backgroundColor: "rgb(209, 0, 105)", boxShadow: "-3px 3px 40px 0px rgba(0, 0, 0, 0.0)" /*0.2*/}]}>

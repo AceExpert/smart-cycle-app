@@ -11,6 +11,7 @@ import {
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Entypo from "@expo/vector-icons/Entypo";
 import Fontisto from "@expo/vector-icons/Fontisto";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 import ActionCard from "../components/actioncard";
 import LauncherIcon from "../components/launchericon";
@@ -43,7 +44,7 @@ export default class Index extends Component {
       voipConnected: false,
       muted: true,
       voipServerConnected: false,
-      mainAnim1: new Animated.Value(300),
+      mainAnim1: new Animated.Value(0), //300
       notifs: [],
       notifBar: false,
       secondPanelBlur: undefined
@@ -129,11 +130,11 @@ export default class Index extends Component {
         duration: 600,
       }).start();
     }, 1000)
-    this.pushNotification({
+    /*this.pushNotification({
       notification: <Notification content={<Text>Incoming call from <Text style={{fontWeight: 700}}>Sayu</Text></Text>} key={`notif-${Math.random()}`} iconName={"info"} IconClass={Fontisto} iconSize={15} iconColor={null} title = {"Incoming call"} type={'call'}/>,
       delay: 3000,
       duration: 10000
-    })
+    })*/
   }
 
   stopSeek(callb) {
@@ -192,10 +193,10 @@ export default class Index extends Component {
 
   render = () => 
     <ScrollView style={[{width: "100%", height: "100%", padding: 0, margin: 0, marginTop: 0}, styles.column]}>
-      <Stack.Screen options={{headerTitle: "Cytroid", headerShown: false}}/>
+      <Stack.Screen options={{headerTitle: "Cytroid", headerShown: false, orientation: "portrait"}}/>
       <View style={{width: "100%", height: 60}}>
-        <View style={{display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", width: "100%", paddingTop: 5}}>
-          <View style={{display: "flex", flexDirection: "row", gap: 3}}>
+        <View style={{display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", width: "100%", paddingTop: 0}}>
+          {/*<View style={{display: "flex", flexDirection: "row", gap: 3}}>
             <View style={{display: "flex", flexDirection: "column", gap: 3, paddingLeft: 3, alignSelf: "flex-end", alignItems: "flex-end"}}>
               <View style={[Floral.petal1(15), {backgroundColor: "white", width: 24, height: 24, boxShadow: "-0px -0px 10px 0px rgba(20, 20, 20, 0.1)", elevation: 0, shadowColor: "rgba(0, 0, 0, 0.3)", borderWidth: 0.0, borderColor: "rgba(58, 58, 58, 0.2)"}]}></View>
               <View style={[Floral.petal2(15), {backgroundColor: "white", width: 28, height: 28, boxShadow: "-0px 5px 20px -2px rgba(20, 20, 20, 0.2)", elevation: 0, shadowColor: "rgba(0, 0, 0, 0.3)", borderWidth: 0.0, borderColor: "rgba(58, 58, 58, 0.2)"}]}>
@@ -208,13 +209,31 @@ export default class Index extends Component {
               <View style={[Floral.petal4(15), {backgroundColor: "white", width: 24, height: 24, boxShadow: "0px 5px 20px -2px rgba(20, 20, 20, 0.2)", elevation: 0, shadowColor: "rgba(100, 100, 100, 0.3)", borderWidth: 0.0, borderColor: "rgba(0, 0, 0, 0.2)"}]}>
               </View>
             </View>
+          </View>*/}
+          <View style={{display: "flex", flexDirection: "row", alignItems: "center", gap: 5, alignSelf: "flex-start", paddingTop: 5, paddingLeft: 10, width: "100%", justifyContent: "flex-start"}}>
+            <View style={{direction: "flex", flexDirection: "row", alignItems: "center", gap: 2}}>
+              <Text style={{fontSize: 25, fontWeight: 500, letterSpacing: 0, color: "rgba(0, 0, 0, 1)"}}>C</Text>
+              <Text style={{fontSize: 25, fontWeight: 300, letterSpacing: 7, color: "rgba(0, 0, 0, 0.6)"}}>YTROID</Text>
+            </View>
           </View>
-          <View style={{alignItems: "center", display: "flex", flexDirection: "row-reverse"}}>
+          <View style={{alignItems: "center", display: "flex", flexDirection: "row-reverse", position: "absolute", right: 0, top: 0, gap: 10}}>
             <SmartView touchFeedback = {false} onTouchEnd = {() => {
               this.toggleNotificationBar()
             }}>
-              <View style={{borderTopLeftRadius: 8, borderBottomLeftRadius: 8, backgroundColor: "rgb(34, 0, 54)", padding: 8, alignItems: "center", paddingRight: 10}}>
+              <View style={{borderTopLeftRadius: 0, borderBottomLeftRadius: 15, backgroundColor: "rgb(153, 0, 89)", padding: 8, alignItems: "center", paddingRight: 8, alignSelf: "flex-start"}}>
                 <Entypo size={30} style={{color: "white"}} name={"notification"}/>
+              </View>
+            </SmartView>
+            <SmartView touchFeedback = {false} onTouchEnd = {() => {
+            }}>
+              <View style={{borderTopLeftRadius: 0, borderBottomLeftRadius: 15, backgroundColor: "transparent", padding: 0, alignItems: "center", paddingRight: 0, alignSelf: "flex-start"}}>
+                <MaterialIcons size={20} style={{color: "grey"}} name={"settings"}/>
+              </View>
+            </SmartView>
+            <SmartView touchFeedback = {false} onTouchEnd = {() => {
+            }}>
+              <View style={{borderTopLeftRadius: 0, borderBottomLeftRadius: 15, backgroundColor: "transparent", padding: 0, alignItems: "center", paddingRight: 0, alignSelf: "flex-start"}}>
+                <MaterialCommunityIcons size={20} style={{color: "rgb(171, 107, 255)"}} name={"flower"}/>
               </View>
             </SmartView>
           </View>
@@ -319,7 +338,7 @@ export default class Index extends Component {
             </View>
         </View>*/}
         <Animated.View style={[styles.row, {width: "100%", padding: 20, paddingTop: 0, justifyContent: "space-between", position: "relative", right: this.state.mainAnim1}]}>
-          <View style={[{paddingTop: 0, gap: 10, width: 240}, styles.column]}>
+          <View style={[{paddingTop: 0, gap: 20, width: 240}, styles.column]}>
             <ActionCard style={[styles.actionCard, {backgroundColor: "#ff2982", borderRadius: 0, borderTopRightRadius: 0, borderTopLeftRadius: 50, borderBottomRightRadius: 60}]}>
               <Text style={[styles.actionCardHead, {color: "white", alignSelf: "flex-end", paddingRight: 10}]}>Cycle</Text>
               <SmartView onLongPress={() => this.pushNotification({
@@ -328,16 +347,30 @@ export default class Index extends Component {
                 duration: 4000, //4000
                 popOnEnd: true
               })}>
-                <MaterialIcons name="power-settings-new" size={52} style={[styles.mainIcon, {color: "white"}]}/>
-              </SmartView>
-              <Text style={[{fontSize: 13, color: "white", alignSelf: "flex-start", paddingLeft: 10}]}>Connected</Text>
+                <MaterialIcons name="power-settings-new" size={52} style={[styles.mainIcon, {color: "white", filter: [{dropShadow: "0px 0px 7px rgb(255, 255, 255)"}]}]}/>
+              </SmartView>  
+              <Text style={[{fontSize: 13, color: "white", paddingLeft: 10, alignSelf: "flex-start"}]}>Connected</Text>
             </ActionCard>
             <ActionCard style={[styles.actionCard, {backgroundColor: "dodgerblue", borderRadius: 0, borderBottomRightRadius: 0, borderTopRightRadius: 60, borderBottomLeftRadius: 50}]}>
               <Text style={[styles.actionCardHead, {color: "white", alignSelf: "flex-start", paddingLeft: 10}]}>Speaker</Text>
-              <MaterialIcons name={"bluetooth-audio"} size={52} style={[styles.mainIcon, {color: "white"}]}/>
-              <Text style={[{fontSize: 13, color: "white", alignSelf: "flex-end", paddingRight: 10}]}>Connected</Text>
+              <SmartView onLongPress={() => this.pushNotification({
+                notification: <Notification content={"Connect / Disconnect with your cycle speaker"} key={`notif-${Math.random()}`} iconName={"info"} IconClass={Fontisto} iconSize={15} type={'info'}/>,
+                delay: 0,
+                duration: 4000, //4000
+                popOnEnd: true
+              })}>
+                <MaterialIcons name={"bluetooth-audio"} size={52} style={[styles.mainIcon, {color: "white", filter: [{dropShadow: "0px 0px 7px rgb(255, 255, 255)"}]}]}/>
+              </SmartView>
+              <View style={{display: "flex", flexDirection: "row-reverse", alignItems: "center", alignSelf: "flex-end"}}>
+                <Text style={[{fontSize: 13, color: "white", alignSelf: "flex-end", paddingRight: 10}]}>Connected</Text>
+              </View>
+              <View style={{position: "absolute", display: "flex", alignItems: "center", right: 0, borderRadius: "50%", backgroundColor: "rgb(119, 184, 0)", boxShadow: "0px 0px 10px -2px rgba(0, 0, 0, 0.3)"}}>
+                <SmartView>
+                  <MaterialIcons name={"settings"} size={20} style={{color: "white", padding: 7}}/>
+                </SmartView>
+              </View>
             </ActionCard>
-            <ActionCard style={[styles.actionCard, {borderWidth: 0.0, borderBottomWidth: 1, borderRightWidth: 1, borderLeftWidth: 0, borderTopWidth: 0, borderColor: this.state.voipServerConnected ? 'orange' : 'grey', borderRadius: 0, borderTopRightRadius: 0, borderTopLeftRadius: 65, borderBottomRightRadius: 70}]}>
+            <ActionCard style={[styles.actionCard, {borderWidth: 0.0, borderBottomWidth: 2, borderRightWidth: 2, borderLeftWidth: 0, borderTopWidth: 0, borderColor: this.state.voipServerConnected ? 'orange' : 'grey', borderRadius: 0, borderTopRightRadius: 0, borderTopLeftRadius: 65, borderBottomRightRadius: 70}]}>
               {this.state.voipServerConnected ? 
                 <MaterialIcons name={"wifi-tethering"} size={15} style={[{color: "orange", position: "absolute", right: 8, top: 5}]}/> 
                   : 
@@ -357,7 +390,7 @@ export default class Index extends Component {
               </View>
               <Text style={[{fontSize: 13, color: "rgb(180, 180, 180)", alignSelf: "flex-start", paddingLeft: 10}]}>{this.state.voipServerConnected? (this.state.voipConnected? 'Connected' : 'Idle') : 'Connecting'}</Text>
             </ActionCard>
-            <ActionCard style={[styles.actionCard, {width: 240, borderWidth: 0., marginTop: 8, height: "auto", gap: 0, borderTopRightRadius: 0, borderTopLeftRadius: 0, borderTopWidth: 3, borderColor: "dodgerblue", borderBottomRightRadius: 0}]}>
+            {/*<ActionCard style={[styles.actionCard, {width: 240, borderWidth: 0., marginTop: 8, height: "auto", gap: 0, borderTopRightRadius: 0, borderTopLeftRadius: 0, borderTopWidth: 3, borderColor: "dodgerblue", borderBottomRightRadius: 0}]}>
                 <Text style={[styles.actionCardHead, {alignSelf: "flex-start", paddingLeft: 9, paddingTop: 5}]}>Sound</Text>
                 <View style={[styles.centerRow, {justifyContent: 'space-between', width: "100%"}]}>
                   <Text style={[{paddingLeft: 9, paddingTop: 5, color: "grey", fontWeight: 500}]}>Startup</Text>
@@ -378,7 +411,7 @@ export default class Index extends Component {
                   <LauncherIcon style={[styles.transparent, styles.actionIcon]} icon={"library-music"} name={"Default"} iconStyle={{color: "grey", padding: 0}}/>
                   <LauncherIcon style={[styles.transparent, styles.actionIcon]} icon={"add"} name={"Custom"} iconStyle={{color: "rebeccapurple", padding: 0}}/>
                 </View>
-              </ActionCard>
+              </ActionCard>*/}
           </View>
         </Animated.View>
 
@@ -428,12 +461,16 @@ export default class Index extends Component {
                   </View>
                 </View>
               </ActionCard>
-              <View style={[styles.row, {gap: 20, height: "auto", flexWrap: "wrap", justifyContent: "flex-end", paddingLeft: 0, paddingTop: 20, paddingBottom: 20, width: "100%", borderLeftWidth: 2, borderColor: "rgba(0, 0, 0, 0.32)", borderTopWidth: 0, borderBottomWidth: 0, backgroundColor: "transparent", elevation: 0}]}>
+              <View style={[styles.row, {gap: 20, height: "auto", flexWrap: "wrap", justifyContent: "flex-end", paddingRight: 0, paddingLeft: 0, paddingTop: 20, paddingBottom: 20, width: "100%", borderLeftWidth: 0, borderRightWidth: 0, borderColor: "rgba(0, 0, 0, 0.32)", borderTopWidth: 0, borderBottomWidth: 0, backgroundColor: "transparent", elevation: 0}]}>
                 <LauncherIcon style={[styles.actionCard, styles.actionIcon, {borderRadius: 0, borderBottomRightRadius: 0, borderTopRightRadius: 30, borderBottomLeftRadius: 20}]} icon={"search"} name={"Find cycle"} iconStyle={{color: "purple"}}/>
                 <LauncherIcon style={[styles.actionCard, styles.actionIcon, {borderRadius: 0, borderTopRightRadius: 0, borderTopLeftRadius: 30, borderBottomRightRadius: 20}]} icon={"location-on"} name={"Location"} iconStyle={{color: "maroon"}}/>
                 <LauncherIcon style={[styles.actionCard, styles.actionIcon, {borderRadius: 0, borderBottomRightRadius: 0, borderTopRightRadius: 30, borderBottomLeftRadius: 20}]} icon={"phonelink-ring"} name={"Ring Cycle"} iconStyle={{color: "coral"}}/>
                 <LauncherIcon style={[styles.actionCard, styles.actionIcon, {borderRadius: 0, borderTopRightRadius: 0, borderTopLeftRadius: 30, borderBottomRightRadius: 20}]} icon={"groups-2"} name={"Group Call"} iconStyle={{color: "navy"}} link={'/call'}/>
-                <LauncherIcon style={[styles.actionCard, styles.actionIcon, {borderRadius: 0, borderBottomRightRadius: 0, borderTopRightRadius: 30, borderBottomLeftRadius: 20}]} icon={"settings"} name={"Settings"} iconStyle={{color: "rgb(120, 120, 120)"}}/>
+                <LauncherIcon style={[styles.actionCard, styles.actionIcon, {borderRadius: 0, borderBottomRightRadius: 0, borderTopRightRadius: 30, borderBottomLeftRadius: 20}]} icon={"settings"} name={"Settings"} iconStyle={{color: "rgb(120, 120, 120)"}} link={'/settings'}/>
+                <LauncherIcon style={[styles.actionCard, styles.actionIcon, {borderRadius: 0, borderTopRightRadius: 0, borderTopLeftRadius: 30, borderBottomRightRadius: 20}]} icon={"satellite-uplink"} name={"Voice-link"} IconClass={MaterialCommunityIcons} iconStyle={{color: "green"}} link={'/call'}/>
+                <LauncherIcon style={[styles.actionCard, styles.actionIcon, {borderRadius: 0, borderBottomRightRadius: 0, borderTopRightRadius: 30, borderBottomLeftRadius: 20}]} icon={"soundbar"} name={"Soundboard"} IconClass={MaterialCommunityIcons} iconStyle={{color: "rgb(255, 76, 100)"}} link={'/soundboard'}/>
+                <LauncherIcon style={[styles.actionCard, styles.actionIcon, {borderRadius: 0, borderBottomLeftRadius: 0, borderTopLeftRadius: 30, borderBottomRightRadius: 20}]} icon={"dashboard"} name={"Dashboard"} iconStyle={{color: "rgb(255, 107, 198)"}} link={'/dashboard'}/>
+                <LauncherIcon style={[styles.actionCard, styles.actionIcon, {borderRadius: 0, borderTopLeftRadius: 0, borderTopRightRadius: 30, borderBottomLeftRadius: 20}]} icon={"flower"} name={"Setup"} IconClass={MaterialCommunityIcons} iconStyle={{color: "rgb(171, 107, 255)"}} link={'/setup'}/>
               </View>
 
               <ActionCard style={[styles.actionCard, {width: "100%", borderWidth: 0.3}, styles.cassette, {backgroundColor: "white", borderTopLeftRadius: 0}]}>
@@ -476,7 +513,9 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 15, //0
     borderTopRightRadius: 0,
     borderRightWidth: 3,
-    borderColor: "green"
+    borderColor: "green",
+    elevation: 0,
+    boxShadow: "0px 4px 25px 0px rgba(30, 30, 30, 0.13)"
   },
   transparent: {
     backgroundColor: "rgb(0, 0, 0, 0)",
