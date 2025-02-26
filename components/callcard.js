@@ -28,18 +28,18 @@ export default class CallCard extends Component {
                         
                     </ImageBackground>
                 </View>
-                <View style={[{flex: 1, display: "flex", flexDirection: "row", justifyContent: "space-between", height: "100%"}]}>
-                    <View style={[styles.infoSide]}>
-                        <Text style={{fontSize: 18, fontWeight: 800}}>{this.props?.name ?? 'Joe Daniel'}</Text>
+                <View style={[{flex: 1, display: "flex", flexDirection: "row", justifyContent: "space-between", height: "100%", alignItems: "center"}]}>
+                    <View style={[styles.infoSide, {justifyContent: "center"}]}>
+                        <Text style={{fontSize: 14, fontWeight: 800}}>{this.props?.name ?? 'Joe Daniel'}</Text>
                         <View style={{display: "flex", flexDirection: "row", alignItems: "center", gap: 5}}>
                             {this.props.online? 
                                 <Ionicons name={'bicycle'} size={13} style={[{color: "green"}]}/> :
                                 <FontAwesome name={'bicycle'} size={13} style={[{color: 'grey'}]}/>
                             }
-                            <Text style={[{fontSize: 11, color: 'grey'}]}>{this.props.online? 'Cycling' : 'Offline'}</Text>
-                            <View style={{height: "100%", width: 1, backgroundColor: "rgba(100, 100, 100, 0.3)"}}></View>
-                            <MaterialIcons name={!this.props.online? 'call-end' : this.props.joined? 'call' : 'call-end'} size={15} style={[{color: !this.props.online? 'grey' : this.props.joined? 'green' : 'orange'}]}/>
-                            <Text style={[{fontSize: 11, color: 'grey'}]}>{this.props.joined? 'In call' : 'Not in call'}</Text>
+                            <Text style={[{fontSize: 9, color: 'grey'}]}>{this.props.online? 'Cycling' : 'Offline'}</Text>
+                            <View style={{height: 10, width: 1, backgroundColor: "rgba(100, 100, 100, 0.3)"}}></View>
+                            <MaterialIcons name={!this.props.online? 'call-end' : this.props.joined? 'call' : 'call-end'} size={11} style={[{color: !this.props.online? 'grey' : this.props.joined? 'green' : 'orange'}]}/>
+                            <Text style={[{fontSize: 9, color: 'grey'}]}>{this.props.joined? 'In call' : 'Not in call'}</Text>
                         </View>
                     </View>
                     <View style={[{display: "flex", flexDirection: "row", gap: 18, height: "100%", alignItems: "center", paddingRight: 10}]}>
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         gap: 5,
-        height: 60,
+        height: 40,
         borderBottomColor: 'rgba(200, 200, 200, 0.5)',
         borderBottomWidth: 0.5, //1
         borderTopWidth: 0,
@@ -116,8 +116,8 @@ const styles = StyleSheet.create({
     },
     avatar: {
         display: "flex",
-        width: 60,
-        height: 60,
+        width: 45,
+        height: 45,
         padding: 5,
         borderRadius: 30
     },

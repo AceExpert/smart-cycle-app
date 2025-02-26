@@ -212,8 +212,8 @@ export default class Index extends Component {
           </View>*/}
           <View style={{display: "flex", flexDirection: "row", alignItems: "center", gap: 5, alignSelf: "flex-start", paddingTop: 5, paddingLeft: 10, width: "100%", justifyContent: "flex-start"}}>
             <View style={{direction: "flex", flexDirection: "row", alignItems: "center", gap: 2}}>
-              <Text style={{fontSize: 25, fontWeight: 500, letterSpacing: 0, color: "rgba(0, 0, 0, 1)"}}>C</Text>
-              <Text style={{fontSize: 25, fontWeight: 300, letterSpacing: 7, color: "rgba(0, 0, 0, 0.6)"}}>YTROID</Text>
+              <Text style={{fontSize: 25, fontWeight: 600, letterSpacing: 0, color: "rgba(0, 0, 0, 1)", fontFamily: "SamsungSharpSans-Bold"}}>C</Text>
+              <Text style={{fontSize: 25, fontWeight: 300, letterSpacing: 7, color: "rgba(0, 0, 0, 0.6)", fontFamily: "SamsungSharpSans-Bold"}}>YTROID</Text>
             </View>
           </View>
           <View style={{alignItems: "center", display: "flex", flexDirection: "row-reverse", position: "absolute", right: 0, top: 0, gap: 10}}>
@@ -349,7 +349,7 @@ export default class Index extends Component {
               })}>
                 <MaterialIcons name="power-settings-new" size={52} style={[styles.mainIcon, {color: "white", filter: [{dropShadow: "0px 0px 7px rgb(255, 255, 255)"}]}]}/>
               </SmartView>  
-              <Text style={[{fontSize: 13, color: "white", paddingLeft: 10, alignSelf: "flex-start"}]}>Connected</Text>
+              <Text style={[{fontSize: 13, color: "white", paddingLeft: 10, alignSelf: "flex-start", fontFamily: "SamsungSharpSans-Bold"}]}>Connected</Text>
             </ActionCard>
             <ActionCard style={[styles.actionCard, {backgroundColor: "dodgerblue", borderRadius: 0, borderBottomRightRadius: 0, borderTopRightRadius: 60, borderBottomLeftRadius: 50}]}>
               <Text style={[styles.actionCardHead, {color: "white", alignSelf: "flex-start", paddingLeft: 10}]}>Speaker</Text>
@@ -416,7 +416,7 @@ export default class Index extends Component {
         </Animated.View>
 
         <View style={[{paddingTop: 20, width: "100%", alignItems: "flex-end", position: "absolute", paddingRight: 20}, styles.column]}>
-          <Animated.View style={[styles.column, {width: this.screenWidth - 40 - 240 + 70, paddingTop: 0, position: "relative", right: Animated.multiply(-1, this.state.mainAnim1), filter: this.state.secondPanelBlur}]}>
+          <Animated.ScrollView style={[styles.column, {width: this.screenWidth - 40 - 240 + 70, paddingTop: 0, position: "relative", right: Animated.multiply(-1, this.state.mainAnim1), filter: this.state.secondPanelBlur}]}>
             <View style={[{justifyContent: "space-between", width: "100%"}, styles.centerRow]}>
               <View style={[styles.centerRow, {gap: 0, marginLeft: 0}]}>
                 <MaterialIcons name={"speaker"} size={17} style={[styles.mainIcon, styles.lightBorder, {color: "grey", padding: 0, transform: [{rotate: "0deg"}]}]}/>
@@ -490,7 +490,7 @@ export default class Index extends Component {
               </ActionCard>
 
             </View>
-          </Animated.View>
+          </Animated.ScrollView>
         </View>
       </View>
 
