@@ -11,6 +11,7 @@ import {
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Entypo from "@expo/vector-icons/Entypo";
 import Fontisto from "@expo/vector-icons/Fontisto";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 import ActionCard from "../components/actioncard";
@@ -20,6 +21,7 @@ import SmartView, {ChatView} from "../components/smartview";
 import NavigationTemplate from "../components/navitemplate";
 import Notification from "../components/notification";
 import { ActionIconType1 } from "../components/callcard";
+import SText from "../components/texts";
 
 import NativeCycleControl from "../specs/NativeCycleControl"
 
@@ -30,7 +32,7 @@ export default class Index extends Component {
   constructor(props) {
     super(props);
     this.props = props;
-    this.naviDefault = <Text style={[styles.actionCardHead]}>Navigation</Text>;
+    this.naviDefault = <SText style={[styles.actionCardHead]}>Navigation</SText>;
     this.screenWidth = Dimensions.get("screen").width
     this.state = {
       music: "Music",
@@ -131,7 +133,7 @@ export default class Index extends Component {
       }).start();
     }, 1000)
     /*this.pushNotification({
-      notification: <Notification content={<Text>Incoming call from <Text style={{fontWeight: 700}}>Sayu</Text></Text>} key={`notif-${Math.random()}`} iconName={"info"} IconClass={Fontisto} iconSize={15} iconColor={null} title = {"Incoming call"} type={'call'}/>,
+      notification: <Notification content={<SText>Incoming call from <SText style={{fontWeight: 700}}>Sayu</SText></SText>} key={`notif-${Math.random()}`} iconName={"info"} IconClass={Fontisto} iconSize={15} iconColor={null} title = {"Incoming call"} type={'call'}/>,
       delay: 3000,
       duration: 10000
     })*/
@@ -204,7 +206,7 @@ export default class Index extends Component {
             </View>
             <View style={{display: "flex", flexDirection: "column", gap: 3, paddingLeft: 0}}>
               <View style={[Floral.petal3(18, 20), {backgroundColor: "white", padding: 5, boxShadow: "0px 0px 10px 0px rgba(20, 20, 20, 0.1)", elevation: 0, shadowColor: "rgba(0, 0, 0, 0.3)", borderWidth: 0.0, borderColor: "rgba(58, 58, 58, 0.2)"}]}>
-                <Text style={{fontSize: 23, fontWeight: 600, paddingRight: 3, paddingLeft: 3}}>Cytroid</Text>
+                <SText style={{fontSize: 23, fontWeight: 600, paddingRight: 3, paddingLeft: 3}}>Cytroid</SText>
               </View>
               <View style={[Floral.petal4(15), {backgroundColor: "white", width: 24, height: 24, boxShadow: "0px 5px 20px -2px rgba(20, 20, 20, 0.2)", elevation: 0, shadowColor: "rgba(100, 100, 100, 0.3)", borderWidth: 0.0, borderColor: "rgba(0, 0, 0, 0.2)"}]}>
               </View>
@@ -212,8 +214,10 @@ export default class Index extends Component {
           </View>*/}
           <View style={{display: "flex", flexDirection: "row", alignItems: "center", gap: 5, alignSelf: "flex-start", paddingTop: 5, paddingLeft: 10, width: "100%", justifyContent: "flex-start"}}>
             <View style={{direction: "flex", flexDirection: "row", alignItems: "center", gap: 2}}>
-              <Text style={{fontSize: 25, fontWeight: 600, letterSpacing: 0, color: "rgba(0, 0, 0, 1)", fontFamily: "SamsungSharpSans-Bold"}}>C</Text>
-              <Text style={{fontSize: 25, fontWeight: 300, letterSpacing: 7, color: "rgba(0, 0, 0, 0.6)", fontFamily: "SamsungSharpSans-Bold"}}>YTROID</Text>
+              <FontAwesome6 size={20} name={"dragon"}/>
+              <SText style={{fontSize: 25, fontWeight: 600, letterSpacing: 0, color: "rgba(0, 0, 0, 1)", fontFamily: "SamsungSharpSans-Bold", paddingLeft: 5}}>C</SText>
+              <SText style={{fontSize: 25, fontWeight: 300, letterSpacing: 7, color: "rgba(0, 0, 0, 0.6)", fontFamily: "SamsungSharpSans-Bold"}}>YTROID</SText>
+              <SText style={{fontSize: 15, fontWeight: 300, letterSpacing: 0, color: "rgb(33, 0, 71)", fontFamily: "SamsungSharpSans-Bold", position: "relative", bottom: -20, right: 80}}>Dragon's Breathe</SText>
             </View>
           </View>
           <View style={{alignItems: "center", display: "flex", flexDirection: "row-reverse", position: "absolute", right: 0, top: 0, gap: 10}}>
@@ -249,7 +253,7 @@ export default class Index extends Component {
             )
           })}
           {/*<Animated.View style={{display: "flex", position: "relative", right: -400, zIndex: 5}}>
-            <Notification title={"Incoming"} type={"call"} content={<Text>Incoming call from <Text style={{fontWeight: 500}}>Sayu</Text> yes hi lorem ipsum sdudso osjckj sdkj dsjkc ksjdjksd dsjk sdkfkjck skdj dskjck sdj cksdjcksd js kjkdsjdkcj jsdk csdkcj sjkc jk</Text>}/>
+            <Notification title={"Incoming"} type={"call"} content={<SText>Incoming call from <SText style={{fontWeight: 500}}>Sayu</SText> yes hi lorem ipsum sdudso osjckj sdkj dsjkc ksjdjksd dsjk sdkfkjck skdj dskjck sdj cksdjcksd js kjkdsjdkcj jsdk csdkcj sjkc jk</SText>}/>
           </Animated.View>*/}
         </View>
       </View>
@@ -259,9 +263,9 @@ export default class Index extends Component {
               <View style={{display: "flex", flexDirection: "row", gap: 5, alignItems: "flex-end"}}>
                 <View style={[Floral.petal1(100, 70), {display: "flex", flexDirection: "column", backgroundColor: "dodgerblue", width: 150, height: 150, borderBottomWidth: 0, borderLeftWidth: 0, borderColor: "rgb(0, 90, 192)", boxShadow: "-5px 5px 25px 0px rgba(0, 0, 0, 0.15)"}]}>
                   <View style={{display: "flex", flexDirection: "column", width: "100%", height: "100%", padding: 10, justifyContent: "space-between", alignItems: "center"}}>
-                    <Text style={[styles.actionCardHead, {color: "white", alignSelf: "flex-start", marginTop: -0, marginLeft: 0}]}>Speaker</Text>
+                    <SText style={[styles.actionCardHead, {color: "white", alignSelf: "flex-start", marginTop: -0, marginLeft: 0}]}>Speaker</SText>
                       <MaterialIcons name={"bluetooth-audio"} size={52} style={[styles.mainIcon, {color: "white"}]}/>
-                    <Text style={[{fontSize: 13, color: "white", alignSelf: "flex-end"}]}>Connected</Text>
+                    <SText style={[{fontSize: 13, color: "white", alignSelf: "flex-end"}]}>Connected</SText>
                   </View>
                 </View>
                 <View style={[Floral.petal2(100, 70), {display: "flex", flexDirection: "column", backgroundColor: "white", width: 150, height: 150, borderBottomWidth: 3, borderRightWidth: 3, borderColor: this.state.voipServerConnected ? 'orange' : 'grey', boxShadow: "5px 5px 35px -4px rgba(0, 0, 0, 0.1)"}]}>
@@ -271,7 +275,7 @@ export default class Index extends Component {
                         : 
                       <ActivityIndicator size={"small"} color={"purple"} style={[{position: "absolute", right: 8, top: 5}]}/>
                     }
-                    <Text style={[styles.actionCardHead, {alignSelf: "center", paddingLeft: 50}]}>VoIP</Text>
+                    <SText style={[styles.actionCardHead, {alignSelf: "center", paddingLeft: 50}]}>VoIP</SText>
                     <View style={[styles.centerRow, {gap: 10, alignSelf: "flex-start", paddingLeft: 0, alignSelf: "center"}]}>
                       <SmartView onTouchEnd={() => this.state.muted ? NativeCycleControl.VoIPUnmute() : NativeCycleControl.VoIPMute()} disabled={!this.state.voipServerConnected}>
                         <MaterialIcons name={this.state.muted ? "mic-off" : "mic"} size={35} style={[styles.mainIcon, {color: this.state.voipServerConnected? (this.state.muted ? "darkred" : "purple") : 'grey'}]}/>
@@ -280,10 +284,10 @@ export default class Index extends Component {
                         <SmartView onTouchEnd={() => this.state.voipConnected? NativeCycleControl.disconnectVoIP() : NativeCycleControl.connectVoIP()} disabled={!this.state.voipServerConnected}>
                           <MaterialIcons name={this.state.voipConnected ? "wifi-calling-3" : "call-end"} size={35} style={[styles.mainIcon, {color: this.state.voipConnected ? "yellowgreen" : "grey"}]}/>
                         </SmartView>
-                        <Text style={[{fontSize: 10, color: "grey", position: "absolute", bottom: -10}]}>{this.state.voipServerConnected? (this.state.voipConnected? 'Leave' : 'Join') : ''}</Text>
+                        <SText style={[{fontSize: 10, color: "grey", position: "absolute", bottom: -10}]}>{this.state.voipServerConnected? (this.state.voipConnected? 'Leave' : 'Join') : ''}</SText>
                       </View>
                     </View>
-                    <Text style={[{fontSize: 13, color: "rgb(180, 180, 180)", alignSelf: "flex-start"}]}>{this.state.voipServerConnected? (this.state.voipConnected? 'Connected' : 'Idle') : 'Connecting'}</Text>
+                    <SText style={[{fontSize: 13, color: "rgb(180, 180, 180)", alignSelf: "flex-start"}]}>{this.state.voipServerConnected? (this.state.voipConnected? 'Connected' : 'Idle') : 'Connecting'}</SText>
                   </View>
                 </View>
               </View>
@@ -295,9 +299,9 @@ export default class Index extends Component {
                 </View>
                 <View style={[Floral.petal4(150, 150), {display: "flex", flexDirection: "column", backgroundColor: "white", width: 230, alignSelf: "flex-start"}]}>
                   <View style={{display: "flex", flexDirection: "column", width: "100%", padding: 10, justifyContent: "space-between", alignItems: "center", gap: 3}}>
-                    <Text style={[styles.actionCardHead, {alignSelf: "flex-start", paddingLeft: 0, paddingTop: 0}]}>Sound</Text>
+                    <SText style={[styles.actionCardHead, {alignSelf: "flex-start", paddingLeft: 0, paddingTop: 0}]}>Sound</SText>
                     <View style={[styles.centerRow, {justifyContent: 'space-between', width: "100%", padding: 0, alignItems: "center", paddingRight: 40, alignSelf: "flex-start"}]}>
-                      <Text style={[{paddingLeft: 0, paddingTop: 0, color: "grey", fontWeight: 500}]}>Startup</Text>
+                      <SText style={[{paddingLeft: 0, paddingTop: 0, color: "grey", fontWeight: 500}]}>Startup</SText>
                       <Switch />
                     </View>
                     
@@ -307,7 +311,7 @@ export default class Index extends Component {
                     </View>
 
                     <View style={[styles.centerRow, {justifyContent: 'space-between', width: "100%", paddingLeft: 20}]}>
-                      <Text style={[{paddingLeft: 9, paddingTop: 5, color: "grey", fontWeight: 500}]}>Stand-by</Text>
+                      <SText style={[{paddingLeft: 9, paddingTop: 5, color: "grey", fontWeight: 500}]}>Stand-by</SText>
                       <Switch />
                     </View>
                     
@@ -340,7 +344,7 @@ export default class Index extends Component {
         <Animated.View style={[styles.row, {width: "100%", padding: 20, paddingTop: 0, justifyContent: "space-between", position: "relative", right: this.state.mainAnim1}]}>
           <View style={[{paddingTop: 0, gap: 20, width: 240}, styles.column]}>
             <ActionCard style={[styles.actionCard, {backgroundColor: "#ff2982", borderRadius: 0, borderTopRightRadius: 0, borderTopLeftRadius: 50, borderBottomRightRadius: 60}]}>
-              <Text style={[styles.actionCardHead, {color: "white", alignSelf: "flex-end", paddingRight: 10}]}>Cycle</Text>
+              <SText style={[styles.actionCardHead, {color: "white", alignSelf: "flex-end", paddingRight: 10, fontFamily: "SamsungSharpSans-Bold"}]}>Cycle</SText>
               <SmartView onLongPress={() => this.pushNotification({
                 notification: <Notification content={"Connect / Disconnect with your cycle"} key={`notif-${Math.random()}`} iconName={"info"} IconClass={Fontisto} iconSize={15} type={'info'}/>,
                 delay: 0,
@@ -349,10 +353,10 @@ export default class Index extends Component {
               })}>
                 <MaterialIcons name="power-settings-new" size={52} style={[styles.mainIcon, {color: "white", filter: [{dropShadow: "0px 0px 7px rgb(255, 255, 255)"}]}]}/>
               </SmartView>  
-              <Text style={[{fontSize: 13, color: "white", paddingLeft: 10, alignSelf: "flex-start", fontFamily: "SamsungSharpSans-Bold"}]}>Connected</Text>
+              <SText style={[{fontSize: 13, color: "white", paddingLeft: 10, alignSelf: "flex-start", fontFamily: "SamsungSharpSans-Bold"}]}>Connected</SText>
             </ActionCard>
             <ActionCard style={[styles.actionCard, {backgroundColor: "dodgerblue", borderRadius: 0, borderBottomRightRadius: 0, borderTopRightRadius: 60, borderBottomLeftRadius: 50}]}>
-              <Text style={[styles.actionCardHead, {color: "white", alignSelf: "flex-start", paddingLeft: 10}]}>Speaker</Text>
+              <SText style={[styles.actionCardHead, {color: "white", alignSelf: "flex-start", paddingLeft: 10, fontFamily: "SamsungSharpSans-Bold"}]}>Speaker</SText>
               <SmartView onLongPress={() => this.pushNotification({
                 notification: <Notification content={"Connect / Disconnect with your cycle speaker"} key={`notif-${Math.random()}`} iconName={"info"} IconClass={Fontisto} iconSize={15} type={'info'}/>,
                 delay: 0,
@@ -362,7 +366,7 @@ export default class Index extends Component {
                 <MaterialIcons name={"bluetooth-audio"} size={52} style={[styles.mainIcon, {color: "white", filter: [{dropShadow: "0px 0px 7px rgb(255, 255, 255)"}]}]}/>
               </SmartView>
               <View style={{display: "flex", flexDirection: "row-reverse", alignItems: "center", alignSelf: "flex-end"}}>
-                <Text style={[{fontSize: 13, color: "white", alignSelf: "flex-end", paddingRight: 10}]}>Connected</Text>
+                <SText style={[{fontSize: 13, color: "white", alignSelf: "flex-end", paddingRight: 10, fontFamily: "SamsungSharpSans-Bold"}]}>Connected</SText>
               </View>
               <View style={{position: "absolute", display: "flex", alignItems: "center", right: 0, borderRadius: "50%", backgroundColor: "rgb(119, 184, 0)", boxShadow: "0px 0px 10px -2px rgba(0, 0, 0, 0.3)"}}>
                 <SmartView>
@@ -376,7 +380,7 @@ export default class Index extends Component {
                   : 
                 <ActivityIndicator size={"small"} color={"purple"} style={[{position: "absolute", right: 8, top: 5}]}/>
               }
-              <Text style={[styles.actionCardHead]}>VoIP</Text>
+              <SText style={[styles.actionCardHead]}>VoIP</SText>
               <View style={[styles.centerRow, {gap: 10, alignSelf: "flex-start", paddingLeft: 10}]}>
                 <SmartView onTouchEnd={() => this.state.muted ? NativeCycleControl.VoIPUnmute() : NativeCycleControl.VoIPMute()} disabled={!this.state.voipServerConnected}>
                   <MaterialIcons name={this.state.muted ? "mic-off" : "mic"} size={35} style={[styles.mainIcon, {color: this.state.voipServerConnected? (this.state.muted ? "darkred" : "purple") : 'grey'}]}/>
@@ -385,15 +389,15 @@ export default class Index extends Component {
                   <SmartView onTouchEnd={() => this.state.voipConnected? NativeCycleControl.disconnectVoIP() : NativeCycleControl.connectVoIP()} disabled={!this.state.voipServerConnected}>
                     <MaterialIcons name={this.state.voipConnected ? "wifi-calling-3" : "call-end"} size={35} style={[styles.mainIcon, {color: this.state.voipConnected ? "yellowgreen" : "grey"}]}/>
                   </SmartView>
-                  <Text style={[{fontSize: 10, color: "grey", position: "absolute", bottom: -10}]}>{this.state.voipServerConnected? (this.state.voipConnected? 'Leave' : 'Join') : ''}</Text>
+                  <SText style={[{fontSize: 10, color: "grey", position: "absolute", bottom: -10}]}>{this.state.voipServerConnected? (this.state.voipConnected? 'Leave' : 'Join') : ''}</SText>
                 </View>
               </View>
-              <Text style={[{fontSize: 13, color: "rgb(180, 180, 180)", alignSelf: "flex-start", paddingLeft: 10}]}>{this.state.voipServerConnected? (this.state.voipConnected? 'Connected' : 'Idle') : 'Connecting'}</Text>
+              <SText style={[{fontSize: 13, color: "rgb(180, 180, 180)", alignSelf: "flex-start", paddingLeft: 10}]}>{this.state.voipServerConnected? (this.state.voipConnected? 'Connected' : 'Idle') : 'Connecting'}</SText>
             </ActionCard>
             {/*<ActionCard style={[styles.actionCard, {width: 240, borderWidth: 0., marginTop: 8, height: "auto", gap: 0, borderTopRightRadius: 0, borderTopLeftRadius: 0, borderTopWidth: 3, borderColor: "dodgerblue", borderBottomRightRadius: 0}]}>
-                <Text style={[styles.actionCardHead, {alignSelf: "flex-start", paddingLeft: 9, paddingTop: 5}]}>Sound</Text>
+                <SText style={[styles.actionCardHead, {alignSelf: "flex-start", paddingLeft: 9, paddingTop: 5}]}>Sound</SText>
                 <View style={[styles.centerRow, {justifyContent: 'space-between', width: "100%"}]}>
-                  <Text style={[{paddingLeft: 9, paddingTop: 5, color: "grey", fontWeight: 500}]}>Startup</Text>
+                  <SText style={[{paddingLeft: 9, paddingTop: 5, color: "grey", fontWeight: 500}]}>Startup</SText>
                   <Switch />
                 </View>
                 
@@ -403,7 +407,7 @@ export default class Index extends Component {
                 </View>
 
                 <View style={[styles.centerRow, {justifyContent: 'space-between', width: "100%"}]}>
-                  <Text style={[{paddingLeft: 9, paddingTop: 5, color: "grey", fontWeight: 500}]}>Stand-by</Text>
+                  <SText style={[{paddingLeft: 9, paddingTop: 5, color: "grey", fontWeight: 500}]}>Stand-by</SText>
                   <Switch />
                 </View>
                 
@@ -416,15 +420,15 @@ export default class Index extends Component {
         </Animated.View>
 
         <View style={[{paddingTop: 20, width: "100%", alignItems: "flex-end", position: "absolute", paddingRight: 20}, styles.column]}>
-          <Animated.ScrollView style={[styles.column, {width: this.screenWidth - 40 - 240 + 70, paddingTop: 0, position: "relative", right: Animated.multiply(-1, this.state.mainAnim1), filter: this.state.secondPanelBlur}]}>
+          <Animated.View style={[styles.column, {width: this.screenWidth - 40 - 240 + 70, paddingTop: 0, position: "relative", right: Animated.multiply(-1, this.state.mainAnim1), filter: this.state.secondPanelBlur}]}>
             <View style={[{justifyContent: "space-between", width: "100%"}, styles.centerRow]}>
               <View style={[styles.centerRow, {gap: 0, marginLeft: 0}]}>
                 <MaterialIcons name={"speaker"} size={17} style={[styles.mainIcon, styles.lightBorder, {color: "grey", padding: 0, transform: [{rotate: "0deg"}]}]}/>
                 <MaterialIcons name={"battery-4-bar"} size={25} style={[styles.mainIcon, styles.lightBorder, {color: "grey", padding: 0, transform: [{rotate: "90deg"}]}]}/>
-                <Text style={[{fontSize: 12, fontWeight: 700, color: "rgb(100 100 100)", position: "relative", left: 0, zIndex: 0, paddingLeft: 4}]}>60</Text>
+                <SText style={[{fontSize: 12, fontWeight: 600, color: "rgb(100 100 100)", position: "relative", left: 0, zIndex: 0, paddingLeft: 4}]}>60</SText>
               </View>          
               <View style={[styles.centerRow, {gap: 6}]}>
-                <Text style={[{fontSize: 12, fontWeight: 700, color: "rgb(100 100 100)", position: "relative", left: 0, zIndex: 0}]}>80</Text>
+                <SText style={[{fontSize: 12, fontWeight: 600, color: "rgb(100 100 100)", position: "relative", left: 0, zIndex: 0}]}>80</SText>
                 <MaterialIcons name={"battery-5-bar"} size={25} style={[styles.mainIcon, styles.lightBorder, {color: "grey", padding: 0, transform: [{rotate: "-90deg"}]}]}/>
               </View>
             </View>
@@ -433,10 +437,10 @@ export default class Index extends Component {
                 <Image style={{position: "absolute", width: 150, height: 150, borderRadius: 20, alignSelf: "flex-end"}} source={{uri: this.state.cover}}/>
                 <View style={[styles.column, {width: "100%", gap: 3}]}>  
                   <View style={[styles.centerRow, {justifyContent: 'space-between', width: "100%", paddingTop: 5, paddingLeft: 5, paddingRight: 20}]}>
-                    <Text style={[styles.actionCardHead, {fontWeight: 600, fontSize: 15}]}>{this.state.music}</Text>
+                    <SText style={[styles.actionCardHead, {fontWeight: 600, fontSize: 15}]}>{this.state.music}</SText>
                   </View>
                   <View>
-                    <Text style={[{fontWeight: 400, color: "grey", fontSize: 9, paddingLeft: 5}]}>{this.state.artist}</Text>
+                    <SText style={[{fontWeight: 400, color: "grey", fontSize: 9, paddingLeft: 5}]}>{this.state.artist}</SText>
                   </View>
                 </View>
                 <View style={[styles.centerRow, {justifyContent: "space-around", width: "100%"}]}>
@@ -483,14 +487,14 @@ export default class Index extends Component {
                   <MaterialIcons name={"navigation"} size={35} style={[styles.mainIcon, {color: "dodgerblue"}]}/>
                 </View>
                 <View style={[styles.centerRow, {justifyContent: "space-around", width: "100%"}]}>
-                  <Text style={[{fontSize: 13, color: "rgb(180, 180, 180)"}]}>ON</Text>
-                  <Text style={[{fontSize: 13, color: "rgb(180, 180, 180)"}]}>ACTIVE</Text>
+                  <SText style={[{fontSize: 13, color: "rgb(180, 180, 180)"}]}>ON</SText>
+                  <SText style={[{fontSize: 13, color: "rgb(180, 180, 180)"}]}>ACTIVE</SText>
 
                 </View>
               </ActionCard>
 
             </View>
-          </Animated.ScrollView>
+          </Animated.View>
         </View>
       </View>
 
@@ -545,7 +549,7 @@ const styles = StyleSheet.create({
   actionCardHead: {
     fontSize: 16, 
     paddingTop: 0, 
-    fontWeight: 700
+    fontWeight: 600
   },
   column: {
     display: "flex",

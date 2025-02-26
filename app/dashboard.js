@@ -15,6 +15,7 @@ import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import SmartView from "../components/smartview";
 import Slider from "../components/slider";
 import CallCard from "../components/callcard";
+import SText from "../components/texts";
 
 export default class Dashboard extends Component {
     
@@ -37,7 +38,7 @@ export default class Dashboard extends Component {
             <View style={[styles.centerRow, {height: 35, width: "100%", position: "absolute", top: 0, backgroundColor: "transparent", borderBottomWidth: 0.0, borderColor: "rgba(0, 0, 0, 0.7)"}]}>
                 <View style={[styles.row, {height: "100%", width: "100%", alignItems: "center", gap: 5, paddingRight: 10, paddingTop: 5, justifyContent: "flex-end"}]}>
                     <View style={[{display: "flex", flexDirection: "row", gap: 5}]}>
-                        <Text style={{fontSize: 22, fontWeight: 600, letterSpacing: .5, color: "rgba(0, 0, 0, 0.5)"}}>Cruise Mode</Text>
+                        <SText style={{fontSize: 22, fontWeight: 600, letterSpacing: .5, color: "rgba(0, 0, 0, 0.5)"}}>Cruise Mode</SText>
                     </View>
                 </View>
             </View>
@@ -46,16 +47,16 @@ export default class Dashboard extends Component {
                     <View style={[styles.column, {alignItems: "center", justifyContent: "center", backgroundColor: 'white' || "rgba(255, 72, 200, 0.53)", height: 160, width: 160, borderRadius: "50%", borderBottomRightRadius: "50%", position: "relative", left: -40, top: -40, borderColor: "rgba(207, 105, 255, 0.66)", borderWidth: 0, boxShadow: "-0px 0px 15px 2px rgba(203, 72, 255, 0.29)"}]}>
                         <View style={[styles.row, {position: "absolute", height: 190, width: 190, alignItems: "center", justifyContent: "center", borderColor: "rgb(255, 255, 255)", borderWidth: 5, borderRadius: "50%", borderBottomRightRadius: "50%", boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.1)"}]}>
                             <View style={[styles.column, {position: "relative", left: 12, top: 15}]}>
-                                <Text style={{fontSize: 40, fontWeight: 500, color: 'rgba(50, 0, 70, 0.73)' || "rgb(255, 255, 255)", filter: [{dropShadow: "0px 0px 7px rgba(255, 43, 227, 0.0)"}]}}>0</Text>
-                                <Text style={{fontSize: 20, fontWeight: 600, color: 'rgba(255, 255, 255, 0.9)' && "rgba(100, 100, 100, 0.8)", position: "relative", left: 25, bottom: 7}}>km/hr</Text>
+                                <SText style={{fontSize: 40, fontWeight: 500, color: 'rgba(50, 0, 70, 0.73)' || "rgb(255, 255, 255)", filter: [{dropShadow: "0px 0px 7px rgba(255, 43, 227, 0.0)"}]}}>0</SText>
+                                <SText style={{fontSize: 20, fontWeight: 600, color: 'rgba(255, 255, 255, 0.9)' && "rgba(100, 100, 100, 0.8)", position: "relative", left: 25, bottom: 7}}>km/hr</SText>
                             </View>
                         </View>
                     </View>
                     <View style={[styles.column, {alignItems: "center", justifyContent: "center", backgroundColor: 'white' || "rgba(255, 72, 200, 0.53)", height: 160, width: 160, borderRadius: "50%", position: "relative", left: -40, bottom: -40, borderColor: "rgba(207, 105, 255, 0.66)", borderWidth: 0, boxShadow: "-0px 0px 15px 2px rgba(87, 15, 255, 0.29)"}]}>
                         <View style={[styles.row, {position: "absolute", height: 190, width: 190, alignItems: "center", justifyContent: "center", borderColor: "rgb(255, 255, 255)", borderWidth: 5, borderRadius: "50%", boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.1)"}]}>
                             <View style={[styles.column, {position: "relative", left: 18, bottom: 25}]}>
-                                <Text style={{fontSize: 20, fontWeight: 600, color: 'rgba(255, 255, 255, 0.9)' && "rgba(100, 100, 100, 0.8)", position: "relative", left: 17, top: 7}}>km/hr²</Text>
-                                <Text style={{fontSize: 40, fontWeight: 500, color: 'rgba(50, 0, 70, 0.73)' || "rgb(255, 255, 255)", filter: [{dropShadow: "0px 0px 7px rgba(255, 43, 227, 0.0)"}]}}>0</Text>
+                                <SText style={{fontSize: 20, fontWeight: 600, color: 'rgba(255, 255, 255, 0.9)' && "rgba(100, 100, 100, 0.8)", position: "relative", left: 17, top: 7}}>km/hr²</SText>
+                                <SText style={{fontSize: 40, fontWeight: 500, color: 'rgba(50, 0, 70, 0.73)' || "rgb(255, 255, 255)", filter: [{dropShadow: "0px 0px 7px rgba(255, 43, 227, 0.0)"}]}}>0</SText>
                             </View>
                         </View>
                     </View>
@@ -64,12 +65,12 @@ export default class Dashboard extends Component {
                             <SimpleLineIcons name="speedometer" size={100} style={{color: "rgba(100, 100, 100, 0.4)" || "rgba(255, 255, 255, 0.3)", transform: [{rotateZ: "45deg"}]}}/>
                         </View>
                         <View style={{display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between"}}>
-                            <Text style={{fontSize: 17, fontWeight: 300, color: 'white' && "rgba(0, 0, 0, 0.7)"}}>Speed</Text>
+                            <SText style={{fontSize: 17, fontWeight: 300, color: 'white' && "rgba(0, 0, 0, 0.7)"}}>Speed</SText>
                             <MaterialIcons name="edit" size={14} style={{color: 'grey' || "purple"}}/>
                         </View>
                         <View style={[styles.class1Card, styles.centerRow, {alignSelf: "flex-end", width: "auto", height: "auto", padding: 7, gap: 8}]}>
-                            <Text style={{fontSize: 40, fontWeight: 500, color: "white" && 'black'}}>0</Text>
-                            <Text style={{fontSize: 25, fontWeight: 600, color: 'rgba(255, 255, 255, 0.9)' && "rgba(100, 100, 100, 0.8)"}}>km/hr</Text>
+                            <SText style={{fontSize: 40, fontWeight: 500, color: "white" && 'black'}}>0</SText>
+                            <SText style={{fontSize: 25, fontWeight: 600, color: 'rgba(255, 255, 255, 0.9)' && "rgba(100, 100, 100, 0.8)"}}>km/hr</SText>
                         </View>
                         <View style={[styles.centerRow, {alignSelf: "flex-end", gap: 7, width: "100%", justifyContent: "flex-end", display: "none"}]}>
                             <MaterialIcons name="edit" size={14} style={{color: 'grey' || "purple"}}/>
@@ -80,12 +81,12 @@ export default class Dashboard extends Component {
                             <SimpleLineIcons name="speedometer" size={100} style={{color: "rgba(100, 100, 100, 0.4)" || "rgba(255, 255, 255, 0.3)", transform: [{rotateZ: "45deg"}]}}/>
                         </View>
                         <View style={{display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between"}}>
-                            <Text style={{fontSize: 14, fontWeight: 300, color: "rgba(0, 0, 0, 0.7)"}}>Acceleration</Text>
+                            <SText style={{fontSize: 14, fontWeight: 300, color: "rgba(0, 0, 0, 0.7)"}}>Acceleration</SText>
                             <MaterialIcons name="edit" size={14} style={{color: 'grey' || "purple"}}/>
                         </View>
                         <View style={[styles.class1Card, styles.centerRow, {alignSelf: "flex-end", width: "auto", height: "auto", padding: 7, gap: 8}]}>
-                            <Text style={{fontSize: 40, fontWeight: 500, color: "black"}}>0</Text>
-                            <Text style={{fontSize: 25, fontWeight: 600, color: 'rgba(255, 255, 255, 0.9)' && "rgba(100, 100, 100, 0.8)"}}>km/hr²</Text>
+                            <SText style={{fontSize: 40, fontWeight: 500, color: "black"}}>0</SText>
+                            <SText style={{fontSize: 25, fontWeight: 600, color: 'rgba(255, 255, 255, 0.9)' && "rgba(100, 100, 100, 0.8)"}}>km/hr²</SText>
                         </View>
                         <View style={[styles.centerRow, {alignSelf: "flex-end", gap: 7, width: "100%", justifyContent: "flex-end", display: "none"}]}>
                             <MaterialIcons name="edit" size={14} style={{color: 'grey' || "purple"}}/>
@@ -100,7 +101,7 @@ export default class Dashboard extends Component {
                                     <MaterialIcons name="bluetooth-audio" size={17} style={{color: "white"}}/>
                                 </View>
                                 <View style={[styles.class1Card, {width: "auto", height: "auto", padding: 7, borderRadius: 8, borderBottomLeftRadius: 8, boxShadow: "0px 2px 6px -2px rgba(0, 0, 0, 0.0)", alignSelf: "", alignItems: "center", justifyContent: "center"}]}>
-                                    <Text style={{fontWeight: 600, fontSize: 13}}>Cytroid Speaker</Text>
+                                    <SText style={{fontWeight: 600, fontSize: 13}}>Cytroid Speaker</SText>
                                 </View>
                             </View>
                             <View style={[styles.row, {alignItems: "flex-end", gap: 5}]}>
@@ -117,10 +118,10 @@ export default class Dashboard extends Component {
                                 <View style={[styles.column, styles.class1Card, {padding: 5, width: 400, height: 210, paddingBottom: 10, borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 0, borderBottomRightRadius: 0, borderWidth: 0.0, borderColor: "black", boxShadow: "0px 2px 6px -2px rgba(0, 0, 0, 0.1)"}]}>
                                     <View style={[styles.column, {width: "100%", gap: 3}]}>  
                                         <View style={[styles.centerRow, {justifyContent: 'space-between', width: "100%", paddingTop: 5, paddingLeft: 5, paddingRight: 20}]}>
-                                            <Text style={[{fontWeight: 600, fontSize: 20}]}>{this.state.music}</Text>
+                                            <SText style={[{fontWeight: 600, fontSize: 20}]}>{this.state.music}</SText>
                                         </View>
                                         <View>
-                                            <Text style={[{fontWeight: 400, color: "grey", fontSize: 14, paddingLeft: 5}]}>{this.state.artist}</Text>
+                                            <SText style={[{fontWeight: 400, color: "grey", fontSize: 14, paddingLeft: 5}]}>{this.state.artist}</SText>
                                         </View>
                                     </View>
                                     <View style={[styles.centerRow, {justifyContent: "space-around", width: "100%"}]}>
@@ -147,7 +148,7 @@ export default class Dashboard extends Component {
                                             <MaterialIcons name="play-arrow" size={30} style={{color: "black"}}/>
                                         </View>
                                         <View style={[{width: "auto", height: "auto", padding: 0, borderRadius: 8,  borderTopLeftRadius: 8, boxShadow: "0px 2px 6px -2px rgba(0, 0, 0, 0.0)", position: "absolute", bottom: -17, left: 2.5, alignSelf: "center", }]}>
-                                            <Text style={{fontWeight: 400, fontSize: 11, color: "rgba(0, 0, 0, 0.5)"}}>Startup</Text>
+                                            <SText style={{fontWeight: 400, fontSize: 11, color: "rgba(0, 0, 0, 0.5)"}}>Startup</SText>
                                         </View>
                                     </View>
                                     <View style={[styles.row, {gap: 5}]}>
@@ -155,7 +156,7 @@ export default class Dashboard extends Component {
                                             <MaterialIcons name="play-arrow" size={30} style={{color: "black"}}/>
                                         </View>
                                         <View style={[{width: "auto", height: "auto", padding: 0, borderRadius: 8,  borderTopLeftRadius: 8, boxShadow: "0px 2px 6px -2px rgba(0, 0, 0, 0.0)", position: "absolute", bottom: -17, left: 2.5, alignSelf: "center", }]}>
-                                            <Text style={{fontWeight: 400, fontSize: 11, color: "rgba(0, 0, 0, 0.5)"}}>Standby</Text>
+                                            <SText style={{fontWeight: 400, fontSize: 11, color: "rgba(0, 0, 0, 0.5)"}}>Standby</SText>
                                         </View>
                                     </View>
                                     <View style={[styles.row, {gap: 5}]}>
@@ -163,7 +164,7 @@ export default class Dashboard extends Component {
                                             <FontAwesome name="bullhorn" size={26} style={{color: "black"}}/>
                                         </View>
                                         <View style={[{width: "auto", height: "auto", padding: 0, borderRadius: 8,  borderTopLeftRadius: 8, boxShadow: "0px 2px 6px -2px rgba(0, 0, 0, 0.0)", position: "absolute", bottom: -17, left: 10, alignSelf: "center", }]}>
-                                            <Text style={{fontWeight: 400, fontSize: 11, color: "rgba(0, 0, 0, 0.5)"}}>Horn</Text>
+                                            <SText style={{fontWeight: 400, fontSize: 11, color: "rgba(0, 0, 0, 0.5)"}}>Horn</SText>
                                         </View>
                                     </View>
                                     <View style={[styles.row, {gap: 5}]}>
@@ -171,15 +172,15 @@ export default class Dashboard extends Component {
                                             <MaterialIcons name="sports-motorsports" size={30} style={{color: "black"}}/>
                                         </View>
                                         <View style={[{width: "auto", height: "auto", padding: 0, borderRadius: 8,  borderTopLeftRadius: 8, boxShadow: "0px 2px 6px -2px rgba(0, 0, 0, 0.0)", position: "absolute", bottom: -17, left: 2.5, alignSelf: "center", }]}>
-                                            <Text style={{fontWeight: 400, fontSize: 11, color: "rgba(0, 0, 0, 0.5)"}}>Revving</Text>
+                                            <SText style={{fontWeight: 400, fontSize: 11, color: "rgba(0, 0, 0, 0.5)"}}>Revving</SText>
                                         </View>
                                     </View>
                                     <View style={[styles.row, {gap: 5}]}>
                                         <View style={[styles.class1Card, {width: "auto", height: "auto", padding: 3, borderRadius: 8,  borderTopRightRadius: 0, boxShadow: "0px 2px 6px -2px rgba(0, 0, 0, 0.1)", alignItems: "center", justifyContent: "center"}]}>
                                             <MaterialIcons name="multitrack-audio" size={30} style={{color: "black"}}/>
                                         </View>
-                                        <View style={[{width: "auto", height: "auto", padding: 0, borderRadius: 8,  borderTopLeftRadius: 8, boxShadow: "0px 2px 6px -2px rgba(0, 0, 0, 0.0)", position: "absolute", bottom: -17, left: -5, alignSelf: "center", }]}>
-                                            <Text style={{fontWeight: 400, fontSize: 11, color: "rgba(0, 0, 0, 0.5)"}}>Soundboard</Text>
+                                        <View style={[{width: "auto", height: "auto", padding: 0, borderRadius: 8,  borderTopLeftRadius: 8, boxShadow: "0px 2px 6px -2px rgba(0, 0, 0, 0.0)", position: "absolute", bottom: -17, left: -10, alignSelf: "center", }]}>
+                                            <SText style={{fontWeight: 400, fontSize: 11, color: "rgba(0, 0, 0, 0.5)"}}>Soundboard</SText>
                                         </View>
                                     </View>
                                 </View>
@@ -217,7 +218,7 @@ export default class Dashboard extends Component {
                         <View style={[styles.column, {padding: 0, width: "100%", height: "auto", paddingBottom: 0, justifyContent: "flex-start", gap: 5, borderBottomLeftRadius: 0}]}>
                             <View style={[styles.centerRow, {paddingTop: 0, paddingLeft: 0, width: "100%", justifyContent: "space-between", alignItems: "flex-end"}]}>
                                 <View style={[styles.row, styles.class1Card, {width: "auto", height: "auto", padding: 5, paddingLeft: 6, alignSelf: "flex-start", borderRadius: 8, borderBottomLeftRadius: 0}]}>
-                                    <Text style={{fontSize: 15, fontWeight: 600}}>VoIP</Text>
+                                    <SText style={{fontSize: 15, fontWeight: 600}}>VoIP</SText>
                                 </View>
                                 <View style={[styles.centerRow, {height: "100%", gap: 3}]}>
                                     <View style={[styles.row, styles.class1Card, {width: "auto", height: "auto", padding: 5, borderRadius: 8, borderBottomRightRadius: 8}]}>
@@ -257,14 +258,14 @@ export default class Dashboard extends Component {
                             <View style={[styles.centerRow, {paddingTop: 0, paddingLeft: 0, width: "100%", justifyContent: "space-between", alignItems: "flex-end"}]}>
                                 <View style={[styles.row, {alignItems: "flex-end", gap: 5}]}>
                                     <View style={[styles.row, styles.class1Card, {width: "auto", height: "auto", padding: 5, paddingLeft: 5, alignSelf: "flex-end", borderRadius: 8, borderBottomLeftRadius: 0}]}>
-                                        <Text style={{fontSize: 16, fontWeight: 500}}>Navigation</Text>
+                                        <SText style={{fontSize: 16, fontWeight: 500}}>Navigation</SText>
                                     </View>
                                     <View style={[styles.row, styles.class1Card, {width: "auto", height: "auto", padding: 5, borderRadius: 8, borderBottomRightRadius: 8}]}>
                                         <MaterialIcons name="power-settings-new" size={20} style={{color: "green"}}/>
                                     </View>
                                     <View style={[styles.row, styles.class1Card, {width: "auto", height: "auto", padding: 5, borderRadius: 8, borderBottomRightRadius: 8, gap: 5, alignItems: "center"}]}>
                                         <FontAwesome6 name="location-arrow" size={20} style={{color: "dodgerblue"}}/>
-                                        <Text style={{fontWeight: 600, letterSpacing: 2}}>START</Text>
+                                        <SText style={{fontWeight: 600, letterSpacing: 2}}>START</SText>
                                     </View>
                                 </View>
                                 <View style={[styles.centerRow, {height: "100%", gap: 3, alignItems: "flex-end"}]}>
@@ -275,8 +276,8 @@ export default class Dashboard extends Component {
                             </View>
                             <View style={[styles.column, styles.class1Card, {padding: 5, width: "100%", height: "auto", paddingBottom: 0, borderTopLeftRadius: 0, borderTopRightRadius: 0}]}>
                                 <View style={[styles.column, {width: "100%", justifyContent: "flex-start", gap: 0, padding: 6}]}>
-                                    <Text style={{fontSize: 20, fontWeight: 800, paddingTop: 2, color: "rgba(0, 0, 0, 0.5)"}}>Inactive</Text>
-                                    <Text style={{fontSize: 13, fontWeight: 400, paddingTop: 2, alignSelf: "flex-end", color: "rgba(0, 0, 0, 0.5)"}}>Casual Cruising</Text>
+                                    <SText style={{fontSize: 20, fontWeight: 500, paddingTop: 2, color: "rgba(0, 0, 0, 0.5)"}}>Inactive</SText>
+                                    <SText style={{fontSize: 13, fontWeight: 400, paddingTop: 2, alignSelf: "flex-end", color: "rgba(0, 0, 0, 0.5)"}}>Casual Cruising</SText>
                                 </View>
                             </View>
                             <View style={[styles.column, {padding: 0, width: 0, height: "0%", paddingBottom: 0, gap: 8}]}>

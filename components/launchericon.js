@@ -1,11 +1,13 @@
 import { Component, useState } from "react";
 
-import { Text, View, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 import ActionCard from "./actioncard";
 import SmartView from "./smartview";
+
+import SText from "./texts";
 
 export default function LauncherIcon({IconClass = MaterialIcons, ...props}) {
 
@@ -27,7 +29,7 @@ export default function LauncherIcon({IconClass = MaterialIcons, ...props}) {
                     <IconClass name={props.icon} size={35} style={[styles.mainIcon, styles.lightBorder, props.iconStyle]}/>
                 </ActionCard>
             </SmartView>
-            <Text style={[styles.iconText]}>{props.name}</Text>
+            <SText style={[styles.iconText]}>{props.name}</SText>
         </View>
     )
 }

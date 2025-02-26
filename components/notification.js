@@ -5,6 +5,8 @@ import { router } from "expo-router";
 
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
+import SText from "./texts";
+
 export const defaultPad = 22.5;
 
 export default function Notification({title, content, children, type, iconBg, iconName, IconClass, iconColor, icon, actions, avatar, iconSize, style, ...others}) {
@@ -20,7 +22,7 @@ export default function Notification({title, content, children, type, iconBg, ic
                     {title?
                     <View style={[styles.notif, {borderWidth: 0.0 /*.5*/, borderColor: "rgba(124, 124, 124, 0.27)", borderBottomLeftRadius: 7, borderBottomRightRadius: 0, borderRadius: 15, borderTopLeftRadius: 0, alignSelf: "flex-start", boxShadow: "-6px -5px 30px 4px rgba(180, 6, 6, 0.22)"}]}>
                         <View style={[{padding: 6, display: "flex", flexDirection: "column"}]}>
-                            <Text style={[{fontSize: 16, fontWeight: 800, paddingRight: 0}]}>{title}</Text> 
+                            <SText style={[{fontSize: 16, fontWeight: 800, paddingRight: 0}]}>{title}</SText> 
                         </View>
                     </View> : 
                     <View style={[{width: 20, height: "100%", backgroundColor: "white", boxShadow: "0px 8px 20px 3px rgba(30, 30, 30, 0.2)", borderRadius: 15, borderTopLeftRadius: 0, borderBottomLeftRadius: 7, borderBottomRightRadius: 0, borderColor: "rgba(124, 124, 124, 0.27)", borderWidth: 0.0 /*.7*/, alignSelf: "flex-end", borderWidth: 0, borderColor: "black", backgroundColor: "white", boxShadow: "-6px -5px 30px 4px rgba(180, 6, 6, 0.28)"}]}></View>         
@@ -33,7 +35,7 @@ export default function Notification({title, content, children, type, iconBg, ic
                     {content?
                     <View style={[styles.notif, {borderWidth: 0.0 /*.5*/, borderRightWidth: 0.0 /*.5*/, borderColor: "rgba(124, 124, 124, 0.27)", borderTopLeftRadius: type === 'call'? 15 : 7, borderTopRightRadius: 0, borderBottomLeftRadius: 0, borderBottomRightRadius: 15, minHeight: 25, boxShadow: "-5px 6px 25px 2px rgba(150, 0, 170, 0.15)"}]}>
                         <View style={[{padding: 7, display: "flex", flexDirection: "column"}]}>    
-                            <Text style={[{fontSize: 15, fontWeight: 400, paddingRight: 0}]}>{content}</Text>
+                            <SText style={[{fontSize: 15, fontWeight: 400, paddingRight: 0}]}>{content}</SText>
                         </View>
                     </View>
                     : 

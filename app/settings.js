@@ -1,7 +1,9 @@
 import { Component } from "react";
 import { router } from "expo-router";
 
-import { Text, View, StyleSheet, Animated } from "react-native";
+import { View, StyleSheet, Animated } from "react-native";
+
+import SText from "../components/texts";
 
 export class Settings extends Component {
     

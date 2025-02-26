@@ -1,10 +1,12 @@
 import { Component } from "react";
 
-import { Text, View, StyleSheet, ImageBackground } from "react-native";
+import { View, StyleSheet, ImageBackground } from "react-native";
 
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+
+import SText from "./texts";
 
 export default class CallCard extends Component {
 
@@ -30,16 +32,16 @@ export default class CallCard extends Component {
                 </View>
                 <View style={[{flex: 1, display: "flex", flexDirection: "row", justifyContent: "space-between", height: "100%", alignItems: "center"}]}>
                     <View style={[styles.infoSide, {justifyContent: "center"}]}>
-                        <Text style={{fontSize: 14, fontWeight: 800}}>{this.props?.name ?? 'Joe Daniel'}</Text>
+                        <SText style={{fontSize: 14, fontWeight: 600}}>{this.props?.name ?? 'Joe Daniel'}</SText>
                         <View style={{display: "flex", flexDirection: "row", alignItems: "center", gap: 5}}>
                             {this.props.online? 
                                 <Ionicons name={'bicycle'} size={13} style={[{color: "green"}]}/> :
                                 <FontAwesome name={'bicycle'} size={13} style={[{color: 'grey'}]}/>
                             }
-                            <Text style={[{fontSize: 9, color: 'grey'}]}>{this.props.online? 'Cycling' : 'Offline'}</Text>
+                            <SText style={[{fontSize: 9, color: 'grey'}]}>{this.props.online? 'Cycling' : 'Offline'}</SText>
                             <View style={{height: 10, width: 1, backgroundColor: "rgba(100, 100, 100, 0.3)"}}></View>
                             <MaterialIcons name={!this.props.online? 'call-end' : this.props.joined? 'call' : 'call-end'} size={11} style={[{color: !this.props.online? 'grey' : this.props.joined? 'green' : 'orange'}]}/>
-                            <Text style={[{fontSize: 9, color: 'grey'}]}>{this.props.joined? 'In call' : 'Not in call'}</Text>
+                            <SText style={[{fontSize: 9, color: 'grey'}]}>{this.props.joined? 'In call' : 'Not in call'}</SText>
                         </View>
                     </View>
                     <View style={[{display: "flex", flexDirection: "row", gap: 18, height: "100%", alignItems: "center", paddingRight: 10}]}>
@@ -92,7 +94,7 @@ export function ActionIconType1(
                 {iconName? 
                   <IconClass name={iconName} size={iconSize ?? 23} style={[{color: iconColor ?? 'black'}, ...(iconStyle?.constructor === Array? iconStyle : [iconStyle])]}/>
                   : text?
-                  <Text style={[{fontSize: 18, fontWeight: 500}]}>{text}</Text> : null
+                  <SText style={[{fontSize: 18, fontWeight: 500}]}>{text}</SText> : null
                 }
             </View>
         </View>

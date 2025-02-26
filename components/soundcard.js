@@ -12,20 +12,22 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 
+import SText from "./texts";
+
 export default function SoundCard({srno, name, artist, duration, trash, check, style, selected, playing, ...props}) {
 
     return (
-        <View style={[styles.centerRow, {height: "auto", width: "100%", paddingLeft: 10, paddingRight: 10, paddingTop: 8, paddingBottom: 8, justifyContent: "space-between", borderBottomWidth: 0.5, borderBottomColor: "rgba(0, 0, 0, 0.2)"}, style]}>
+        <View style={[styles.centerRow, {height: "auto", width: "100%", paddingLeft: 10, paddingRight: 10, paddingTop: 8, paddingBottom: 8, justifyContent: "space-between", borderBottomWidth: 0.5, borderBottomColor: "rgba(0, 0, 0, 0.6)", borderStyle: "dotted"}, style]}>
             <View style={{display: "flex", flexDirection: "row", gap: 5, alignItems: "center"}}>
-                <Text style={{fontSize: 15, fontWeight: 300}}>{srno}</Text>
+                <SText style={{fontSize: 15, fontWeight: 300}}>{srno}</SText>
                 <View style={[styles.column, {height: "auto", justifyContent: "space-evenly", paddingTop: 0, paddingBottom: 0}]}>
-                    <Text style={{fontSize: 17, fontWeight: 600}}>{name}</Text>
+                    <SText style={{fontSize: 14, fontWeight: 600}}>{name}</SText>
                     <View style={{display: "flex", flexDirection: "row", gap: 5, alignItems: "center"}}>
-                        <Text style={{fontSize: 14, fontWeight: 400, color: "grey"}}>{artist}</Text>
+                        <SText style={{fontSize: 12, fontWeight: 400, color: "grey"}}>{artist}</SText>
                         <View style={{width: 0.5, backgroundColor: "rgba(80, 80, 80, 0.5)", height: "100%"}}></View>
                         <View style={{display: "flex", flexDirection: "row", gap: 2, alignItems: "center"}}>
-                            <Ionicons name={"timer-sharp"} size={13}/>
-                            <Text style={{fontSize: 14, fontWeight: 600, color: "rgba(0, 0, 0, 0.8)"}}>{duration}</Text>
+                            <Ionicons name={"timer-sharp"} size={12}/>
+                            <SText style={{fontSize: 12, fontWeight: 600, color: "rgba(0, 0, 0, 0.8)"}}>{duration}</SText>
                         </View>
                     </View>
                 </View>

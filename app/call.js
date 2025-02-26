@@ -9,6 +9,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 import CallCard, { ActionIconType1 } from "../components/callcard";
+import SText from "../components/texts";
 
 export default class CallView extends Component {
 
@@ -152,7 +153,7 @@ export default class CallView extends Component {
                                 <Animated.View style={[styles.controlButton, {transform: [{rotateY: this.state.butterflyAnim1.interpolate({inputRange: [-25, 25], outputRange: ["35deg", "-35deg"]})}, {translateX:  this.state.butterflyAnim1.interpolate({inputRange: [-25, 0, 25], outputRange: [-15, 0, -15]})}], width: 150 || 180 || 110, height: 150 || 180 || 110, elevation: 0 ?? 7, shadowColor: 'rgba(255, 0, 255, 0.62)', borderWidth: 0, borderColor: 'rgba(100, 100, 100, 0.2)', borderColor: "white", borderWidth: 15, backgroundColor: "transparent", boxShadow: "0px 0px 2px -4px rgba(0, 0, 0, 0.1)", borderRadius: "40%", borderBottomLeftRadius: "0%", borderTopRightRadius: "0%"}]}>
                                     <MaterialIcons style={[{}]} name={"pause"} size={35}/>
                                 </Animated.View>
-                                {/*<Text style={[{fontSize: 15, color: "rgba(0, 0, 0, .5)"}]}>Hold</Text>*/}
+                                {/*<SText style={[{fontSize: 15, color: "rgba(0, 0, 0, .5)"}]}>Hold</SText>*/}
                             </View>
                         </View>
                         <View style={{display: "flex", flexDirection: "row", alignItems: "flex-start", gap: 7, alignSelf: "flex-end", paddingRight: 20}}>

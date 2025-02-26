@@ -3,6 +3,8 @@ import { router } from "expo-router";
 
 import { Text, View, StyleSheet, ImageBackground } from "react-native";
 
+import SText from "./texts";
+
 export default class SmartView extends Component {
 
     constructor(props) {
@@ -62,7 +64,7 @@ export default class SmartView extends Component {
             {this.props?.tooltip ?
             <View style={[styles.row, {position: "absolute", display: this.state.display, zIndex: 10, left: 20, bottom: 70}]}>
                 <View style={[{padding: 4, filter: "blur(0px)", borderWidth: 0, borderColor: "black", backgroundColor: "rgba(0, 0, 0, 0.5)", borderRadius: 3}]}>
-                    <Text style={[{fontSize: 12, color: 'white'}]}>{this.props.tooltip}</Text>
+                    <SText style={[{fontSize: 12, color: 'white'}]}>{this.props.tooltip}</SText>
                 </View>
             </View> : null}
             {this.props.children}
