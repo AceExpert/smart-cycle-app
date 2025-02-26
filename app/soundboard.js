@@ -35,9 +35,9 @@ export default class Soundboard extends Component {
             <Stack.Screen options={{orientation: "portrait", headerShown: false}}/>
             <View style={[styles.centerRow, {height: 70, width: "100%", position: "absolute", top: 0, backgroundColor: "white", borderBottomWidth: 1, borderColor: "rgba(0, 0, 0, 0.7)"}]}>
                 <View style={[styles.row, {height: "100%", width: "100%", alignItems: "center", justifyContent: "center", gap: 5}]}>
-                    <MaterialIcons name="multitrack-audio" size={20} color={"purple"}/>
-                    <MaterialIcons name="multitrack-audio" size={20} color={"rgb(226, 9, 128)"}/>
-                    <MaterialIcons name="multitrack-audio" size={20} color={"rgb(85, 9, 226)"}/>
+                    <MaterialIcons name="multitrack-audio" size={20} color={"purple"} style={{filter: [{dropShadow: "0px 0px 7px rgba(169, 26, 235, 0.73)"}]}}/>
+                    <MaterialIcons name="multitrack-audio" size={20} color={"rgb(226, 9, 128)"} style={{filter: [{dropShadow: "0px 0px 7px rgb(235, 26, 189)"}]}}/>
+                    <MaterialIcons name="multitrack-audio" size={20} color={"rgb(85, 9, 226)"} style={{filter: [{dropShadow: "0px 0px 7px rgba(89, 26, 235, 0.79)"}]}}/>
                     <SText style={{fontSize: 28, fontWeight: 300, letterSpacing: 7, fontFamily: "SamsungSharpSans-Bold"}}>SOUNDBOARD</SText>
                 </View>
             </View>
