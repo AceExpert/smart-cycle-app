@@ -87,6 +87,9 @@ public class CycleService extends Service {
     VoStreamTask streamTask = null;
     VoStreamPlayTask streamPlayTask = null;
 
+    boolean volumeChange = false;
+    boolean volumeUp = false;
+
     ArrayList<Integer> rssiRecord = new ArrayList<Integer>();
 
     boolean locked = true;
@@ -344,6 +347,7 @@ public class CycleService extends Service {
                     auth = false;
                     onCycleLock();
                 }
+                volumeChange = false;
             } else if (Objects.equals(intent.getAction(), "haptic_navigation")) {
                 try {
                     if (gattClient != null && manager.getConnectionState(gattClient.getDevice(), BluetoothProfile.GATT) == BluetoothProfile.STATE_CONNECTED) {
@@ -469,6 +473,7 @@ public class CycleService extends Service {
     };
 
     public void onCycleLock() {
+        volumeChange = false;
         startGPS = true;
         leaveVOIP();
     };
@@ -503,6 +508,11 @@ public class CycleService extends Service {
         vows.sendMessage("{\"type\":2, \"action\":0}");
     }
 
+    public void volumeControl(boolean up) {
+        volumeChange = true;
+        volumeUp = up;
+    }
+
     public void connectCycle() {
         BluetoothDevice device = adapter.getRemoteDevice(address);
 
@@ -510,6 +520,7 @@ public class CycleService extends Service {
             gattClient = device.connectGatt(this, false, new BluetoothGattCallback() {
                 @Override
                 public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+                    volumeChange = false;
                     if(newState == 2) {
                         gatt.requestMtu(200);
                     } else {
@@ -549,7 +560,14 @@ public class CycleService extends Service {
                         sendMediaControl("TRACK_NEXT");
                     } else if (cmd.equals(".prev")) {
                         sendMediaControl("TRACK_PREV");
-                    } else if (cmd.equals(".join")) {
+                    } else if (cmd.equals(".vol_up")) {
+                        volumeControl(true);
+                    } else if (cmd.equals(".vol_down")) {
+                        volumeControl(false);
+                    } else if (cmd.equals(".vol_stop")) {
+                        volumeChange = false;
+                    }
+                    else if (cmd.equals(".join")) {
                         if(joined) {
                             leaveVOIP();
                         } else {
@@ -570,6 +588,9 @@ public class CycleService extends Service {
                 @Override
                 public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
                     if(!auth) return;
+                    if(volumeChange) {
+                        audioManager.adjustVolume(volumeUp? AudioManager.ADJUST_RAISE : AudioManager.ADJUST_LOWER, AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
+                    }
                     if(rssiRecord.size() < 10) {
                         rssiRecord.add(rssi);
                     } else {
