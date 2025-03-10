@@ -4,10 +4,15 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.companion.AssociationInfo;
+import android.companion.AssociationRequest;
+import android.companion.BluetoothLeDeviceFilter;
+import android.companion.CompanionDeviceManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.IntentSender;
 import android.content.pm.ServiceInfo;
 import android.media.AudioAttributes;
 import android.media.AudioDeviceInfo;
@@ -20,15 +25,18 @@ import android.media.MediaRecorder;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import android.bluetooth.*;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.Toast;
 
 import java.io.File;
@@ -49,6 +57,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Objects;
+import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -57,7 +66,7 @@ public class CycleService extends Service {
 
     static String token = "49n5pEsOUDF25rBhUFmN";
     String gpsToken = "auth 1234";
-    String address = "88:13:BF:0B:CB:3E";
+    String address = "2C:BC:BB:0D:94:4E";
     String speakerAddr = "88:13:bf:0b:94:6e";
     String serverIP = "10.145.65.124";
     int localPort = 8248;
@@ -70,6 +79,7 @@ public class CycleService extends Service {
     AudioManager audioManager;
     BluetoothManager manager;
     NotificationManager notificationManager;
+    CompanionDeviceManager companionDeviceManager;
 
     BluetoothAdapter adapter;
     BluetoothGatt gattClient = null;
@@ -89,6 +99,7 @@ public class CycleService extends Service {
 
     boolean volumeChange = false;
     boolean volumeUp = false;
+    LocalDateTime lastVolCtrl = LocalDateTime.now();
 
     ArrayList<Integer> rssiRecord = new ArrayList<Integer>();
 
@@ -96,13 +107,17 @@ public class CycleService extends Service {
     LocalDateTime lockTime = null;
 
     Socket gpsSocket = null;
-    String gpsIP = "10.145.112.237";
+    String gpsIP = "192.168.78.101";//""10.145.112.237";
     boolean startGPS = true;
     GPSTask gpsTask = null;
 
     String[] cycleLocation = new String[] {"22.32182833", "N", "87.298741166", "E"};
 
     boolean callState = false;
+    String callName = null;
+    String callNo = null;
+    boolean incoming = false;
+
     boolean auth = false;
 
     LinkedList<String> sendQueue = new LinkedList<>();
@@ -254,11 +269,16 @@ public class CycleService extends Service {
         }
 
         public double getRealCoords(String nmeaFormat) {
-            Matcher matcher = latPat.matcher(nmeaFormat);
-            return Double.parseDouble(matcher.group(1)) + Double.parseDouble(matcher.group(2)) / 60;
+            try {
+                Matcher matcher = latPat.matcher(nmeaFormat);
+                return Double.parseDouble(matcher.group(1)) + Double.parseDouble(matcher.group(2)) / 60;
+            } catch (IllegalStateException e) {
+                return 0;
+            }
         }
 
         public void processCommand(String cmd) {
+            Log.i("sock cmd", cmd);
             if(cmd.equals("$alert")) {
                 Log.w("ALERT", "cycle alert");
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("google.navigation:q="+(cycleLocation[1] == "S" ? "-" : "") + cycleLocation[0] + "," + (cycleLocation[3] == "W" ? "-" : "") + cycleLocation[2] + "&mode=l"));
@@ -284,10 +304,10 @@ public class CycleService extends Service {
                     String lat_dir = parts[3];
                     String logt = parts[4];
                     String logt_dir = parts[5];
-                    cycleLocation = new String[]{String.valueOf(getRealCoords(lat)), lat_dir, String.valueOf(getRealCoords(logt)), logt_dir};
+                    //cycleLocation = new String[]{String.valueOf(getRealCoords(lat)), lat_dir, String.valueOf(getRealCoords(logt)), logt_dir};
                     Intent intent = new Intent("cycle_location");
-                    intent.putExtra("location", cycleLocation);
-                    sendBroadcast(intent);
+                    //intent.putExtra("location", cycleLocation);
+                    //sendBroadcast(intent);
                 };
             };
         }
@@ -393,6 +413,7 @@ public class CycleService extends Service {
         adapter = manager.getAdapter();
         audioManager = getSystemService(AudioManager.class);
         notificationManager = getSystemService(NotificationManager.class);
+        companionDeviceManager = (CompanionDeviceManager) getSystemService(Context.COMPANION_DEVICE_SERVICE);
         gpsTask = new GPSTask();
         streamTask = new VoStreamTask();
         streamPlayTask = new VoStreamPlayTask();
@@ -453,7 +474,7 @@ public class CycleService extends Service {
                 .build();
         startForeground(4, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE);
         startService(new Intent(this, NotificationProcessor.class));
-        //startService(new Intent(this, CallService.class));
+        startService(new Intent(this, CallService.class));
         if(adapter.isEnabled()) connectCycle();
         (new Thread(gpsTask)).start();
         (new Thread(streamTask)).start();
@@ -513,7 +534,63 @@ public class CycleService extends Service {
         volumeUp = up;
     }
 
+    public void sendMediaKey(int keyCode) {
+        Intent i1 = new Intent(Intent.ACTION_MEDIA_BUTTON).putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, keyCode));
+        Intent i2 = new Intent(Intent.ACTION_MEDIA_BUTTON).putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, keyCode));
+        sendOrderedBroadcast(i1, null);
+        sendOrderedBroadcast(i2, null);
+    }
+
     public void connectCycle() {
+
+        if (companionDeviceManager.getMyAssociations().isEmpty()) {
+            AssociationRequest request = new AssociationRequest.Builder()
+                    .setDeviceProfile(AssociationRequest.DEVICE_PROFILE_WATCH)
+                    .addDeviceFilter(
+                            new BluetoothLeDeviceFilter.Builder()
+                                    .setNamePattern(Pattern.compile("^[cC]ytroid.+$"))
+                                    .build()
+                    )
+                    .build();
+            Executor executor = new Executor() {
+                @Override
+                public void execute(Runnable command) {
+                    command.run();
+                }
+            };
+            companionDeviceManager.associate(request, executor, new CompanionDeviceManager.Callback() {
+                @Override
+                public void onAssociationPending(@NonNull IntentSender intentSender) {
+                    try {
+                        intentSender.sendIntent(CycleService.this, 1, null, new IntentSender.OnFinished() {
+                            @Override
+                            public void onSendFinished(IntentSender IntentSender, Intent intent, int resultCode, String resultData, Bundle resultExtras) {
+
+                            }
+                        }, null);
+                    } catch (IntentSender.SendIntentException e) {
+                        Log.e("CDM error", e.toString());
+                    }
+                }
+
+                @Override
+                public void onAssociationCreated(@NonNull AssociationInfo associationInfo) {
+                    address = associationInfo.getDeviceMacAddress().toString().toUpperCase();
+                    initCycle();
+                }
+
+                @Override
+                public void onFailure(@Nullable CharSequence error) {
+
+                }
+            });
+        } else {
+            address = companionDeviceManager.getMyAssociations().get(0).getDeviceMacAddress().toString().toUpperCase();
+            initCycle();
+        }
+    }
+
+    public void initCycle() {
         BluetoothDevice device = adapter.getRemoteDevice(address);
 
         try {
@@ -549,17 +626,20 @@ public class CycleService extends Service {
 
                 @Override
                 public void onCharacteristicChanged(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattCharacteristic characteristic, @NonNull byte[] value) {
-                    StringBuilder builder = new StringBuilder();
-                    for(byte ch: value) builder.append(ch);
-
-                    String cmd = builder.toString();
+                    String cmd = new String(value, StandardCharsets.US_ASCII);
+                    Log.i("ble cmd", cmd);
 
                     if(cmd.equals(".play")) {
                         sendMediaControl("PLAY_PAUSE");
+                        sendMediaControl("H_REJECT_CALL");
+                        sendMediaKey(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
                     } else if (cmd.equals(".next")) {
                         sendMediaControl("TRACK_NEXT");
+                        sendMediaControl("H_ANSWER_CALL");
+                        sendMediaKey(KeyEvent.KEYCODE_MEDIA_NEXT);
                     } else if (cmd.equals(".prev")) {
                         sendMediaControl("TRACK_PREV");
+                        sendMediaKey(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
                     } else if (cmd.equals(".vol_up")) {
                         volumeControl(true);
                     } else if (cmd.equals(".vol_down")) {
@@ -589,7 +669,10 @@ public class CycleService extends Service {
                 public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
                     if(!auth) return;
                     if(volumeChange) {
-                        audioManager.adjustVolume(volumeUp? AudioManager.ADJUST_RAISE : AudioManager.ADJUST_LOWER, AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
+                        if(lastVolCtrl.until(LocalDateTime.now(), ChronoUnit.MILLIS) > 490) {
+                            audioManager.adjustVolume(volumeUp ? AudioManager.ADJUST_RAISE : AudioManager.ADJUST_LOWER, AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
+                            lastVolCtrl = LocalDateTime.now();
+                        }
                     }
                     if(rssiRecord.size() < 10) {
                         rssiRecord.add(rssi);

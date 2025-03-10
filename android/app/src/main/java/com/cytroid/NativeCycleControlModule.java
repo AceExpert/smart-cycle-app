@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.media.session.MediaSessionManager;
 import android.os.VibrationEffect;
 import android.util.Log;
+import android.view.KeyEvent;
 
 import androidx.annotation.NonNull;
 
@@ -167,22 +168,36 @@ public class NativeCycleControlModule extends NativeCycleControlSpec {
 
     }
 
+    public void sendMediaKey(int keyCode) {
+        Intent i1 = new Intent(Intent.ACTION_MEDIA_BUTTON).putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, keyCode));
+        Intent i2 = new Intent(Intent.ACTION_MEDIA_BUTTON).putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, keyCode));
+        ctx.sendOrderedBroadcast(i1, null);
+        ctx.sendOrderedBroadcast(i2, null);
+    }
+
     @Override
     public void mediaToggle() {
         this.sendBroadcast("PLAY_PAUSE");
+        this.sendMediaKey(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
     }
 
     @Override
     public void mediaNext() {
         sendBroadcast("TRACK_NEXT");
+        this.sendMediaKey(KeyEvent.KEYCODE_MEDIA_NEXT);
     }
 
     @Override
     public void mediaPrev() {
+        this.sendBroadcast("TRACK_PREV");
+        this.sendMediaKey(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+    }
+
+    @Override
+    public void openNotificationAccess() {
         Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         ctx.startActivity(intent);
-        this.sendBroadcast("TRACK_PREV");
     }
 
     @Override

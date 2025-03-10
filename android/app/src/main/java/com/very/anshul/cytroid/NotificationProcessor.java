@@ -7,6 +7,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Icon;
@@ -145,12 +146,12 @@ public class NotificationProcessor extends NotificationListenerService {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         unregisterReceiver(broadcastReceiver);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        toggleNotificationListenerService();
         return START_STICKY;
     }
 
@@ -303,7 +304,7 @@ public class NotificationProcessor extends NotificationListenerService {
                     }
                 } catch (NumberFormatException e) {};
             } else {
-                if(leftDistance != -1) {
+                if(leftDistance != null && leftDistance != -1) {
                     sendDirection("destination");
                     leftDistance = (float) -1;
                 }
@@ -348,5 +349,15 @@ public class NotificationProcessor extends NotificationListenerService {
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn, RankingMap rankingMap, int reason) {
         super.onNotificationRemoved(sbn, rankingMap, reason);
+    }
+
+    private void toggleNotificationListenerService() {
+        PackageManager pm = getPackageManager();
+        pm.setComponentEnabledSetting(new ComponentName(this, NotificationProcessor.class),
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+
+        pm.setComponentEnabledSetting(new ComponentName(this, NotificationProcessor.class),
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+
     }
 }
