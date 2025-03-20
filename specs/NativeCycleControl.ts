@@ -34,6 +34,8 @@ export interface Spec extends TurboModule {
     disconnectVoIP(): void;
     VoIPMute(): void;
     VoIPUnmute(): void;
+
+    openNotificationAccess(): void;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>("NativeCycleControl");

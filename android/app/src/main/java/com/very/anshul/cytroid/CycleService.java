@@ -47,10 +47,14 @@ import java.io.InputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -65,8 +69,9 @@ import java.util.stream.Stream;
 public class CycleService extends Service {
 
     static String token = "49n5pEsOUDF25rBhUFmN";
-    String gpsToken = "auth 1234";
+    String gpsToken = "hMrXDM0x6G";
     String address = "2C:BC:BB:0D:94:4E";
+    String secAddress = "ff:bc:cd:ff:ff:aa";
     String speakerAddr = "88:13:bf:0b:94:6e";
     String serverIP = "10.145.65.124";
     int localPort = 8248;
@@ -106,9 +111,10 @@ public class CycleService extends Service {
     boolean locked = true;
     LocalDateTime lockTime = null;
 
-    Socket gpsSocket = null;
-    String gpsIP = "192.168.78.101";//""10.145.112.237";
-    boolean startGPS = true;
+    SocketChannel gpsSocket = null;
+    boolean gpsConnected = false;
+    boolean gpsConnecting = false;
+    String gpsIP = "192.168.78.101";
     GPSTask gpsTask = null;
 
     String[] cycleLocation = new String[] {"22.32182833", "N", "87.298741166", "E"};
@@ -121,6 +127,7 @@ public class CycleService extends Service {
     boolean auth = false;
 
     LinkedList<String> sendQueue = new LinkedList<>();
+    LinkedList<String> gpsWriteQueue = new LinkedList<>();
 
     String[] cycleIntents = new String[] {"media_rsp", "map_update", "haptic_navigation", "CONNECT_VOIP", "DISCONNECT_VOIP", "MUTE_VOIP", "UNMUTE_VOIP"};
 
@@ -264,8 +271,31 @@ public class CycleService extends Service {
     public class GPSTask implements Runnable {
 
         Pattern latPat = Pattern.compile("(\\d+)(\\d{2}\\.\\d+)");
+        Selector selector = null;
+        Thread hbTimer = new Thread(() -> {
+            while (true) {
+                if(gpsConnected && gpsSocket != null && gpsSocket.isConnected()) {
+                    ByteBuffer buffer = ByteBuffer.wrap(".hb".getBytes());
+                    try {
+                        gpsSocket.write(buffer);
+                    } catch (IOException e) {
+
+                    }
+                }
+                try {
+                    Thread.sleep(45000);
+                } catch (InterruptedException e) {
+
+                }
+            }
+        });
+
+        String cmds = "";
+        boolean cmdStart = false;
+        LocalDateTime lastHb = null;
 
         public GPSTask() {
+            hbTimer.start();
         }
 
         public double getRealCoords(String nmeaFormat) {
@@ -299,7 +329,7 @@ public class CycleService extends Service {
                 ringtone.play();
             } else {
                 String[] parts = cmd.split(",");
-                if (parts[0].equals("$GPGGA")) {
+                if (parts.length > 0 && parts[0].equals("$GPGGA")) {
                     String lat = parts[2];
                     String lat_dir = parts[3];
                     String logt = parts[4];
@@ -318,38 +348,112 @@ public class CycleService extends Service {
 
         @Override
         public void run() {
-            try {
-                while(true) {
-                    if(locked && startGPS) {
-                        try {
-                            gpsSocket = new Socket(gpsIP, 3000);
-                            InputStream inputStream = gpsSocket.getInputStream();
-                            Log.i("socket", "started");
-                            String cmd = "";
-                            gpsSocket.getOutputStream().write(gpsToken.getBytes());
-                            gpsSocket.getOutputStream().flush();
-                            while (gpsSocket != null && gpsSocket.isConnected() && locked && startGPS) {
-                                byte[] b = new byte[1];
-                                while (locked && startGPS && inputStream.readNBytes(b, 0, 1) == 1) {
-                                    if (b[0] == '\n') {
-                                        processCommand(cmd);
-                                        cmd = "";
-                                    } else
-                                        cmd += new String(b, StandardCharsets.US_ASCII);
+            while(true) {
+                try {
+                    if(!gpsConnected && !gpsConnecting) {
+                        cmds = "";
+                        cmdStart = false;
+                        lastHb = null;
+
+                        selector = Selector.open();
+                        gpsSocket = SocketChannel.open();
+                        gpsSocket.configureBlocking(false);
+                        gpsSocket.connect(new InetSocketAddress("82.25.105.122", 3121));
+                        gpsSocket.register(selector, SelectionKey.OP_CONNECT);
+                        gpsConnecting = true;
+                    } else if (gpsConnecting) {
+                        if(selector.select(10000) > 0) {
+
+                            for(SelectionKey key: selector.selectedKeys()) {
+                                if(!key.isValid()) {
+                                    gpsConnected = false;
+                                    gpsConnecting = false;
+                                    break;
                                 }
+                                if(key.isConnectable()) {
+                                    SocketChannel sock = (SocketChannel) key.channel();
+                                    if (sock.finishConnect()) {
+                                        sock.write(ByteBuffer.wrap(("$auth phone " + gpsToken + " " + secAddress).getBytes()));
+                                        gpsConnected = true;
+                                        gpsConnecting = false;
+                                        int keys = SelectionKey.OP_READ;
+                                        if(!gpsWriteQueue.isEmpty()) keys |= SelectionKey.OP_WRITE;
+                                        key.interestOps(keys);
+                                        lastHb = LocalDateTime.now();
+                                    } else {
+                                    }
+                                };
                             }
-                            if (gpsSocket != null) gpsSocket.close();
-                        } catch (IOException e) {
+                            selector.selectedKeys().clear();
                         }
                     } else {
-                        try {
-                            if (gpsSocket != null) gpsSocket.close();
-                        } catch (Exception e) {};
-                        Thread.sleep(2000);
-                    }
-                }
-            } catch (InterruptedException e) {
+                        if(lastHb != null && lastHb.until(LocalDateTime.now(), ChronoUnit.SECONDS) >= 60) {
+                            Log.i("socket end", "time");
+                            gpsConnected = false;
+                            gpsConnecting = false;
+                            gpsSocket.close();
+                            continue;
+                        }
+                        if(selector.select(10000) > 0) {
+                            for(SelectionKey key: selector.selectedKeys()) {
+                                if(!key.isValid()) {
+                                    gpsConnected = false;
+                                    gpsConnecting = false;
+                                    break;
+                                }
+                                if(key.isReadable()) {
+                                    SocketChannel sock = (SocketChannel) key.channel();
+                                    ByteBuffer buffer = ByteBuffer.allocate(1024);
+                                    int len = sock.read(buffer);
+                                    if(len == -1) {
+                                        gpsConnected = false;
+                                        gpsConnecting = false;
+                                        sock.close();
+                                        break;
+                                    }
+                                    if(len > 0) {
+                                        lastHb = LocalDateTime.now();
+                                    }
+                                    Log.i("socket read", String.valueOf(len));
+                                    for(int i = 0; i < len; i++) {
+                                        byte current = buffer.get(i);
+                                        if(current == '.' || current == '$') {
+                                            cmdStart = true;
+                                            cmds += new String(new byte[]{current}, StandardCharsets.US_ASCII);
+                                            continue;
+                                        }
+                                        if(cmdStart) {
+                                            if(current == '\n') {
+                                                Log.i("socket msg", cmds);
+                                                cmdStart = false;
+                                                processCommand(cmds);
+                                                cmds = "";
+                                            } else {
+                                                cmds += new String(new byte[]{current}, StandardCharsets.US_ASCII);
+                                            }
+                                        }
+                                    }
+                                }
 
+                                if(key.isWritable()) {
+                                    SocketChannel sock = (SocketChannel) key.channel();
+                                    String data = gpsWriteQueue.pop();
+                                    ByteBuffer buffer = ByteBuffer.wrap(data.getBytes());
+                                    sock.write(buffer);
+                                }
+
+                                int keys = SelectionKey.OP_READ;
+                                if(!gpsWriteQueue.isEmpty()) keys |= SelectionKey.OP_WRITE;
+                                key.interestOps(keys);
+                            }
+                        }
+                        selector.selectedKeys().clear();
+                    }
+                } catch (IOException e) {
+                    Log.e("Socket error", String.valueOf(e));
+                    gpsConnected = false;
+                    gpsConnecting = false;
+                }
             }
         }
     }
@@ -488,14 +592,12 @@ public class CycleService extends Service {
     }
 
     public void onCycleUnlock() {
-        startGPS = false;
         setCycleAudioRouting();
         vows.sendMessage("{\"type\":1, \"action\":1}");
     };
 
     public void onCycleLock() {
         volumeChange = false;
-        startGPS = true;
         leaveVOIP();
     };
 

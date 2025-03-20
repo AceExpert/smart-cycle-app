@@ -3,7 +3,7 @@ import { router, Stack } from "expo-router";
 
 import { 
   Text, View, StyleSheet, 
-  ScrollView, Switch, /*DeviceEventEmitter,*/ 
+  ScrollView, Switch, DeviceEventEmitter, 
   Image, Dimensions, ActivityIndicator, 
   ImageBackground, Animated
 } from "react-native";
@@ -55,7 +55,7 @@ export default class Index extends Component {
 
   componentDidMount() {
     this.setState({voipServerConnected: true})
-    /*
+    
     DeviceEventEmitter.addListener("mediaActive", evt => {
       console.log(evt)
       if(evt.active === 'false') {
@@ -124,7 +124,7 @@ export default class Index extends Component {
     })
     DeviceEventEmitter.addListener("unmuteVOIP", evt => {
       this.setState({muted: false})
-    })*/
+    })
     NativeCycleControl.init(() => {})
     setTimeout(() => {
       Animated.timing(this.state.mainAnim1, {
@@ -232,6 +232,13 @@ export default class Index extends Component {
             }}>
               <View style={{borderTopLeftRadius: 0, borderBottomLeftRadius: 15, backgroundColor: "transparent", padding: 0, alignItems: "center", paddingRight: 0, alignSelf: "flex-start"}}>
                 <MaterialIcons size={20} style={{color: "grey"}} name={"settings"}/>
+              </View>
+            </SmartView>
+            <SmartView touchFeedback = {false} onTouchEnd = {() => {
+              NativeCycleControl.openNotificationAccess()
+            }}>
+              <View style={{borderTopLeftRadius: 0, borderBottomLeftRadius: 15, backgroundColor: "transparent", padding: 0, alignItems: "center", paddingRight: 0, alignSelf: "flex-start"}}>
+                <MaterialIcons size={20} style={{color: "rgb(117, 107, 255)"}} name={"notification-important"}/>
               </View>
             </SmartView>
             <SmartView touchFeedback = {false} onTouchEnd = {() => {
