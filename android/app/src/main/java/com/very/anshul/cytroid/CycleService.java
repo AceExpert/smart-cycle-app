@@ -301,6 +301,7 @@ public class CycleService extends Service {
         public double getRealCoords(String nmeaFormat) {
             try {
                 Matcher matcher = latPat.matcher(nmeaFormat);
+                matcher.find();
                 return Double.parseDouble(matcher.group(1)) + Double.parseDouble(matcher.group(2)) / 60;
             } catch (IllegalStateException e) {
                 return 0;
@@ -334,10 +335,14 @@ public class CycleService extends Service {
                     String lat_dir = parts[3];
                     String logt = parts[4];
                     String logt_dir = parts[5];
-                    //cycleLocation = new String[]{String.valueOf(getRealCoords(lat)), lat_dir, String.valueOf(getRealCoords(logt)), logt_dir};
-                    Intent intent = new Intent("cycle_location");
-                    //intent.putExtra("location", cycleLocation);
-                    //sendBroadcast(intent);
+                    double res_lat = getRealCoords(lat);
+                    double res_logt = getRealCoords(logt);
+                    if(res_lat != 0 || res_logt != 0) {
+                        cycleLocation = new String[]{String.valueOf(res_lat), lat_dir, String.valueOf(res_logt), logt_dir};
+                        Intent intent = new Intent("cycle_location");
+                        intent.putExtra("location", cycleLocation);
+                        sendBroadcast(intent);
+                    }
                 };
             };
         }
