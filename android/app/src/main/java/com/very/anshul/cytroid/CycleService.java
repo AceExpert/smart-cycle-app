@@ -422,8 +422,9 @@ public class CycleService extends Service {
                                     Log.i("socket read", String.valueOf(len));
                                     for(int i = 0; i < len; i++) {
                                         byte current = buffer.get(i);
-                                        if(current == '.' || current == '$') {
+                                        if(!cmdStart && current == '.' || current == '$') {
                                             cmdStart = true;
+                                            cmds = "";
                                             cmds += new String(new byte[]{current}, StandardCharsets.US_ASCII);
                                             continue;
                                         }
