@@ -21,7 +21,7 @@ export default class CallCard extends Component {
     }
 
     render = () =>
-        <View style={[{width: "100%", display: "flex", flexDirection: "column", elevation: 0, backgroundColor: "rgba(255, 255, 255, 0)", borderLeftColor: this.props.sideColor ?? "green", borderLeftWidth: this.props.sideWidth ?? 5}]}>
+        <View style={[{width: "100%", display: "flex", flexDirection: "column", elevation: 0, backgroundColor: "rgba(255, 255, 255, 0)", borderLeftColor: this.props.sideColor ?? "green", borderLeftWidth: 0 && (this.props.sideWidth ?? 5)}]}>
             <View style={[styles.card, this.props.style ?? {}]}>
                 <View style={[styles.avatar]}>
                     <ImageBackground 
@@ -30,7 +30,7 @@ export default class CallCard extends Component {
                         
                     </ImageBackground>
                 </View>
-                <View style={[{flex: 1, display: "flex", flexDirection: "row", justifyContent: "space-between", height: "100%", alignItems: "center"}]}>
+                <View style={[{flex: 1, display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center"}]}>
                     <View style={[styles.infoSide, {justifyContent: "center"}]}>
                         <SText style={{fontSize: 14, fontWeight: 600}}>{this.props?.name ?? 'Joe Daniel'}</SText>
                         <View style={{display: "flex", flexDirection: "row", alignItems: "center", gap: 5}}>
@@ -39,12 +39,12 @@ export default class CallCard extends Component {
                                 <FontAwesome name={'bicycle'} size={13} style={[{color: 'grey'}]}/>
                             }
                             <SText style={[{fontSize: 9, color: 'grey'}]}>{this.props.online? 'Cycling' : 'Offline'}</SText>
-                            <View style={{height: 10, width: 1, backgroundColor: "rgba(100, 100, 100, 0.3)"}}></View>
+                            <View style={{height: "100%", width: 1, backgroundColor: "rgba(100, 100, 100, 0.3)"}}></View>
                             <MaterialIcons name={!this.props.online? 'call-end' : this.props.joined? 'call' : 'call-end'} size={11} style={[{color: !this.props.online? 'grey' : this.props.joined? 'green' : 'orange'}]}/>
                             <SText style={[{fontSize: 9, color: 'grey'}]}>{this.props.joined? 'In call' : 'Not in call'}</SText>
                         </View>
                     </View>
-                    <View style={[{display: "flex", flexDirection: "row", gap: 18, height: "100%", alignItems: "center", paddingRight: 10}]}>
+                    <View style={[{display: "flex", flexDirection: "row", gap: 18, alignItems: "center", paddingRight: 10}]}>
                         <MaterialIcons name={this.props.joined? 'wifi-calling-3' : 'add-call'} size={20} style={[{color: this.props.joined? 'green' : 'black'}]}/>
                         <MaterialIcons name={this.props.online? (this.props.muted === false? 'mic' : 'mic-off') : 'mic-off'} size={20} style={[{color: this.props.online? (this.props.muted === false? 'purple' : 'darkred') : 'grey'}]}/>
                     </View>
@@ -108,13 +108,14 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         gap: 5,
-        height: 40,
         borderBottomColor: 'rgba(200, 200, 200, 0.5)',
         borderBottomWidth: 0.5, //1
         borderTopWidth: 0,
         borderRightWidth: 0,
         borderTopColor: 'rgba(220, 220, 220, 0.4)',
-        borderRightColor: 'rgba(220, 220, 220, 0.4)'
+        borderRightColor: 'rgba(220, 220, 220, 0.4)',
+        paddingTop: 2,
+        paddingBottom: 2,
     },
     avatar: {
         display: "flex",
@@ -128,9 +129,6 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         alignItems: "flex-start",
         justifyContent: "space-between",
-        height: "100%",
-        paddingTop: 9,
-        paddingBottom: 12
     },
     memberCard: {
         backgroundColor: "white",
@@ -138,10 +136,13 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 0,
         borderBottomLeftRadius: 0,
         width: "100%",
-        elevation: 10,
+        elevation: 0,
         shadowColor: "rgba(20, 20, 20, .4)",
         display: "flex",
         flexDirection: "column",
-        gap: 5
+        gap: 5,
+        borderColor: "grey",
+        borderWidth: 0.0,
+        boxShadow: "0px 3px 25px 0px rgba(0,0,0,0.05)",
     },
 })

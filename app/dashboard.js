@@ -42,60 +42,28 @@ export default class Dashboard extends Component {
                     </View>
                 </View>
             </View>
-            <View style={[styles.row, {width: "100%", height: "100%", padding: 0, justifyContent: "space-between", paddingRight: 10}]}>
-                <View style={[styles.column, {gap: 5, justifyContent: "space-between", height: "100%", paddingTop: 0, width: 150}]}>
-                    <View style={[styles.column, {alignItems: "center", justifyContent: "center", backgroundColor: 'white' || "rgba(255, 72, 200, 0.53)", height: 160, width: 160, borderRadius: "50%", borderBottomRightRadius: "50%", position: "relative", left: -40, top: -40, borderColor: "rgba(207, 105, 255, 0.66)", borderWidth: 0, boxShadow: "-0px 0px 15px 2px rgba(203, 72, 255, 0.29)"}]}>
-                        <View style={[styles.row, {position: "absolute", height: 190, width: 190, alignItems: "center", justifyContent: "center", borderColor: "rgb(255, 255, 255)", borderWidth: 5, borderRadius: "50%", borderBottomRightRadius: "50%", boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.1)"}]}>
+            <View style={[styles.row, {width: "100%", height: "100%", padding: 0, justifyContent: "space-between", paddingRight: "0.8%"}]}>
+                <View style={[styles.column, {gap: 5, justifyContent: "space-between", height: "100%", paddingTop: 0, width: 140}]}>
+                    <View style={[styles.column, {alignItems: "center", justifyContent: "center", backgroundColor: 'white' || "rgba(255, 72, 200, 0.53)", height: 140, width: 140, borderRadius: "50%", borderBottomRightRadius: "50%", position: "relative", left: -35, top: -35, borderColor: "rgba(207, 105, 255, 0.66)", borderWidth: 0, boxShadow: "-0px 0px 15px 2px rgba(203, 72, 255, 0.29)"}]}>
+                        <View style={[styles.row, {position: "absolute", height: 165, width: 165, alignItems: "center", justifyContent: "center", borderColor: "rgb(255, 255, 255)", borderWidth: 5, borderRadius: "50%", borderBottomRightRadius: "50%", boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.1)"}]}>
                             <View style={[styles.column, {position: "relative", left: 12, top: 15}]}>
                                 <SText style={{fontSize: 40, fontWeight: 500, color: 'rgba(50, 0, 70, 0.73)' || "rgb(255, 255, 255)", filter: [{dropShadow: "0px 0px 7px rgba(255, 43, 227, 0.0)"}]}}>0</SText>
                                 <SText style={{fontSize: 20, fontWeight: 600, color: 'rgba(255, 255, 255, 0.9)' && "rgba(100, 100, 100, 0.8)", position: "relative", left: 25, bottom: 7}}>km/hr</SText>
                             </View>
                         </View>
                     </View>
-                    <View style={[styles.column, {alignItems: "center", justifyContent: "center", backgroundColor: 'white' || "rgba(255, 72, 200, 0.53)", height: 160, width: 160, borderRadius: "50%", position: "relative", left: -40, bottom: -40, borderColor: "rgba(207, 105, 255, 0.66)", borderWidth: 0, boxShadow: "-0px 0px 15px 2px rgba(87, 15, 255, 0.29)"}]}>
-                        <View style={[styles.row, {position: "absolute", height: 190, width: 190, alignItems: "center", justifyContent: "center", borderColor: "rgb(255, 255, 255)", borderWidth: 5, borderRadius: "50%", boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.1)"}]}>
+                    <View style={[styles.column, {alignItems: "center", justifyContent: "center", backgroundColor: 'white' || "rgba(255, 72, 200, 0.53)", height: 140, width: 140, borderRadius: "50%", position: "relative", left: -35, bottom: -35, borderColor: "rgba(207, 105, 255, 0.66)", borderWidth: 0, boxShadow: "-0px 0px 15px 2px rgba(87, 15, 255, 0.29)"}]}>
+                        <View style={[styles.row, {position: "absolute", height: 165, width: 165, alignItems: "center", justifyContent: "center", borderColor: "rgb(255, 255, 255)", borderWidth: 5, borderRadius: "50%", boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.1)"}]}>
                             <View style={[styles.column, {position: "relative", left: 18, bottom: 25}]}>
                                 <SText style={{fontSize: 20, fontWeight: 600, color: 'rgba(255, 255, 255, 0.9)' && "rgba(100, 100, 100, 0.8)", position: "relative", left: 17, top: 7}}>km/hr²</SText>
                                 <SText style={{fontSize: 40, fontWeight: 500, color: 'rgba(50, 0, 70, 0.73)' || "rgb(255, 255, 255)", filter: [{dropShadow: "0px 0px 7px rgba(255, 43, 227, 0.0)"}]}}>0</SText>
                             </View>
                         </View>
                     </View>
-                    {/*<View style={[styles.column, styles.class1Card, {backgroundColor: 'transparent' || "rgb(110, 0, 61)", overflow: "hidden", borderRadius: 0 //25, borderTopRightRadius: 0, borderBottomRightRadius: 25, boxShadow: "-5px 3px 10px 0px rgba(0, 0, 0, .0)", borderWidth: .0, borderColor: "black", justifyContent: "space-evenly"}]}>
-                        <View style={{position: "absolute", bottom: -40, left: -40, zIndex: 5}}>
-                            <SimpleLineIcons name="speedometer" size={100} style={{color: "rgba(100, 100, 100, 0.4)" || "rgba(255, 255, 255, 0.3)", transform: [{rotateZ: "45deg"}]}}/>
-                        </View>
-                        <View style={{display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between"}}>
-                            <SText style={{fontSize: 17, fontWeight: 300, color: 'white' && "rgba(0, 0, 0, 0.7)"}}>Speed</SText>
-                            <MaterialIcons name="edit" size={14} style={{color: 'grey' || "purple"}}/>
-                        </View>
-                        <View style={[styles.class1Card, styles.centerRow, {alignSelf: "flex-end", width: "auto", height: "auto", padding: 7, gap: 8}]}>
-                            <SText style={{fontSize: 40, fontWeight: 500, color: "white" && 'black'}}>0</SText>
-                            <SText style={{fontSize: 25, fontWeight: 600, color: 'rgba(255, 255, 255, 0.9)' && "rgba(100, 100, 100, 0.8)"}}>km/hr</SText>
-                        </View>
-                        <View style={[styles.centerRow, {alignSelf: "flex-end", gap: 7, width: "100%", justifyContent: "flex-end", display: "none"}]}>
-                            <MaterialIcons name="edit" size={14} style={{color: 'grey' || "purple"}}/>
-                        </View>
-                    </View>
-                    <View style={[styles.column, styles.class1Card, {backgroundColor: 'transparent' || "rgba(78, 0, 131, 0.93)", overflow: "hidden", borderRadius: 0 //25, borderBottomRightRadius: 0, boxShadow: "-5px 3px 10px 0px rgba(0, 0, 0, .0)", borderWidth: 0.0, borderColor: "black", justifyContent: "space-evenly"}]}>
-                        <View style={{position: "absolute", bottom: -40, left: -40, zIndex: 5}}>
-                            <SimpleLineIcons name="speedometer" size={100} style={{color: "rgba(100, 100, 100, 0.4)" || "rgba(255, 255, 255, 0.3)", transform: [{rotateZ: "45deg"}]}}/>
-                        </View>
-                        <View style={{display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between"}}>
-                            <SText style={{fontSize: 14, fontWeight: 300, color: "rgba(0, 0, 0, 0.7)"}}>Acceleration</SText>
-                            <MaterialIcons name="edit" size={14} style={{color: 'grey' || "purple"}}/>
-                        </View>
-                        <View style={[styles.class1Card, styles.centerRow, {alignSelf: "flex-end", width: "auto", height: "auto", padding: 7, gap: 8}]}>
-                            <SText style={{fontSize: 40, fontWeight: 500, color: "black"}}>0</SText>
-                            <SText style={{fontSize: 25, fontWeight: 600, color: 'rgba(255, 255, 255, 0.9)' && "rgba(100, 100, 100, 0.8)"}}>km/hr²</SText>
-                        </View>
-                        <View style={[styles.centerRow, {alignSelf: "flex-end", gap: 7, width: "100%", justifyContent: "flex-end", display: "none"}]}>
-                            <MaterialIcons name="edit" size={14} style={{color: 'grey' || "purple"}}/>
-                        </View>
-                    </View>*/}
                 </View>
-                <View style={[styles.column, {gap: 15, justifyContent: "space-evenly", height: "100%"}]}>
+                <View style={[styles.column, {gap: 15, justifyContent: "space-evenly", height: "100%", width: "40%"}]}>
                     <View style={[styles.column, {gap: 5}]}>
-                        <View style={[styles.row, {alignItems: "flex-end", justifyContent: "space-between", paddingRight: 40}]}>
+                        <View style={[styles.row, {alignItems: "flex-end", justifyContent: "space-between", paddingRight: 37}]}>
                             <View style={[styles.row, {alignItems: "flex-end", gap: 5}]}>
                                 <View style={[styles.class1Card, {width: "auto", height: "auto", padding: 5, borderRadius: 8,  borderBottomLeftRadius: 0, backgroundColor: "dodgerblue", boxShadow: "0px 2px 6px -2px rgba(0, 0, 0, 0.1)"}]}>
                                     <MaterialIcons name="bluetooth-audio" size={17} style={{color: "white"}}/>
@@ -113,9 +81,9 @@ export default class Dashboard extends Component {
                                 </View>
                             </View>
                         </View>
-                        <View style={[styles.row, {gap: 10}]}>
-                            <View style={[styles.column, {gap: 7, height: 180}]}>
-                                <View style={[styles.column, styles.class1Card, {padding: 5, width: 400, height: 210, paddingBottom: 10, borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 0, borderBottomRightRadius: 0, borderWidth: 0.0, borderColor: "black", boxShadow: "0px 2px 6px -2px rgba(0, 0, 0, 0.1)"}]}>
+                        <View style={[styles.row, {gap: 7, height: "65%"}]}>
+                            <View style={[styles.column, {gap: 7}]}>
+                                <View style={[styles.column, styles.class1Card, {padding: 5, width: "100%", height: "100%", paddingBottom: 10, borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 0, borderBottomRightRadius: 0, borderWidth: 0.0, borderColor: "black", boxShadow: "0px 2px 6px -2px rgba(0, 0, 0, 0.1)"}]}>
                                     <View style={[styles.column, {width: "100%", gap: 3}]}>  
                                         <View style={[styles.centerRow, {justifyContent: 'space-between', width: "100%", paddingTop: 5, paddingLeft: 5, paddingRight: 20}]}>
                                             <SText style={[{fontWeight: 600, fontSize: 20}]}>{this.state.music}</SText>
@@ -185,19 +153,19 @@ export default class Dashboard extends Component {
                                     </View>
                                 </View>
                             </View>
-                            <View style={[styles.column, {padding: 0, width: 30, height: "100%", paddingBottom: 10, gap: 8}]}>
-                                <View style={[styles.column, styles.class1Card, {width: "100%", height: 180, backgroundColor: "rgba(170, 170, 170, 0.3)", borderBottomLeftRadius: 0, alignItems: "center", justifyContent: "flex-end", padding: 0, boxShadow: "0px 2px 6px -2px rgba(0, 0, 0, 0.1)", borderWidth: 0.0, borderColor: "black"}]}>
+                            <View style={[styles.column, {padding: 0, width: 30, height: "100%", paddingBottom: 0, gap: 5}]}>
+                                <View style={[styles.column, styles.class1Card, {width: "100%", flex: 1, backgroundColor: "rgba(170, 170, 170, 0.3)", borderBottomLeftRadius: 0, alignItems: "center", justifyContent: "flex-end", padding: 0, boxShadow: "0px 2px 6px -2px rgba(0, 0, 0, 0.1)", borderWidth: 0.0, borderColor: "black"}]}>
                                     <View style={[styles.column, {width: "100%", height: "40%", backgroundColor: "white", borderRadius: 13, borderBottomLeftRadius: 0, padding: 0, borderTopWidth: 0}]}>
                                         <View></View>
                                     </View>
                                 </View>
-                                <View style={[styles.column, styles.class1Card, {width: "auto", height: 40, padding: 5, alignItems: "center", justifyContent: "center", borderTopLeftRadius: 0, boxShadow: "0px 2px 6px -2px rgba(0, 0, 0, 0.1)"}]}>
+                                <View style={[styles.column, styles.class1Card, {width: "auto", height: 35, padding: 5, alignItems: "center", justifyContent: "center", borderTopLeftRadius: 0, boxShadow: "0px 2px 6px -2px rgba(0, 0, 0, 0.1)"}]}>
                                     <MaterialIcons name="volume-up" size={20}/>
                                 </View>
                             </View>
                         </View>
                     </View>
-                    <View style={[styles.centerRow, {width: 410}]}>
+                    <View style={[styles.centerRow, {width: "100%"}]}>
                         <View style={[styles.centerRow, {paddingTop: 0, paddingLeft: 0, width: "100%", justifyContent: "center"}]}>
                             <View style={[styles.centerRow, {gap: 3, width: "100%", justifyContent: "space-between"}]}>
                                 <View style={[styles.row, styles.class1Card, {width: 90, height: "auto", padding: 15, borderRadius: 25, borderBottomLeftRadius: 0, backgroundColor: "rgb(219, 121, 40)", justifyContent: "center", boxShadow: "0px 4px 10px -2px rgba(0, 0, 0, 0.15)"}]}>
@@ -213,7 +181,7 @@ export default class Dashboard extends Component {
                         </View>
                     </View>
                 </View>
-                <View style={[styles.column, {gap: 15, justifyContent: "space-around", height: "100%", width: 370}]}>
+                <View style={[styles.column, {gap: 15, justifyContent: "space-around", height: "100%", flex: 1, paddingLeft: 43}]}>
                     <View style={[styles.row, {gap: 10}]}>
                         <View style={[styles.column, {padding: 0, width: "100%", height: "auto", paddingBottom: 0, justifyContent: "flex-start", gap: 5, borderBottomLeftRadius: 0}]}>
                             <View style={[styles.centerRow, {paddingTop: 0, paddingLeft: 0, width: "100%", justifyContent: "space-between", alignItems: "flex-end"}]}>
@@ -311,7 +279,6 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     class1Card: {
-        width: 160, height: 150, 
         backgroundColor: "white", 
         padding: 12, 
         borderRadius: 13,

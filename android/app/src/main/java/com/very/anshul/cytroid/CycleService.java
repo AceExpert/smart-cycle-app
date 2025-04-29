@@ -363,7 +363,7 @@ public class CycleService extends Service {
                         selector = Selector.open();
                         gpsSocket = SocketChannel.open();
                         gpsSocket.configureBlocking(false);
-                        gpsSocket.connect(new InetSocketAddress("82.25.105.122", 3121));
+                        gpsSocket.connect(new InetSocketAddress("209.74.79.245", 3121));
                         gpsSocket.register(selector, SelectionKey.OP_CONNECT);
                         gpsConnecting = true;
                     } else if (gpsConnecting) {
@@ -794,7 +794,7 @@ public class CycleService extends Service {
                             }
                         } else {
                             if (locked) {
-                                if (!(lockTime != null && lockTime.until(LocalDateTime.now(), ChronoUnit.SECONDS) < 4)) {
+                                if (!(lockTime != null && lockTime.until(LocalDateTime.now(), ChronoUnit.SECONDS) < 7)) {
                                     queueSend(token + " unlock");
                                     locked = false;
                                     onCycleUnlock();

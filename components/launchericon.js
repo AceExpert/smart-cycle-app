@@ -26,7 +26,7 @@ export default function LauncherIcon({IconClass = MaterialIcons, ...props}) {
                 }}
             >
                 <ActionCard style={[props.style, {backgroundColor: touch? 'rgb(200, 200, 200)': props.style?.backgroundColor ?? 'white', display: "flex", alignItems: "center", justifyContent: "center"}]}>
-                    <IconClass name={props.icon} size={35} style={[styles.mainIcon, styles.lightBorder, props.iconStyle]}/>
+                    <IconClass name={props.icon} size={30} style={[styles.mainIcon, styles.lightBorder, props.iconStyle]}/>
                 </ActionCard>
             </SmartView>
             <SText style={[styles.iconText]}>{props.name}</SText>
@@ -49,6 +49,6 @@ const styles = StyleSheet.create({
     },
     mainIcon: {
         borderRadius: 100, 
-        padding: 4
+        padding: 2
     },
 })

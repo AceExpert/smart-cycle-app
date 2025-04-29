@@ -41,9 +41,9 @@ export default class Soundboard extends Component {
                     <SText style={{fontSize: 28, fontWeight: 300, letterSpacing: 7, fontFamily: "SamsungSharpSans-Bold"}}>SOUNDBOARD</SText>
                 </View>
             </View>
-            <ScrollView style={{display: "flex", flexDirection: "column", gap: 10, paddingTop: 50, padding: 0, width: "100%"}}>
+            <ScrollView style={{display: "flex", flexDirection: "column", gap: 10, padding: 0, width: "100%"}} contentContainerStyle={{paddingBottom: 50, paddingTop: 50}}>
                 <View style={[styles.column, {alignSelf: "flex-start", gap: 5}]}>
-                    <View style={[styles.row, {alignItems: "flex-end", gap: 5, justifyContent: "space-between", paddingLeft: 0, paddingRight: 20}]}>
+                    <View style={[styles.row, {alignItems: "flex-end", gap: 5, justifyContent: "space-between", paddingLeft: 0, paddingRight: "3%"}]}>
                         <View style={[styles.class1Card, {padding: 5, borderRadius: 8, borderBottomLeftRadius: 0, paddingRight: 8, paddingLeft: 8, borderLeftWidth: 0, borderStyle: "solid", borderTopLeftRadius: 0, boxShadow: "-5px 3px 0px 0px rgba(0, 0, 0, 1)"}]}>
                             <SText style={{fontSize: 25, fontWeight: 600, fontFamily: "SamsungSharpSans-Bold"}}>Startup Sound</SText>
                         </View>
@@ -56,7 +56,7 @@ export default class Soundboard extends Component {
                             </View>
                         </View>
                     </View>
-                    <View style={{paddingLeft: 20, paddingRight: 20, gap: 5}}>
+                    <View style={{paddingLeft: "3%", paddingRight: "3%", gap: 5}}>
                         <View>
                             <View style={[styles.class1Card, {padding: 5, borderRadius: 8, borderBottomLeftRadius: 0, paddingRight: 8, paddingLeft: 8, alignSelf: "flex-start"}]}>
                                 <SText style={{fontSize: 15, fontWeight: 400}}>Default</SText>
@@ -85,7 +85,7 @@ export default class Soundboard extends Component {
                 </View>
 
                 <View style={[styles.column, {alignSelf: "flex-start", gap: 5, marginTop: 25}]}>
-                    <View style={[styles.row, {alignItems: "flex-end", gap: 5, justifyContent: "space-between", paddingRight: 20}]}>
+                    <View style={[styles.row, {alignItems: "flex-end", gap: 5, justifyContent: "space-between", paddingRight: "3%"}]}>
                         <View style={[styles.class1Card, {padding: 5, borderRadius: 8, borderBottomLeftRadius: 0, paddingRight: 8, paddingLeft: 8, borderLeftWidth: 0, borderStyle: "solid", borderTopLeftRadius: 0, boxShadow: "-5px 3px 0px 0px rgba(0, 0, 0, 1)",}]}>
                             <SText style={{fontSize: 25, fontWeight: 600}}>Stand-by Playlist</SText>
                         </View>
@@ -98,7 +98,7 @@ export default class Soundboard extends Component {
                             </View>
                         </View>
                     </View>
-                    <View style={{paddingLeft: 20, paddingRight: 20, gap: 5}}>
+                    <View style={{paddingLeft: "3%", paddingRight: "3%", gap: 5}}>
                         <View style={{marginTop: 0}}>
                             <View style={[styles.centerRow, {alignItems: "flex-end", justifyContent: "space-between"}]}>
                                 <View style={[styles.class1Card, {padding: 5, borderRadius: 8, borderBottomLeftRadius: 0, paddingRight: 8, paddingLeft: 8}]}>
@@ -117,7 +117,7 @@ export default class Soundboard extends Component {
                 </View>
 
                 <View style={[styles.column, {alignSelf: "flex-start", gap: 5, marginTop: 25}]}>
-                    <View style={[styles.row, {alignItems: "flex-end", gap: 5, justifyContent: "space-between", paddingRight: 20}]}>
+                    <View style={[styles.row, {alignItems: "flex-end", gap: 5, justifyContent: "space-between", paddingRight: "3%"}]}>
                         <View style={[styles.class1Card, {padding: 5, borderRadius: 8, borderBottomLeftRadius: 0, paddingRight: 8, paddingLeft: 8, borderLeftWidth: 0, borderStyle: "solid", borderTopLeftRadius: 0, boxShadow: "-5px 3px 0px 0px rgba(0, 0, 0, 1)",}]}>
                             <SText style={{fontSize: 25, fontWeight: 600}}>Effects</SText>
                         </View>
@@ -130,7 +130,7 @@ export default class Soundboard extends Component {
                             </View>
                         </View>
                     </View>
-                    <View style={{paddingLeft: 20, paddingRight: 20, gap: 5}}>
+                    <View style={{paddingLeft: "3%", paddingRight: "3%", gap: 5}}>
                         <View style={{marginTop: 0}}>
                             <View style={[styles.centerRow, {alignItems: "flex-end", justifyContent: "space-between"}]}>
                                 <View style={[styles.class1Card, {padding: 5, borderRadius: 8, borderBottomLeftRadius: 0, paddingRight: 8, paddingLeft: 8}]}>

@@ -56,11 +56,11 @@ export default class CallView extends Component {
     render = () => 
         <View style={[{width: "100%", height: "100%", display: "flex", flexDirection: "column"}]}>
             <Stack.Screen options={{headerShown: false}} />
-            <View style={[{width: "100%", display: "flex", flexDirection: "column", gap: 25, alignItems: "center", justifyContent: "center", paddingTop: 50}]}>
+            <View style={[{width: "100%", display: "flex", flexDirection: "column", gap: 25, alignItems: "center", justifyContent: "space-between", height: "100%", paddingTop: '5%', paddingBottom: '5%'}]}>
                 <View style={[{width: "100%", display: "flex", flexDirection: "column-reverse", gap: 3}]}>
-                    <View style={[{width: "100%", paddingRight: 85, paddingBottom: 30, direction: "flex", flexDirection: "row", alignItems: "flex-start", gap: 3}]}>
+                    <View style={[{width: "100%", direction: "flex", flexDirection: "row", alignItems: "flex-start", justifyContent: "center", gap: 3, paddingRight: "2%", paddingLeft: "2%"}]}>
                         
-                        <View style={[styles.memberCard, {borderTopRightRadius: 0, borderBottomRightRadius: 30}]}>
+                        <View style={[styles.memberCard, {borderRadius: 10}]}>
                             <ScrollView style={{display: "flex", width: "100%", flexDirection: "column", gap: 0, maxHeight: 300}}>
                                 <CallCard 
                                     name = {"Anshul"} 
@@ -79,53 +79,43 @@ export default class CallView extends Component {
                                 />
                             </ScrollView>
                         </View>
-                        <ActionIconType1 latch={'center'} mainPad={10} iconName={'settings'} IconClass={MaterialIcons} iconSize={25} radius={23} style={{borderTopLeftRadius: 0, borderBottomRightRadius: 0, borderBottomLeftRadius: 18, boxShadow: "3px 3px 25px -3px rgba(123, 0, 238, 0.22)", backgroundColor: "rgb(34, 0, 54)"}} iconColor={"white"}/>
 
                     </View>
-                    <View style={[{width: "100%", display: "flex", flexDirection: "row-reverse", /*justifyContent: "space-between",*/ gap: 3, alignItems: "flex-end"}]}>
-                        <ActionIconType1 latch={'right'} leftPad={0} mainPad={9} text={'Members'} radius={20} style={{borderBottomLeftRadius: 0}}/>
-                        <ActionIconType1 latch={'center'} mainPad={9} leftPad={0} iconName={'group-add'} IconClass={MaterialIcons} radius={23} iconSize={23} iconColor={"black" || "white"} style={{borderBottomRightRadius: 0, borderTopLeftRadius: 0, backgroundColor: "rgb(0, 95, 238)", backgroundColor: "white", borderBottomLeftRadius: 15, boxShadow: "-3px -3px 15px 0px rgba(0, 95, 238, 0.22)"}}/>
+                    <View style={[{width: "100%", display: "flex", flexDirection: "row-reverse", /*justifyContent: "space-between",*/ alignItems: "flex-end"}]}>
+                        <View style={[{display: "flex", flexDirection: "row-reverse", gap: "1.5%", alignItems: "center", width: "100%", justifyContent: "space-between", paddingLeft: "2%", paddingRight: "2%"}]}>
+                            <ActionIconType1 latch={'center'} leftPad={0} mainPad={9} text={'Members'} radius={10}/>
+                            <ActionIconType1 latch={'center'} mainPad={9} leftPad={0} iconName={'group-add'} IconClass={MaterialIcons} radius={10} iconSize={23} iconColor={"black" || "white"} style={{}}/>
                         {/*<View style={[{display: "flex", flexDirection: "row", alignItems: "center", gap: 10}]}>
                             <ActionIconType1 latch={'left'} mainPad={10} leftPad={6} iconName={'group-add'} IconClass={MaterialIcons} iconSize={25}/>
                             <ActionIconType1 latch={'center'} mainPad={10} iconName={'settings'} IconClass={MaterialIcons} iconSize={25}/>
                         </View>*/}
+                        </View>
                     </View>
                     <View style={[{width: "100%", display: "flex", flexDirection: "row", justifyContent: "flex-start", marginBottom: 10, alignItems: "center"}]}>
-                        <View style={[{display: "flex", flexDirection: "row", alignItems: "flex-end", gap: 3, justifyContent: "flex-end"}]}>
-                            <ActionIconType1 latch={'left'} mainPad={9} text={'Our dreams'} style={{borderTopRightRadius: 30, borderBottomRightRadius: 0}}/>
-                            <ActionIconType1 mainPad={7} iconName={'exit'} IconClass={Ionicons} iconSize={23} iconColor={"darkred"} radius={30} style={{borderBottomLeftRadius: 0, borderTopRightRadius: 0, borderBottomRightRadius: 17}} iconStyle={[{position: "relative", right: -3}]}/>
-                            <View style={{position: "absolute", top: -43, display: "flex", flexDirection: "row", gap: 3, alignItems: "flex-end", right: -64}}>
-                        
-                            </View>
-                            <View style={{gap: 3, display: "flex", flexDirection: "row-reverse", alignItems: "flex-start", position: "absolute", bottom: -43}}>
-                                <ActionIconType1 mainPad={7} iconName={'ellipsis-vertical'} IconClass={Ionicons} iconSize={23} style={{borderTopLeftRadius: 0, borderBottomRightRadius: 0}} radius={20}/>
-                                <ActionIconType1 mainPad={5} iconName={'settings'} IconClass={MaterialIcons} iconSize={23} style={{borderTopRightRadius: 0, borderBottomLeftRadius: 0, backgroundColor: "transparent", borderWidth: 3, borderColor: "white", elevation: 0, boxShadow: "-3px 3px 30px -5px rgba(255, 123, 0, 0.3)"}} radius={20}/>
-                            </View>
+                        <View style={[{display: "flex", flexDirection: "row", alignItems: "flex-end", gap: "1.5%", justifyContent: "flex-start"}]}>
+                            <ActionIconType1 latch={'left'} mainPad={7} text={'Our dreams'}/>
+                            <ActionIconType1 mainPad={7} iconName={'settings'} IconClass={MaterialIcons} iconSize={23} radius={10}/>
+                            <ActionIconType1 mainPad={7} iconName={'ellipsis-vertical'} IconClass={Ionicons} iconSize={23} radius={10}/>
                         </View>
                     </View>
                     <View style={[{display: "flex", flexDirection: "row", alignItems: "center", gap: 10, marginBottom: 0, justifyContent: "flex-end", width: "100%"}]}>
-                        <View style={{display: "flex", flexDirection: "row-reverse", gap: 3, position: "relative", left: 0, bottom: -0}}>
-                            <ActionIconType1 latch={'right'} mainPad={10} text={'Group'} radius={20} leftPad={5} style={{borderTopLeftRadius: 30, borderBottomRightRadius: 0, borderBottomLeftRadius: 0}}/>
-                            <ActionIconType1 mainPad={7} iconName={'ellipsis-vertical'} IconClass={Ionicons} iconSize={23} style={{transform: [{rotateZ: "-0deg"}], borderTopLeftRadius: 0, borderBottomRightRadius: 0, borderBottomLeftRadius: 23}} radius={30} iconStyle={{transform: [{rotateZ: "0deg"}]}}/>
-                            <View style={{gap: 3, display: "flex", flexDirection: "column", alignItems: "flex-start", position: "absolute", marginRight: 130, alignItems: "center", justifyContent: "center", top: -15}}>
-                                <View style={{gap: 3, display: "flex", flexDirection: "row-reverse", alignItems: "flex-start"}}>
-                                    <ActionIconType1 mainPad={11} iconName={'exchange'} IconClass={FontAwesome} iconSize={32} style={{transform: [{rotateZ: "-0deg"}], borderTopRightRadius: 0, borderBottomLeftRadius: 0, borderBottomRightRadius: 30}} radius={40} iconStyle={{transform: [{rotateZ: "0deg"}]}}/>
-                                    <ActionIconType1 mainPad={11} iconName={'lock-open'} IconClass={MaterialIcons} iconSize={32} style={{transform: [{rotateZ: "-0deg"}], borderTopLeftRadius: 0, borderBottomRightRadius: 0, borderBottomLeftRadius: 30}} radius={40} iconStyle={{transform: [{rotateZ: "0deg"}]}}/>
-                                </View>
-                                <View style={{gap: 3, display: "flex", flexDirection: "row-reverse", alignItems: "flex-start"}}>
-                                    <ActionIconType1 mainPad={11} iconName={'caretright'} IconClass={AntDesign} iconSize={32} style={{transform: [{rotateZ: "0deg"}], borderTopLeftRadius: 0, borderBottomRightRadius: 0, borderTopRightRadius: 30}} iconStyle={{transform: [{rotateZ: "-0deg"}]}} radius={40}/>
-                                    <ActionIconType1 mainPad={11} iconName={'caretleft'} IconClass={AntDesign} iconSize={32} style={{transform: [{rotateZ: "-0deg"}], borderTopRightRadius: 0, borderBottomLeftRadius: 0, borderTopLeftRadius: 30, backgroundColor: "white", borderWidth: 0, borderColor: "white", elevation: 0, boxShadow: "-3px 3px 20px 0px rgba(49, 49, 49, 0.1)"}} iconStyle={{transform: [{rotateZ: "0deg"}]}} radius={40}/>
-                                </View>
-                                {/*<View style={{display: "flex", flexDirection: "row", position: "absolute", width: "100%", alignSelf: "center", justifyContent: "center"}}>
+                        <View style={{display: "flex", flexDirection: "row-reverse", gap: "1.5%", position: "relative", left: 0, bottom: -0}}>
+                            <ActionIconType1 latch={'right'} mainPad={7} text={'Group'} radius={10} leftPad={0} />
+                            <ActionIconType1 mainPad={8} iconName={'exchange'} IconClass={FontAwesome} iconSize={20} radius={10} />
+                            <ActionIconType1 mainPad={8} iconName={'lock-open'} IconClass={MaterialIcons} iconSize={20} radius={10}/>
+                            <ActionIconType1 mainPad={8} iconName={'caretright'} IconClass={AntDesign} iconSize={20} radius={10}/>
+                            <ActionIconType1 mainPad={8} iconName={'caretleft'} IconClass={AntDesign} iconSize={20} radius={10}/>
+                            <ActionIconType1 mainPad={8} iconName={'ellipsis-vertical'} IconClass={Ionicons} iconSize={20} radius={10} />
+                            {/*<View style={{display: "flex", flexDirection: "row", position: "absolute", width: "100%", alignSelf: "center", justifyContent: "center"}}>
                                     <View style={{borderRadius: "50%", boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.0)", elevation: 10, shadowColor: "rgba(0, 0, 0, 0.3)"}}>
                                         <MaterialIcons name={"lock-open"} size={30} style={[{'color': "rgba(129, 129, 129, 0.42)"}]}/>
                                     </View>
                                 </View>*/}
-                            </View>
+                            
                         </View>
                     </View>
                 </View>
-                <View style={[{width: "100%", display: "flex", flexDirection: "column", gap: 20, justifyContent: "center"}]}>
+                <View style={[{width: "100%", display: "none", flexDirection: "column", gap: 20, justifyContent: "center"}]}>
                     <ActionIconType1 latch={'left'} mainPad={10} height={30} width={220} radius={0} style={{alignSelf: "flex-start", borderTopRightRadius: 17, backgroundColor: "rgb(255, 0, 55)"}}/>
                     <ActionIconType1 latch={'right'} mainPad={10} height={30} width={130} radius={0} style={{alignSelf: "flex-end", borderTopLeftRadius: 17, backgroundColor: "lightgreen"}}/>
                     <ActionIconType1 latch={'left'} mainPad={10} height={30} width={150} radius={0} style={{alignSelf: "flex-start", borderBottomRightRadius: 17, backgroundColor: "gold"}}/>
@@ -141,25 +131,25 @@ export default class CallView extends Component {
                         </View>
                     </Animated.View>
                 </View>
-                <View style={{width: "100%", display: "flex", flexDirection: "column", paddingTop: 0}}>
+                {/*<View style={{width: "100%", display: "flex", flexDirection: "column", paddingTop: 0}}>
                     <View style={{width: "100%", padding: 20, display: "flex", flexDirection: "column", gap: 7, alignItems: "flex-start", transform: [{rotateZ: "-0deg"}] || [{rotateX: "30deg"}, {rotateZ: "-30deg"}]}}>
                         <View style={{display: "flex", flexDirection: "row", alignItems: "flex-end", gap: 7, alignSelf: "flex-end"}}>
                             <View style={{display: "flex", flexDirection: "column", gap: 10, alignItems: "center", zIndex: 5}}>
-                                <Animated.View style={[styles.controlButton, {transform: [{rotateY: this.state.butterflyAnim1.interpolate({inputRange: [-25, 25], outputRange: ["-35deg", "35deg"]})}, {translateX:  this.state.butterflyAnim1.interpolate({inputRange: [-25, 0, 25], outputRange: [15, 0, 15]})}], width: 180, height: 180, elevation: 0 ?? 15, shadowColor: 'rgba(132, 0, 194, 0.4)', borderWidth: 0.0, borderColor: 'rgba(100, 100, 100, 0.2)', boxShadow: "0px 0px 20px -10px rgba(0, 0, 0, 0.1)", borderRadius: "40%", borderBottomRightRadius: "0%", borderTopLeftRadius: "0%", backgroundColor: "rgb(209, 0, 105)", boxShadow: "-3px 3px 40px 0px rgba(0, 0, 0, 0.0)" /*0.2*/}]}>
+                                <Animated.View style={[styles.controlButton, {transform: [{rotateY: this.state.butterflyAnim1.interpolate({inputRange: [-25, 25], outputRange: ["-35deg", "35deg"]})}, {translateX:  this.state.butterflyAnim1.interpolate({inputRange: [-25, 0, 25], outputRange: [15, 0, 15]})}], width: 180, height: 180, elevation: 0 ?? 15, shadowColor: 'rgba(132, 0, 194, 0.4)', borderWidth: 0.0, borderColor: 'rgba(100, 100, 100, 0.2)', boxShadow: "0px 0px 20px -10px rgba(0, 0, 0, 0.1)", borderRadius: "40%", borderBottomRightRadius: "0%", borderTopLeftRadius: "0%", backgroundColor: "rgb(209, 0, 105)", boxShadow: "-3px 3px 40px 0px rgba(0, 0, 0, 0.0)" //0.2}]}>
                                     <MaterialIcons style={[{color: "white"}]} name={"call"} size={80}/>
                                 </Animated.View>
                             </View>
-                            <View style={{display: "flex", flexDirection: "column", gap: 10, alignItems: "center", /*position: "relative", right: 7, right: -20*/}}>
+                            <View style={{display: "flex", flexDirection: "column", gap: 10, alignItems: "center", //position: "relative", right: 7, right: -20}}>
                                 <Animated.View style={[styles.controlButton, {transform: [{rotateY: this.state.butterflyAnim1.interpolate({inputRange: [-25, 25], outputRange: ["35deg", "-35deg"]})}, {translateX:  this.state.butterflyAnim1.interpolate({inputRange: [-25, 0, 25], outputRange: [-15, 0, -15]})}], width: 150 || 180 || 110, height: 150 || 180 || 110, elevation: 0 ?? 7, shadowColor: 'rgba(255, 0, 255, 0.62)', borderWidth: 0, borderColor: 'rgba(100, 100, 100, 0.2)', borderColor: "white", borderWidth: 15, backgroundColor: "transparent", boxShadow: "0px 0px 2px -4px rgba(0, 0, 0, 0.1)", borderRadius: "40%", borderBottomLeftRadius: "0%", borderTopRightRadius: "0%"}]}>
                                     <MaterialIcons style={[{}]} name={"pause"} size={35}/>
                                 </Animated.View>
-                                {/*<SText style={[{fontSize: 15, color: "rgba(0, 0, 0, .5)"}]}>Hold</SText>*/}
+                                {<SText style={[{fontSize: 15, color: "rgba(0, 0, 0, .5)"}]}>Hold</SText>}
                             </View>
                         </View>
                         <View style={{display: "flex", flexDirection: "row", alignItems: "flex-start", gap: 7, alignSelf: "flex-end", paddingRight: 20}}>
                             <View style={{display: "flex", flexDirection: "column", gap: 10, alignItems: "center"}}>
                                 <Animated.View style={[styles.controlButton, {transform: [{rotateY: this.state.butterflyAnim1.interpolate({inputRange: [-25, 25], outputRange: ["35deg", "-35deg"]})}, {translateX: this.state.butterflyAnim1.interpolate({inputRange: [-25, 0, 25], outputRange: [15, 0, 15]})}], width: 160 || 140, height: 160 || 140, elevation: 0 ?? 10, shadowColor: 'rgba(216, 1, 144, 0.55)', borderWidth: 30, borderColor: 'rgba(100, 100, 100, 0.2)', borderColor: "rgb(108, 0, 129)", borderRadius: "50%", borderBottomLeftRadius: "0%", borderTopRightRadius: "0%", backgroundColor: "rgb(108, 0, 129)"}]}>
-                                    {/*<MaterialIcons style={[{color: "white"}]} name={"mic-off"} size={50}/>*/}
+                                    {<MaterialIcons style={[{color: "white"}]} name={"mic-off"} size={50}}
                                 </Animated.View>
                             </View>
                             <View style={{display: "flex", flexDirection: "column", gap: 10, alignItems: "center"}}>
@@ -173,6 +163,28 @@ export default class CallView extends Component {
                             </View>
                         </View>
                     </View>
+                </View>*/}
+                <View style={{width: "100%", display: "flex", flexDirection: "column", paddingTop: 0}}>
+                    <View style={{width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: 'center', gap: "3%", position: "relative"}}>
+                        <View style={{display: "flex", flexDirection: "column", gap: 10, alignItems: "center"}}>
+                            <Animated.View style={[styles.controlButton, {/*width: "100%" || 130 || 140,*/ height: 120 || 130 || 140, aspectRatio: 1, elevation: 0 ?? 10, shadowColor: 'rgba(216, 1, 144, 0.55)', borderWidth: 0, borderColor: 'rgba(100, 100, 100, 0.2)', backgroundColor: "rgb(34, 0, 54)", borderRadius: "7%", borderTopLeftRadius: 0, borderBottomLeftRadius: 0}]}>
+                                <MaterialIcons style={[{color: "white"}]} name={"mic-off"} size={50}/>
+                            </Animated.View>
+                        </View>
+                        <View style={{display: "flex", flexDirection: "column", gap: 10, alignItems: "center", zIndex: 5}}>
+                            <Animated.View style={[styles.controlButton, {/*width: "100%" && 2000,*/ height: 170, aspectRatio: 1, elevation: 0 ?? 15, shadowColor: 'rgba(132, 0, 194, 0.4)', borderWidth: 0.0, borderColor: 'rgba(100, 100, 100, 0.2)', boxShadow: "0px 0px 20px -10px rgba(0, 0, 0, 0.1)", borderRadius: "5%", backgroundColor: "rgb(209, 0, 105)", boxShadow: "-3px 3px 40px 0px rgba(0, 0, 0, 0.0)" /*0.2*/}]}>
+                                <MaterialIcons style={[{color: "white"}]} name={"call"} size={80}/>
+                            </Animated.View>
+                        </View>
+
+                        <View style={{display: "flex", flexDirection: "column", gap: 10, alignItems: "center"/*position: "relative", right: 7, right: -20*/}}>
+                            <Animated.View style={[styles.controlButton, {/*width: "100%" || 150 || 180 || 100,*/ height: 140 || 150 || 180 || 100, aspectRatio: 1, elevation: 0 ?? 7, shadowColor: 'rgba(255, 0, 255, 0.62)', borderWidth: 0, borderColor: 'rgba(100, 100, 100, 0.2)', borderColor: "white", borderWidth: 15, backgroundColor: "transparent", boxShadow: "0px 0px 2px -4px rgba(0, 0, 0, 0.1)", borderRadius: "7%", borderTopRightRadius: 0, borderBottomRightRadius: 0}]}>
+                                <MaterialIcons style={[{}]} name={"pause"} size={35}/>
+                            </Animated.View>
+                            {/*<SText style={[{fontSize: 15, color: "rgba(0, 0, 0, .5)"}]}>Hold</SText>*/}
+                        </View>
+
+                    </View>
                 </View>
             </View>
         </View>
@@ -182,15 +194,21 @@ export default class CallView extends Component {
 const styles = StyleSheet.create({
     memberCard: {
         backgroundColor: "white",
-        borderRadius: 17,
-        borderTopLeftRadius: 0,
-        borderBottomLeftRadius: 0,
+        borderRadius: 10,
+        /*borderTopLeftRadius: 0,
+        borderBottomLeftRadius: 0,*/
         width: "100%",
         elevation: 10,
         shadowColor: "rgba(20, 20, 20, .4)",
         display: "flex",
         flexDirection: "column",
-        gap: 5
+        gap: 5,
+
+        elevation: 0,
+        borderColor: "rgb(116, 116, 116)",
+        borderWidth: 0.0,
+        backgroundColor: "rgb(255, 255, 255)",
+        boxShadow: "0px 5px 30px 0px rgba(0,0,0,0.0)"
     },
     controlButton: {
         width: 120,
