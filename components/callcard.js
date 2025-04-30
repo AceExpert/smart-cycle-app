@@ -94,7 +94,7 @@ export function ActionIconType1(
                 {iconName? 
                   <IconClass name={iconName} size={iconSize ?? 23} style={[{color: iconColor ?? 'black'}, ...(iconStyle?.constructor === Array? iconStyle : [iconStyle])]}/>
                   : text?
-                  <SText style={[{fontSize: 18, fontWeight: 500}]}>{text}</SText> : null
+                  <SText style={[{fontSize: 14, fontWeight: 500}]}>{text}</SText> : null
                 }
             </View>
         </View>

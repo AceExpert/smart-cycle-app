@@ -25,7 +25,7 @@ export default class CallView extends Component {
     }
 
     componentDidMount() {
-        this.wallAnim()
+        //this.wallAnim()
         //this.wingAnimate()
     }
 
@@ -84,7 +84,7 @@ export default class CallView extends Component {
                     <View style={[{width: "100%", display: "flex", flexDirection: "row-reverse", /*justifyContent: "space-between",*/ alignItems: "flex-end"}]}>
                         <View style={[{display: "flex", flexDirection: "row-reverse", gap: "1.5%", alignItems: "center", width: "100%", justifyContent: "space-between", paddingLeft: "2%", paddingRight: "2%"}]}>
                             <ActionIconType1 latch={'center'} leftPad={0} mainPad={9} text={'Members'} radius={10}/>
-                            <ActionIconType1 latch={'center'} mainPad={9} leftPad={0} iconName={'group-add'} IconClass={MaterialIcons} radius={10} iconSize={23} iconColor={"black" || "white"} style={{}}/>
+                            <ActionIconType1 latch={'center'} mainPad={9} leftPad={0} iconName={'group-add'} IconClass={MaterialIcons} radius={10} iconSize={17} iconColor={"black" || "white"} style={{}}/>
                         {/*<View style={[{display: "flex", flexDirection: "row", alignItems: "center", gap: 10}]}>
                             <ActionIconType1 latch={'left'} mainPad={10} leftPad={6} iconName={'group-add'} IconClass={MaterialIcons} iconSize={25}/>
                             <ActionIconType1 latch={'center'} mainPad={10} iconName={'settings'} IconClass={MaterialIcons} iconSize={25}/>
@@ -94,18 +94,18 @@ export default class CallView extends Component {
                     <View style={[{width: "100%", display: "flex", flexDirection: "row", justifyContent: "flex-start", marginBottom: 10, alignItems: "center"}]}>
                         <View style={[{display: "flex", flexDirection: "row", alignItems: "flex-end", gap: "1.5%", justifyContent: "flex-start"}]}>
                             <ActionIconType1 latch={'left'} mainPad={7} text={'Our dreams'}/>
-                            <ActionIconType1 mainPad={7} iconName={'settings'} IconClass={MaterialIcons} iconSize={23} radius={10}/>
-                            <ActionIconType1 mainPad={7} iconName={'ellipsis-vertical'} IconClass={Ionicons} iconSize={23} radius={10}/>
+                            <ActionIconType1 mainPad={7} iconName={'settings'} IconClass={MaterialIcons} iconSize={17} radius={10}/>
+                            <ActionIconType1 mainPad={7} iconName={'ellipsis-vertical'} IconClass={Ionicons} iconSize={17} radius={10}/>
                         </View>
                     </View>
                     <View style={[{display: "flex", flexDirection: "row", alignItems: "center", gap: 10, marginBottom: 0, justifyContent: "flex-end", width: "100%"}]}>
                         <View style={{display: "flex", flexDirection: "row-reverse", gap: "1.5%", position: "relative", left: 0, bottom: -0}}>
                             <ActionIconType1 latch={'right'} mainPad={7} text={'Group'} radius={10} leftPad={0} />
-                            <ActionIconType1 mainPad={8} iconName={'exchange'} IconClass={FontAwesome} iconSize={20} radius={10} />
-                            <ActionIconType1 mainPad={8} iconName={'lock-open'} IconClass={MaterialIcons} iconSize={20} radius={10}/>
-                            <ActionIconType1 mainPad={8} iconName={'caretright'} IconClass={AntDesign} iconSize={20} radius={10}/>
-                            <ActionIconType1 mainPad={8} iconName={'caretleft'} IconClass={AntDesign} iconSize={20} radius={10}/>
-                            <ActionIconType1 mainPad={8} iconName={'ellipsis-vertical'} IconClass={Ionicons} iconSize={20} radius={10} />
+                            <ActionIconType1 mainPad={8} iconName={'exchange'} IconClass={FontAwesome} iconSize={17} radius={10} />
+                            <ActionIconType1 mainPad={8} iconName={'lock-open'} IconClass={MaterialIcons} iconSize={17} radius={10}/>
+                            <ActionIconType1 mainPad={8} iconName={'caretright'} IconClass={AntDesign} iconSize={17} radius={10}/>
+                            <ActionIconType1 mainPad={8} iconName={'caretleft'} IconClass={AntDesign} iconSize={17} radius={10}/>
+                            <ActionIconType1 mainPad={8} iconName={'ellipsis-vertical'} IconClass={Ionicons} iconSize={17} radius={10} />
                             {/*<View style={{display: "flex", flexDirection: "row", position: "absolute", width: "100%", alignSelf: "center", justifyContent: "center"}}>
                                     <View style={{borderRadius: "50%", boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.0)", elevation: 10, shadowColor: "rgba(0, 0, 0, 0.3)"}}>
                                         <MaterialIcons name={"lock-open"} size={30} style={[{'color': "rgba(129, 129, 129, 0.42)"}]}/>

@@ -21,7 +21,7 @@ export default class SmartView extends Component {
   
     render = () => 
         <View 
-            style={[this.props?.style, {padding: 1, backgroundColor: this.props.touchFeedback === false? "rgba(0, 0, 0, 0)": this.state.touch? "rgba(107, 107, 107, 0.2)" : "rgba(0, 0, 0, 0)", borderRadius: "50%"}]}
+            style={[{borderRadius: '50%'}, this.props?.style, {padding: 0 && 1, backgroundColor: this.props.touchFeedback === false? "rgba(0, 0, 0, 0)": this.state.touch? "rgba(107, 107, 107, 0.2)" : "rgba(0, 0, 0, 0)"}]}
             ref={this.view}
             onStartShouldSetResponder={evt => this.props.disabled === true? false : (() => {
                 this.setState({touch: true}, () => {
@@ -41,6 +41,9 @@ export default class SmartView extends Component {
                         timer: setTimeout(() => this.setState({display: "none", timer: null}), 5000)
                     })
                 }
+            }}
+            onResponderMove={evt => {
+                console.log(evt.nativeEvent.locationX, evt.nativeEvent.locationY)
             }}
             onResponderRelease={
                 evt => {

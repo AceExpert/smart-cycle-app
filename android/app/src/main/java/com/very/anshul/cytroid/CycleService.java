@@ -129,7 +129,7 @@ public class CycleService extends Service {
     LinkedList<String> sendQueue = new LinkedList<>();
     LinkedList<String> gpsWriteQueue = new LinkedList<>();
 
-    String[] cycleIntents = new String[] {"media_rsp", "map_update", "haptic_navigation", "CONNECT_VOIP", "DISCONNECT_VOIP", "MUTE_VOIP", "UNMUTE_VOIP"};
+    String[] cycleIntents = new String[] {"media_rsp", "map_update", "haptic_navigation", "CONNECT_VOIP", "DISCONNECT_VOIP", "MUTE_VOIP", "UNMUTE_VOIP", "SETUP_SPEAKER"};
 
     public class VoStreamTask implements Runnable {
 
@@ -500,6 +500,9 @@ public class CycleService extends Service {
             } else if (Objects.equals(intent.getAction(), "UNMUTE_VOIP")) {
                 muted = false;
                 sendMediaControl("unmute_voip");
+            } else if (Objects.equals(intent.getAction(), "SETUP_SPEAKER")) {
+
+                queueSend(token + " " + "speaker_setup");
             };
         }
     };

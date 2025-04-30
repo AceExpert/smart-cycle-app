@@ -168,6 +168,11 @@ public class NativeCycleControlModule extends NativeCycleControlSpec {
 
     }
 
+    @Override
+    public void setupSpeaker() {
+        sendBroadcast("SETUP_SPEAKER");
+    }
+
     public void sendMediaKey(int keyCode) {
         Intent i1 = new Intent(Intent.ACTION_MEDIA_BUTTON).putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, keyCode));
         Intent i2 = new Intent(Intent.ACTION_MEDIA_BUTTON).putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, keyCode));

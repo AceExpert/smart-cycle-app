@@ -14,6 +14,7 @@ export interface Spec extends TurboModule {
     getVolume(): number;
     getSeek(): number;
     setSeek(seek: number): void;
+    setupSpeaker(): void;
     
     onCycleConnect(callback: () => void): void;
     onCycleDisconnect(callback: () => void): void;
