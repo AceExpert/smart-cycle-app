@@ -4,13 +4,20 @@ import { Stack } from "expo-router";
 
 import { LinearGradient } from "expo-linear-gradient";
 
-import { ScrollView, View, Text, Animated, StyleSheet, PanResponder, useAnimatedValue, Dimensions, Easing} from "react-native";
+import { 
+    ScrollView, View, Text, Animated, 
+    StyleSheet, PanResponder, useAnimatedValue, 
+    Dimensions, Easing, DeviceEventEmitter} from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 import SText from "../../components/texts";
 import SmartView from "../../components/smartview";
 import Switch from "../../components/switch";
 import Slider from "../../components/slider";
+
+import SpeakerChooser from "../../popups/speakers";
+
+import { resolveBtAddress } from "../../utils";
 
 import {settings} from "../../globalstates"
 
@@ -21,6 +28,10 @@ export default function SoundSettings({...props}) {
     let [active, setActive] = useState(settings.speakerActive);
     let [speakerName, setSpeaker] = useState(settings.speakerName);
     let [speakerAddr, setSpeakerAddr] = useState(settings.speakerAddr);
+
+    let [speakerChooserInfo, setSpeakerInfo] = useState([]);
+    let [discovering, setDisc] = useState(false);
+    let [discComplete, setDiscComplete] = useState(false);
 
     let savePop = useAnimatedValue(0);
 
@@ -33,11 +44,44 @@ export default function SoundSettings({...props}) {
     }
 
     let setupSpeaker = () => {
-        console.log("speaker setup")
         NativeCycleControl.setupSpeaker();
     }
+
+    let speakerChoice = data => {
+        if(!data) {
+            setDisc(false);
+            setSpeakerInfo([]);
+        }
+    }
+
+    useEffect(() => {
+        DeviceEventEmitter.addListener("speakerDiscovery", evt => {
+            if(evt.data) {
+                setSpeakerInfo([]);
+                setDisc(true);
+                setDiscComplete(false);
+            } else {
+                setDiscComplete(true);
+            }
+        });
+        DeviceEventEmitter.addListener("speakerDiscoveryResult", evt => {
+            for(let speaker of speakerChooserInfo) {
+                if(speaker[1] === resolveBtAddress(evt.address)) {
+                    if(evt.rssi > speaker[2]) {
+                        speaker[2] = evt.rssi;
+                        setSpeakerInfo(speakerChooserInfo);
+                    }
+                    return;
+                }
+            }
+            speakerChooserInfo = [...speakerChooserInfo, [evt.name, resolveBtAddress(evt.address), evt.rssi]]
+            setSpeakerInfo(speakerChooserInfo);
+        });
+    }, []);
+
     return (
         <View style={[styles.column, {width: "100%", height: "100%"}]}>
+
             <Animated.View style={{position: "absolute", zIndex: 1, bottom: -100, transform: [{translateY: savePop}], alignSelf: "center", width: "100%"}}>
                 <View style={[styles.rowCenter, {width: "100%", padding: "5%", gap: "1%"}]}>
                     <SmartView style={[{flex: 2}]} onTouchEnd={() => {
@@ -66,6 +110,12 @@ export default function SoundSettings({...props}) {
                 </View>
             </Animated.View>
             
+            <View style={[styles.columnCenter, {width: "100%", height: "100%", position: "absolute", top: 0, left: 0, backgroundColor: "rgba(0, 0, 0, 0.23)", zIndex: 2, display: discovering? "flex" : "none"}]}>
+                <View style={[styles.columnCenter, {width: "100%", padding: "5%", paddingTop: "20%"}]}>
+                    <SpeakerChooser speakerInfo={speakerChooserInfo} onResult={speakerChoice} complete={discComplete}/>
+                </View>
+            </View>
+
             <View style={[styles.column, {width: "100%", paddingTop: 0}]}>
                 <View style={[styles.rowCenter, {width: "100%", justifyContent: "center", padding: 10, paddingTop: 20, backgroundColor: "white"}]}>
                     <SText style={[{fontSize: 20}]}>Music & Entertainment</SText>
@@ -90,7 +140,7 @@ export default function SoundSettings({...props}) {
                                     <View style={[styles.column, {gap: 0, flex: 4}]}>
                                         <View style={[{backgroundColor: "black", borderRadius: 5, padding: "5%", gap: 4, boxShadow: "0px 5px 10px 0px rgba(0,0,0,0.05)", borderColor: "rgba(0,0,0,0.5)", borderWidth: 0., borderTopLeftRadius: 10}, styles.column]}>
                                             <SText style={{fontSize: 17, color: "white"}}>Speaker</SText>
-                                            <SText style={[{color: "rgba(255, 255, 255, 0.64)", fontSize: 11, display: speakerAddr? "none" : "flex"}]}>Not yet setup. Setup Now</SText>
+                                            <SText style={[{color: "rgba(255, 255, 255, 0.64)", fontSize: 11, display: speakerAddr? "none" : "flex"}]}>Setup Now</SText>
                                         </View>
                                         <View style={[styles.rowCenter, {backgroundColor: "white", padding: "3%", borderRadius: 5, display: "none"}, {justifyContent: "center"}]}>
                                         </View>

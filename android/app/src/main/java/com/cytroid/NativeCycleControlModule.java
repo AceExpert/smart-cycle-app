@@ -13,16 +13,23 @@ import android.util.Log;
 import android.view.KeyEvent;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.very.anshul.cytroid.CycleService;
 import com.very.anshul.cytroid.NotificationProcessor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -31,7 +38,7 @@ public class NativeCycleControlModule extends NativeCycleControlSpec {
 
     ReactApplicationContext ctx;
 
-    String[] filters = new String[]{"join_voip", "mute_voip", "leave_voip", "unmute_voip", "media_rsp", "map_update", "voip_serv_conn", "voip_serv_disconn"};
+    String[] filters = new String[]{"join_voip", "mute_voip", "leave_voip", "unmute_voip", "media_rsp", "map_update", "voip_serv_conn", "voip_serv_disconn", "sdisc", "sdisc_res", "gps_connect", "cycle_lock"};
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -84,6 +91,29 @@ public class NativeCycleControlModule extends NativeCycleControlSpec {
                 ctx.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("VOIPOpen", Arguments.createMap());
             } else if(Objects.equals(intent.getAction(), "voip_serv_disconn")) {
                 ctx.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("VOIPDisconnect", Arguments.createMap());
+            } else if (Objects.equals(intent.getAction(), "gps_connect")) {
+                WritableMap map = Arguments.createMap();
+                map.putBoolean("data", intent.getBooleanExtra("connected", false));
+                ctx.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("cycleConnect", map);
+            } else if (Objects.equals(intent.getAction(), "cycle_lock")) {
+                WritableMap map = Arguments.createMap();
+                map.putBoolean("data", intent.getBooleanExtra("locked", true));
+                ctx.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("cycleLock", map);
+            } else if (Objects.equals(intent.getAction(), "sdisc")) {
+                WritableMap map = Arguments.createMap();
+                map.putBoolean("data", intent.getBooleanExtra("started", false));
+                ctx.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("speakerDiscovery", map);
+            } else if (Objects.equals(intent.getAction(), "sdisc_res")) {
+                WritableMap map = Arguments.createMap();
+                map.putString("name", intent.getStringExtra("name"));
+                map.putInt("rssi", intent.getIntExtra("rssi", -126));
+                WritableArray array = Arguments.createArray();
+                byte[] dev_addr = intent.getByteArrayExtra("address");
+                for(int i = 0; i < 6; i++) {
+                    array.pushInt(dev_addr[i]);
+                }
+                map.putArray("address", array);
+                ctx.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("speakerDiscoveryResult", map);
             }
         }
     };
@@ -171,6 +201,12 @@ public class NativeCycleControlModule extends NativeCycleControlSpec {
     @Override
     public void setupSpeaker() {
         sendBroadcast("SETUP_SPEAKER");
+    }
+
+    @Override
+    public void setSettings(ReadableMap map) {
+        Intent intent = new Intent("UPDATE_SETTINGS");
+        //intent.putExtra("info", map);
     }
 
     public void sendMediaKey(int keyCode) {

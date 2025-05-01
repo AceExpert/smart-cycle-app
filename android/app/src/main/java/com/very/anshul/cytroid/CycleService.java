@@ -50,6 +50,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.SelectionKey;
@@ -373,12 +374,18 @@ public class CycleService extends Service {
                                 if(!key.isValid()) {
                                     gpsConnected = false;
                                     gpsConnecting = false;
+                                    Intent intent = new Intent("gps_connect");
+                                    intent.putExtra("connected", false);
+                                    sendBroadcast(intent);
                                     break;
                                 }
                                 if(key.isConnectable()) {
                                     SocketChannel sock = (SocketChannel) key.channel();
                                     if (sock.finishConnect()) {
                                         sock.write(ByteBuffer.wrap(("$auth phone " + gpsToken + " " + secAddress).getBytes()));
+                                        Intent intent = new Intent("gps_connect");
+                                        intent.putExtra("connected", true);
+                                        sendBroadcast(intent);
                                         gpsConnected = true;
                                         gpsConnecting = false;
                                         int keys = SelectionKey.OP_READ;
@@ -394,14 +401,20 @@ public class CycleService extends Service {
                     } else {
                         if(lastHb != null && lastHb.until(LocalDateTime.now(), ChronoUnit.SECONDS) >= 60) {
                             Log.i("socket end", "time");
+                            Intent intent = new Intent("gps_connect");
+                            intent.putExtra("connected", false);
+                            sendBroadcast(intent);
                             gpsConnected = false;
                             gpsConnecting = false;
                             gpsSocket.close();
                             continue;
                         }
-                        if(selector.select(10000) > 0) {
+                        if(selector.select(20000) > 0) {
                             for(SelectionKey key: selector.selectedKeys()) {
                                 if(!key.isValid()) {
+                                    Intent intent = new Intent("gps_connect");
+                                    intent.putExtra("connected", false);
+                                    sendBroadcast(intent);
                                     gpsConnected = false;
                                     gpsConnecting = false;
                                     break;
@@ -411,6 +424,9 @@ public class CycleService extends Service {
                                     ByteBuffer buffer = ByteBuffer.allocate(1024);
                                     int len = sock.read(buffer);
                                     if(len == -1) {
+                                        Intent intent = new Intent("gps_connect");
+                                        intent.putExtra("connected", false);
+                                        sendBroadcast(intent);
                                         gpsConnected = false;
                                         gpsConnecting = false;
                                         sock.close();
@@ -457,6 +473,9 @@ public class CycleService extends Service {
                     }
                 } catch (IOException e) {
                     Log.e("Socket error", String.valueOf(e));
+                    Intent intent = new Intent("gps_connect");
+                    intent.putExtra("connected", false);
+                    sendBroadcast(intent);
                     gpsConnected = false;
                     gpsConnecting = false;
                 }
@@ -601,11 +620,17 @@ public class CycleService extends Service {
     }
 
     public void onCycleUnlock() {
+        Intent intent = new Intent("cycle_lock");
+        intent.putExtra("locked", false);
+        sendBroadcast(intent);
         setCycleAudioRouting();
         vows.sendMessage("{\"type\":1, \"action\":1}");
     };
 
     public void onCycleLock() {
+        Intent intent = new Intent("cycle_lock");
+        intent.putExtra("locked", true);
+        sendBroadcast(intent);
         volumeChange = false;
         leaveVOIP();
     };
@@ -714,6 +739,7 @@ public class CycleService extends Service {
                     } else {
                         locked = true;
                         auth = false;
+                        onCycleLock();
                         if(adapter.isEnabled()) gatt.connect();
                     }
                 }
@@ -737,8 +763,46 @@ public class CycleService extends Service {
 
                 @Override
                 public void onCharacteristicChanged(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattCharacteristic characteristic, @NonNull byte[] value) {
-                    String cmd = new String(value, StandardCharsets.US_ASCII);
+                    String cmd = "";
+                    int i = 0;
+                    for(; i < value.length; i++) {
+                            cmd += new String(value, i, 1, StandardCharsets.US_ASCII);
+
+                            if(cmd.equals(".sdisc")) break;
+                    }
                     Log.i("ble cmd", cmd);
+
+                    if(cmd.equals(".sdisc")){
+                        if(value[i+1] == '_') {
+                            String ncmd = new String(value, i + 2, value.length - i - 2, StandardCharsets.US_ASCII);
+                            if(ncmd.equals("start")) {
+                                Intent intent = new Intent("sdisc");
+                                intent.putExtra("started", true);
+                                sendBroadcast(intent);
+                            } else if (ncmd.equals("end")) {
+                                Intent intent = new Intent("sdisc");
+                                intent.putExtra("started", false);
+                                sendBroadcast(intent);
+                            }
+                        } else if (value[i+1] == ' ') {
+                            i+=2;
+                            int dev_name_len = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).put(value, i, 4).getInt(0);
+                            i+=4;
+                            String dev_name = new String(value, i, dev_name_len, StandardCharsets.US_ASCII);
+                            i+=dev_name_len;
+                            byte[] address = new byte[6];
+                            for(int j = 0; j < 6; j++) {
+                                address[j] = value[i + j];
+                            };
+                            i+=6;
+                            int rssi = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).put(value, i, 1).getInt(0) - 256;
+                            Intent intent = new Intent("sdisc_res");
+                            intent.putExtra("name", dev_name);
+                            intent.putExtra("address", address);
+                            intent.putExtra("rssi", rssi);
+                            sendBroadcast(intent);
+                        }
+                    }
 
                     if(cmd.equals(".play")) {
                         sendMediaControl("PLAY_PAUSE");
@@ -765,7 +829,7 @@ public class CycleService extends Service {
                             joinVOIP();
                         }
                     } else if (cmd.equals(".leave")) {
-                    }
+                    };
                 }
 
                 @Override
