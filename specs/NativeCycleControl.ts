@@ -15,20 +15,15 @@ export interface Spec extends TurboModule {
     getSeek(): number;
     setSeek(seek: number): void;
     setupSpeaker(): void;
-    
-    onCycleConnect(callback: () => void): void;
-    onCycleDisconnect(callback: () => void): void;
-    onSpeakerConnect(callback: () => void): void;
-    onSpeakerDisconnect(callback: () => void): void;
+    connectSpeaker(address: number[]): void;
+
+    openMap(): void;
 
     getSpeakerName(): string;
     connectCycleSpeaker(): void;
     isCycleSpeakerConnected(): boolean;
 
-    onVoIPConnect(callback: () => void): void;
-    onVoIPDisconnect(callback: () => void): void;
-    onVoIPMute(callback: () => void): void;
-    onVoIPUnmute(callback: () => void): void;
+    getCycleState(): void; 
     
     isVoIPactive(): boolean;
     connectVoIP(): void;
@@ -38,7 +33,7 @@ export interface Spec extends TurboModule {
 
     openNotificationAccess(): void;
 
-    setSettings(settings: Object): void;
+    setSettings(settings: string): void;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>("NativeCycleControl");

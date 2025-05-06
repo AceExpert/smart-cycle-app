@@ -20,7 +20,6 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.AudioTrack;
-import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -34,23 +33,25 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import android.bluetooth.*;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.widget.Toast;
+
+import com.very.anshul.cytroid.state.AppState;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.net.SocketException;
-import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.SelectionKey;
@@ -60,22 +61,25 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 public class CycleService extends Service {
 
     static String token = "49n5pEsOUDF25rBhUFmN";
     String gpsToken = "hMrXDM0x6G";
-    String address = "2C:BC:BB:0D:94:4E";
+    String address = null;
     String secAddress = "ff:bc:cd:ff:ff:aa";
     String speakerAddr = "88:13:bf:0b:94:6e";
     String serverIP = "10.145.65.124";
     int localPort = 8248;
+
+    AppState mainState = null;
 
     double lat = 0;
     double longt = 0;
@@ -128,9 +132,14 @@ public class CycleService extends Service {
     boolean auth = false;
 
     LinkedList<String> sendQueue = new LinkedList<>();
+    LinkedList<byte[]> sendByteQueue = new LinkedList<byte[]>();
     LinkedList<String> gpsWriteQueue = new LinkedList<>();
 
-    String[] cycleIntents = new String[] {"media_rsp", "map_update", "haptic_navigation", "CONNECT_VOIP", "DISCONNECT_VOIP", "MUTE_VOIP", "UNMUTE_VOIP", "SETUP_SPEAKER"};
+    String[] cycleIntents = new String[] {
+            "media_rsp", "map_update",
+            "haptic_navigation", "CONNECT_VOIP", "DISCONNECT_VOIP", "MUTE_VOIP", "UNMUTE_VOIP", "SETUP_SPEAKER",
+            "CONNECT_SPEAKER", "CYCLE_STATE", "UPDATE_SETTINGS", "GET_SETTINGS", "OPEN_MAP"
+    };
 
     public class VoStreamTask implements Runnable {
 
@@ -309,7 +318,7 @@ public class CycleService extends Service {
             }
         }
 
-        public void processCommand(String cmd) {
+        public void processCommand(String cmd){
             Log.i("sock cmd", cmd);
             if(cmd.equals("$alert")) {
                 Log.w("ALERT", "cycle alert");
@@ -340,6 +349,11 @@ public class CycleService extends Service {
                     double res_logt = getRealCoords(logt);
                     if(res_lat != 0 || res_logt != 0) {
                         cycleLocation = new String[]{String.valueOf(res_lat), lat_dir, String.valueOf(res_logt), logt_dir};
+                        try {
+                            mainState.data.put("location", new JSONArray(cycleLocation));
+                            mainState.saveState();
+                        } catch (JSONException e) {
+                        }
                         Intent intent = new Intent("cycle_location");
                         intent.putExtra("location", cycleLocation);
                         sendBroadcast(intent);
@@ -522,6 +536,46 @@ public class CycleService extends Service {
             } else if (Objects.equals(intent.getAction(), "SETUP_SPEAKER")) {
 
                 queueSend(token + " " + "speaker_setup");
+            } else if (Objects.equals(intent.getAction(), "CONNECT_SPEAKER")) {
+                String ncmd = token + " " + "speaker_addr ";
+                byte[] cmd_buffer = new byte[ncmd.length() + 6];
+                byte[] address = intent.getByteArrayExtra("address");
+                for(int i = 0; i < ncmd.length(); i++) {
+                    cmd_buffer[i] = ncmd.getBytes()[i];
+                };
+                for(int i = 0; i < 6; i++) {
+                    cmd_buffer[ncmd.length() + i] = address[i];
+                };
+                queueSendByte(cmd_buffer);
+            } else if (Objects.equals(intent.getAction(), "CYCLE_STATE")) {
+                Intent respIntent = new Intent("gps_connect");
+                respIntent.putExtra("connected", gpsConnected);
+                sendBroadcast(respIntent);
+                Intent lockRespIntent = new Intent("cycle_lock");
+                lockRespIntent.putExtra("locked", locked);
+                sendBroadcast(lockRespIntent);
+            } else if (Objects.equals(intent.getAction(), "UPDATE_SETTINGS")) {
+                try {
+                    JSONObject new_settings = new JSONObject(intent.getStringExtra("data"));
+                    for (Iterator<String> it = new_settings.keys(); it.hasNext(); ) {
+                        String key = it.next();
+                        String value = new_settings.optString(key, null);
+                        mainState.data.put(key, value);
+                    }
+                    if(locked) {
+                        mainState.data.put("to_sync", true);
+                    } else {
+                        syncState();
+                        mainState.data.put("to_sync", false);
+                    }
+                    mainState.saveState();
+                } catch (JSONException e) {
+
+                }
+            } else if (Objects.equals(intent.getAction(), "GET_SETTINGS")) {
+                Intent respIntent = new Intent("cycle_settings");
+                respIntent.putExtra("data", mainState.data.toString());
+                sendBroadcast(respIntent);
             };
         }
     };
@@ -605,6 +659,7 @@ public class CycleService extends Service {
                 .setContentInfo("Your cycle is being monitored, you can relax.")
                 .build();
         startForeground(4, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE);
+        mainState = new AppState(this, "settings", "settings.backup");
         startService(new Intent(this, NotificationProcessor.class));
         startService(new Intent(this, CallService.class));
         if(adapter.isEnabled()) connectCycle();
@@ -612,6 +667,17 @@ public class CycleService extends Service {
         (new Thread(streamTask)).start();
         (new Thread(streamPlayTask)).start();
         vows.connect();
+        sendBroadcast(new Intent("cycle_service_active"));
+        try {
+            JSONArray locationData = mainState.data.getJSONArray("location");
+            if(cycleLocation.length == 4) {
+                cycleLocation[0] = locationData.getString(0);
+                cycleLocation[1] = locationData.getString(1);
+                cycleLocation[2] = locationData.getString(2);
+                cycleLocation[3] = locationData.getString(3);
+            }
+        } catch (JSONException e) {
+        }
         return START_STICKY;
     }
 
@@ -619,10 +685,23 @@ public class CycleService extends Service {
         sendQueue.add(cmd);
     }
 
+    public void queueSendByte(byte[] cmd) {
+        sendByteQueue.add(cmd);
+    }
+
     public void onCycleUnlock() {
         Intent intent = new Intent("cycle_lock");
         intent.putExtra("locked", false);
         sendBroadcast(intent);
+        try {
+            if (mainState.data.getBoolean("to_sync")) {
+                syncState();
+                mainState.data.put("to_sync", false);
+                mainState.saveState();
+            }
+        } catch (JSONException e) {
+
+        }
         setCycleAudioRouting();
         vows.sendMessage("{\"type\":1, \"action\":1}");
     };
@@ -648,6 +727,18 @@ public class CycleService extends Service {
             } catch (SecurityException e) {
 
             } catch (Exception e) {}
+        }
+    }
+
+    public void syncState() {
+        queueSend(token + " " + "set_total" + " " + mainState.data.length());
+        for (Iterator<String> it = mainState.data.keys(); it.hasNext();) {
+            String key = it.next();
+            try {
+                queueSend(token + " " + "set_state" + " " + key + " " + mainState.data.getString(key));
+            } catch (JSONException e) {
+
+            }
         }
     }
 
@@ -829,6 +920,14 @@ public class CycleService extends Service {
                             joinVOIP();
                         }
                     } else if (cmd.equals(".leave")) {
+                    } else if (cmd.equals(".paired")) {
+                        Intent intent = new Intent("sdisc_pair");
+                        intent.putExtra("paired", true);
+                        sendBroadcast(intent);
+                    } else if (cmd.equals(".paired_fail")) {
+                        Intent intent = new Intent("sdisc_pair");
+                        intent.putExtra("paired", false);
+                        sendBroadcast(intent);
                     };
                 }
 
@@ -872,6 +971,8 @@ public class CycleService extends Service {
                     };
                     if(!sendQueue.isEmpty()) {
                         gatt.writeCharacteristic(getMainCharacteristic(), sendQueue.pop().getBytes(), BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
+                    } else if (!sendByteQueue.isEmpty()) {
+                        gatt.writeCharacteristic(getMainCharacteristic(), sendByteQueue.pop(), BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
                     } else
                         gatt.readRemoteRssi();
                 }

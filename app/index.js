@@ -25,6 +25,7 @@ import { ActionIconType1 } from "../components/callcard";
 import SText from "../components/texts";
 
 import { settings } from "../globalstates";
+import { saveAll, setSettings } from "../globalstates/sync";
 
 import NativeCycleControl from "../specs/NativeCycleControl"
 
@@ -135,7 +136,12 @@ export default class Index extends Component {
     DeviceEventEmitter.addListener("cycleLock", evt => {
       this.setState({cycleLocked: evt.data});
     })
-    NativeCycleControl.init(() => {})
+    DeviceEventEmitter.addListener("cycleSettings", evt => {
+      setSettings(evt);
+    })
+    NativeCycleControl.init(() => {
+      NativeCycleControl.getCycleState();
+    })
     setTimeout(() => {
       Animated.timing(this.state.mainAnim1, {
         toValue: 0,
@@ -414,7 +420,7 @@ export default class Index extends Component {
               
               <ActionCard 
                 style={[styles.actionCard, {
-                        width: settings.navigationActive? "100%" : "45%", borderWidth: 0.3, aspectRatio: settings.navigationActive? 2 : 1}, 
+                        width: settings.navi_active? "100%" : "45%", borderWidth: 0.3, aspectRatio: settings.navi_active? 2 : 1}, 
                         styles.cassette, 
                         {backgroundColor: "white", borderTopLeftRadius: 0, opacity: this.state.cycleLocked? 0.6 : 1}
                         ]
@@ -425,10 +431,10 @@ export default class Index extends Component {
                   this.state.navigation
                 }
                 <View style={[styles.centerRow, {justifyContent: "space-around", width: "100%"}]}>
-                  <MaterialIcons name={"power-settings-new"} size={35} style={[styles.mainIcon, {color: settings.navigationOn? "green" : "grey"}]}/>
+                  <MaterialIcons name={"power-settings-new"} size={35} style={[styles.mainIcon, {color: settings.navi? "green" : "grey"}]}/>
                 </View>
                 <View style={[styles.centerRow, {justifyContent: "space-around", width: "100%"}]}>
-                  <SText style={[{fontSize: 13, color: "rgb(180, 180, 180)"}]}>{settings.navigationOn? 'ON' : 'OFF'}</SText>
+                  <SText style={[{fontSize: 13, color: "rgb(180, 180, 180)"}]}>{settings.navi? 'ON' : 'OFF'}</SText>
                 </View>
               </ActionCard>
 

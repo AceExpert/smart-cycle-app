@@ -1,23 +1,22 @@
 let settings = {
-    forceActive: true,
-    forceThresh: 30,
-    gps: true,
-    gpsSens: 60,
+    force: true,
+    force_sense: 30,
+    alarm: true,
+    alarm_sense: 60,
     speakerName: null,
     speakerAddr: null,
-    speakerActive: false,
-    navigationOn: true,
-    navigationActive: false,
+    speaker: true,
+    navi: true,
+    navi_active: false,
 };
 
 let account = {
-    user: 'very.anshul',
-    name: 'Anshul Singh',
-    email: 'very.anshul@gmail.com',
+    user: null,
+    name: null,
+    email: null,
     avatar: null,
 }
 
 export {
     settings, account
 }
-

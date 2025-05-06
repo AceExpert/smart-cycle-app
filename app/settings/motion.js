@@ -12,13 +12,14 @@ import SmartView from "../../components/smartview";
 import Switch from "../../components/switch";
 import Slider from "../../components/slider";
 
-import {settings} from "../../globalstates"
+import { settings } from "../../globalstates"
+import { saveAll } from "../../globalstates/sync";
 
 export default function MotionSettings({...props}) {
 
-    let sliderVal = useAnimatedValue(settings.gpsSens);
-    let [value, setValue] = useState(settings.gpsSens);
-    let [active, setActive] = useState(settings.gps);
+    let sliderVal = useAnimatedValue(settings.alarm_sense);
+    let [value, setValue] = useState(settings.alarm_sense);
+    let [active, setActive] = useState(settings.alarm);
 
     let savePop = useAnimatedValue(0);
 
@@ -34,9 +35,10 @@ export default function MotionSettings({...props}) {
             <Animated.View style={{position: "absolute", zIndex: 1, bottom: -100, transform: [{translateY: savePop}], alignSelf: "center", width: "100%"}}>
                 <View style={[styles.rowCenter, {width: "100%", padding: "5%", gap: "1%"}]}>
                     <SmartView style={[{flex: 2}]} onTouchEnd={() => {
-                        settings.gpsSens = value;
-                        settings.gps = active;
+                        settings.alarm_sense = value;
+                        settings.alarm = active;
                         savePopShow(false)
+                        saveAll()
                     }}>
                         <View style={[styles.rowCenter, {height: "100%", backgroundColor: "rgb(194, 89, 255)", justifyContent: "center", borderTopLeftRadius: 10, borderBottomLeftRadius: 10, boxShadow: "-0px 10px 20px 0px rgba(0,0,0,.08)"}]}>
                             <MaterialIcons name="check" style={{color: "white", fontSize: 25}}/>
@@ -49,10 +51,10 @@ export default function MotionSettings({...props}) {
                     </View>
                     <SmartView style={[{flex: 2}]} onTouchEnd={() => {
                         savePopShow(false)
-                        setValue(settings.gpsSens);
-                        setActive(settings.gps);
+                        setValue(settings.alarm_sense);
+                        setActive(settings.alarm);
                         Animated.timing(sliderVal, {
-                            toValue: settings.gpsSens,
+                            toValue: settings.alarm_sense,
                             useNativeDriver: false,
                             duration: 500,
                         }).start()
@@ -77,7 +79,7 @@ export default function MotionSettings({...props}) {
                         <View style={[styles.column, {width: "100%", gap: 3}]}>
                             <View style={[styles.rowCenter, styles.settingsChip, {justifyContent: "space-between"}]}>
                                 <SText style={[styles.settingsMain]}>Active</SText>
-                                <Switch defaultValue={settings.gps} onClick={val => {
+                                <Switch defaultValue={settings.alarm} onClick={val => {
                                     setActive(val);
                                     savePopShow(true);
                                 }}/>

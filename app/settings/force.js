@@ -13,12 +13,13 @@ import Switch from "../../components/switch";
 import Slider from "../../components/slider";
 
 import {settings} from "../../globalstates"
+import { saveAll } from "../../globalstates/sync";
 
 export default function ForceSettings({...props}) {
 
-    let sliderVal = useAnimatedValue(settings.forceThresh);
-    let [value, setValue] = useState(settings.forceThresh);
-    let [forceActive, setActive] = useState(settings.forceActive);
+    let sliderVal = useAnimatedValue(settings.force_sense);
+    let [value, setValue] = useState(settings.force_sense);
+    let [forceActive, setActive] = useState(settings.force);
 
     let savePop = useAnimatedValue(0);
 
@@ -34,9 +35,11 @@ export default function ForceSettings({...props}) {
             <Animated.View style={{position: "absolute", zIndex: 1, bottom: -100, transform: [{translateY: savePop}], alignSelf: "center", width: "100%"}}>
                 <View style={[styles.rowCenter, {width: "100%", padding: "5%", gap: "1%"}]}>
                     <SmartView style={[{flex: 2}]} onTouchEnd={() => {
-                        settings.forceActive = forceActive;
-                        settings.forceThresh = value;
+                        settings.force = forceActive;
+                        settings.force_sense = value;
                         savePopShow(false)
+                        saveAll();
+
                     }}>
                         <View style={[styles.rowCenter, {height: "100%", backgroundColor: "rgb(194, 89, 255)", justifyContent: "center", borderTopLeftRadius: 10, borderBottomLeftRadius: 10, boxShadow: "-0px 10px 20px 0px rgba(0,0,0,.08)"}]}>
                             <MaterialIcons name="check" style={{color: "white", fontSize: 25}}/>
@@ -49,17 +52,17 @@ export default function ForceSettings({...props}) {
                     </View>
                     <SmartView style={[{flex: 2}]} onTouchEnd={() => {
                         savePopShow(false)
-                        setValue(settings.forceThresh);
-                        setActive(settings.forceActive);
+                        setValue(settings.force_sense);
+                        setActive(settings.force);
                         Animated.timing(sliderVal, {
-                            toValue: settings.forceThresh,
+                            toValue: settings.force_sense,
                             useNativeDriver: false,
                             duration: 500,
                         }).start()
                     }}>
-                    <View style={[styles.rowCenter, {flex: 2, height: "100%", backgroundColor: "rgb(167, 0, 14)", justifyContent: "center", borderTopRightRadius: 10, borderBottomRightRadius: 10, boxShadow: "-0px 10px 20px 0px rgba(0,0,0,.08)"}]}>
-                        <MaterialIcons name={"close"} style={{color: "white", fontSize: 25}}/>
-                    </View>
+                        <View style={[styles.rowCenter, {flex: 2, height: "100%", backgroundColor: "rgb(167, 0, 14)", justifyContent: "center", borderTopRightRadius: 10, borderBottomRightRadius: 10, boxShadow: "-0px 10px 20px 0px rgba(0,0,0,.08)"}]}>
+                            <MaterialIcons name={"close"} style={{color: "white", fontSize: 25}}/>
+                        </View>
                     </SmartView>
                 </View>
             </Animated.View>

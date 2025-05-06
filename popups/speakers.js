@@ -7,7 +7,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import SText from "../components/texts";
 import SmartView from "../components/smartview";
 
-export default function SpeakerChooser({speakerInfo, complete, onResult, ...props}) {
+export default function SpeakerChooser({speakerInfo, complete, onResult, retry, ...props}) {
 
     let [speakerChooserInfo, setSpeakerInfo] = useState(speakerInfo? speakerInfo?.map?.((v, i) => [...v, false]) : []);
     let [discComplete, setComplete] = useState(complete);
@@ -22,6 +22,11 @@ export default function SpeakerChooser({speakerInfo, complete, onResult, ...prop
 
     return (
         <View style={[styles.column, styles.mainWindow, {width: "100%", backgroundColor: "white", gap: 5}]}>
+            <View style={[{position: "absolute", top: 10, right: 10, borderRadius: "50%", padding: 5, backgroundColor: "purple", justifyContent: "center"}, styles.columnCenter, {display: discComplete? "flex" : "none"}]}>
+                <SmartView onTouchEnd={() => retry?.()}>
+                    <MaterialIcons name="refresh" size={20} color={"white"}/>
+                </SmartView>
+            </View>
             <SText style={{alignSelf: 'center', fontSize: 19}}>Speaker Discovery</SText>
             <View style={[styles.rowCenter, {width: "100%", gap: 5, justifyContent: "flex-start", paddingBottom: speakerInfo?.length? "0%" : "3%"}]}>
                 <SText style={[{fontSize: 13, color: "rgba(0, 0, 0, 0.77)"}]}>{discComplete? 'Discovery Finished' : 'Discovering'}</SText>
@@ -30,7 +35,7 @@ export default function SpeakerChooser({speakerInfo, complete, onResult, ...prop
             <View style={[styles.column, {gap: 7, width: "100%", display: speakerInfo?.length? "flex" : "none"}]}>
                 <SText style={{fontSize: 17}}>Select</SText>
                 <ScrollView style={[styles.column, {width: "100%", maxHeight: 380}]} contentContainerStyle={{gap: 5}}>
-                    {speakerChooserInfo?.sort?.((d1, d2) => d1[2] - d2[2]).map((d, i) => {
+                    {speakerChooserInfo?.sort?.((d1, d2) => d2[2] - d1[2]).map((d, i) => {
                         return (
                             <SmartView style={{width: "100%"}} onTouchEnd={() => {
                                 speakerChooserInfo = speakerChooserInfo.map((v, ind) => {
@@ -46,9 +51,18 @@ export default function SpeakerChooser({speakerInfo, complete, onResult, ...prop
                 </ScrollView>
             </View>
             <View style={[styles.rowCenter, {gap: 5, paddingTop: 5}]}>
-                <View style={[styles.rowCenter, {flex: 1, display: speakerInfo?.length? "flex" : "none", borderRadius: 5, backgroundColor: "purple", justifyContent: "center", padding: 10}]}>
-                    <SText style={{color: "white"}}>Pair</SText>
-                </View>
+                <SmartView style={{flex: 1, display: speakerInfo?.length? "flex" : "none"}} onTouchEnd={() => {
+                    let speaker = speakerChooserInfo.find(v => v[3]);
+                    if(speaker)
+                        onResult?.(speaker[1])
+                    else {
+                    }
+                }}>
+                    <View style={[styles.rowCenter, {flex: 1, borderRadius: 5, backgroundColor: "purple", justifyContent: "center", padding: 10}]}>
+                        <SText style={{color: "white"}}>Pair</SText>
+                    </View>
+                </SmartView>
+                
                 <SmartView style={{flex: 1}} onTouchEnd={() => {
                     onResult?.(null);
                 }}>

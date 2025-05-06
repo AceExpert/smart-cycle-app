@@ -15,6 +15,7 @@ export default function Settings({...props}){
             <Stack.Screen options={{headerTitle: "Settings", headerShown: false}}/>
             <View style={[styles.column, {width: "100%"}]}>
                 <SText style={{paddingTop: "5%", paddingLeft: "3%", fontSize: 20}}>Account</SText>
+                {account.user? 
                 <View style={[styles.column, {padding: '3%', gap: 5}]}>                    
                     <View style={[styles.column, {backgroundColor: "white", borderRadius: 10}]}>
                         <View style={[styles.rowCenter, {padding: "2%", justifyContent: "space-between"}]}>
@@ -47,7 +48,17 @@ export default function Settings({...props}){
                             </View>
                         </View>
                     </View>
+                </View> :
+                <View style={[styles.column, {padding: "3%", gap: 5, paddingTop: 10}]}>
+                    <SmartView onTouchEnd={() => {
+                        router.navigate("./login")
+                    }}>
+                        <View style={[styles.rowCenter, {width: "100%", justifyContent: "center", backgroundColor: "black", padding: 10, paddingTop: 10, paddingBottom: 10, borderRadius: 5}]}>
+                            <SText style={[{color: "white"}]}>Login</SText>
+                        </View>
+                    </SmartView>
                 </View>
+                }
                 <SText style={{paddingTop: "3%", paddingLeft: "3%", fontSize: 20}}>Settings</SText>
                 <View style={[styles.columnCenter, {width: "100%", padding: "3%"}]}>
                     <View style={[{width: "100%", backgroundColor: "white", borderRadius: 10, borderWidth: 1, borderColor: "rgba(54, 54, 54, 0.0)", borderStyle: "solid", boxShadow: "0px 0px 20px 2px rgba(0, 0, 0, 0.04)"}]}>

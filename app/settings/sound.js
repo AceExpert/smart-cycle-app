@@ -25,7 +25,7 @@ import NativeCycleControl from "../../specs/NativeCycleControl"
 
 export default function SoundSettings({...props}) {
 
-    let [active, setActive] = useState(settings.speakerActive);
+    let [active, setActive] = useState(settings.speaker);
     let [speakerName, setSpeaker] = useState(settings.speakerName);
     let [speakerAddr, setSpeakerAddr] = useState(settings.speakerAddr);
 
@@ -51,6 +51,8 @@ export default function SoundSettings({...props}) {
         if(!data) {
             setDisc(false);
             setSpeakerInfo([]);
+        } else {
+            NativeCycleControl.connectSpeaker(data.split(":").map(v => parseInt(v, 16)));
         }
     }
 
@@ -85,8 +87,7 @@ export default function SoundSettings({...props}) {
             <Animated.View style={{position: "absolute", zIndex: 1, bottom: -100, transform: [{translateY: savePop}], alignSelf: "center", width: "100%"}}>
                 <View style={[styles.rowCenter, {width: "100%", padding: "5%", gap: "1%"}]}>
                     <SmartView style={[{flex: 2}]} onTouchEnd={() => {
-                        settings.gpsSens = value;
-                        settings.speakerActive = active;
+                        settings.speaker = active;
                         savePopShow(false)
                     }}>
                         <View style={[styles.rowCenter, {height: "100%", backgroundColor: "rgb(194, 89, 255)", justifyContent: "center", borderTopLeftRadius: 10, borderBottomLeftRadius: 10, boxShadow: "-0px 10px 20px 0px rgba(0,0,0,.08)"}]}>
@@ -99,9 +100,8 @@ export default function SoundSettings({...props}) {
                         </View>
                     </View>
                     <SmartView style={[{flex: 2}]} onTouchEnd={() => {
-                        savePopShow(false)
-                        setValue(settings.speakerActive);
-                        setActive(settings.gps);
+                        savePopShow(false);
+                        setActive(settings.speaker);
                     }}>
                     <View style={[styles.rowCenter, {flex: 2, height: "100%", backgroundColor: "rgb(167, 0, 14)", justifyContent: "center", borderTopRightRadius: 10, borderBottomRightRadius: 10, boxShadow: "-0px 10px 20px 0px rgba(0,0,0,.08)"}]}>
                         <MaterialIcons name={"close"} style={{color: "white", fontSize: 25}}/>
@@ -112,7 +112,7 @@ export default function SoundSettings({...props}) {
             
             <View style={[styles.columnCenter, {width: "100%", height: "100%", position: "absolute", top: 0, left: 0, backgroundColor: "rgba(0, 0, 0, 0.23)", zIndex: 2, display: discovering? "flex" : "none"}]}>
                 <View style={[styles.columnCenter, {width: "100%", padding: "5%", paddingTop: "20%"}]}>
-                    <SpeakerChooser speakerInfo={speakerChooserInfo} onResult={speakerChoice} complete={discComplete}/>
+                    <SpeakerChooser speakerInfo={speakerChooserInfo} onResult={speakerChoice} complete={discComplete} retry={setupSpeaker}/>
                 </View>
             </View>
 
@@ -129,7 +129,7 @@ export default function SoundSettings({...props}) {
                         <View style={[styles.column, {width: "100%", gap: 5}]}>
                             <View style={[styles.rowCenter, styles.settingsChip, {justifyContent: "space-between"}]}>
                                 <SText style={[styles.settingsMain]}>Active</SText>
-                                <Switch defaultValue={settings.gps} onClick={val => {
+                                <Switch defaultValue={settings.speaker} onClick={val => {
                                     setActive(val);
                                     savePopShow(true);
                                 }}/>
