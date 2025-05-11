@@ -25,7 +25,7 @@ export default class ActionCard extends Component {
         flexDirection: "column",
     },
     actionCard: {
-        width: "100%",
+        width: 150,
         gap: "1%",
         backgroundColor: "white",
         borderRadius: 25,
@@ -34,7 +34,6 @@ export default class ActionCard extends Component {
         boxShadow: "0px 3px 30px 0px rgba(137, 0, 201, 0.0)",
         shadowColor: "rgba(00, 00, 00, 0.4)",
         borderWidth: 0.0,
-        borderBottomWidth: 0.0,
         borderColor: "rgba(90, 90, 90, .4)"
     }
   })

@@ -34,6 +34,7 @@ export interface Spec extends TurboModule {
     openNotificationAccess(): void;
 
     setSettings(settings: string): void;
+    getSettings(filename: string): void;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>("NativeCycleControl");

@@ -9,27 +9,28 @@ import SmartView from "./smartview";
 
 import SText from "./texts";
 
-export default function LauncherIcon({IconClass = MaterialIcons, ...props}) {
+export default function LauncherIcon({IconClass = MaterialIcons, onClick, link, iconStyle, name, style, icon, ...props}) {
 
     let [touch, setTouch] = useState(false);
   
     return (
-        <View style={[styles.column, {alignItems: "center", gap: 3, justifyContent: "center"}, props.rStyle]}> 
+        <View style={[styles.column, {alignItems: "center", gap: 3, justifyContent: "center"}, props.rStyle]} {...props}> 
             <SmartView 
                 touchFeedback={false} 
-                link={props.link}
+                link={link}
                 onTouchStart={() => {
                     setTouch(true)
                 }}
                 onTouchEnd={() => {
                     setTouch(false)
+                    onClick?.();
                 }}
             >
-                <ActionCard style={[props.style, {backgroundColor: touch? 'rgb(200, 200, 200)': props.style?.backgroundColor ?? 'white', display: "flex", alignItems: "center", justifyContent: "center"}]}>
-                    <IconClass name={props.icon} size={30} style={[styles.mainIcon, styles.lightBorder, props.iconStyle]}/>
+                <ActionCard style={[style, {backgroundColor: touch? 'rgb(200, 200, 200)': props.style?.backgroundColor ?? 'white', display: "flex", alignItems: "center", justifyContent: "center"}]}>
+                    <IconClass name={icon} size={30} style={[styles.mainIcon, styles.lightBorder, iconStyle]}/>
                 </ActionCard>
             </SmartView>
-            <SText style={[styles.iconText]}>{props.name}</SText>
+            <SText style={[styles.iconText, {display: "flex", position: "absolute", bottom: -20, width: 100, textAlign: "center"}]}>{name}</SText>
         </View>
     )
 }

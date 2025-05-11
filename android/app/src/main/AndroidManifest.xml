@@ -75,7 +75,6 @@
             android:name=".CycleService"
             android:enabled="true"
             android:foregroundServiceType="connectedDevice"
-            android:process=":cycle"
             android:exported="true">
         </service>
 
